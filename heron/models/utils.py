@@ -3,8 +3,10 @@ from typing import Any, Optional
 
 import numpy as np
 import torch
-from peft import LoraConfig, get_peft_config, get_peft_model
+from peft.mapping import get_peft_model
+from peft.tuners.lora import LoraConfig
 
+from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
 from .git_llm.git_japanese_stablelm_alpha import (
     GitJapaneseStableLMAlphaConfig,
     GitJapaneseStableLMAlphaForCausalLM,
@@ -12,20 +14,21 @@ from .git_llm.git_japanese_stablelm_alpha import (
 from .git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
 from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
 from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
-from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
 
 GitLLMForCausalLM = Any
 
 
 def load_model(
-    model_name: str,
-    vision_model_name: str,
-    num_image_with_embedding: Optional[int],
-    is_fp16: bool,
+    config: dict,
 ) -> GitLLMForCausalLM:
-    """Loading a GIT-LLM depending on configs"""
+    """Loading a V&L model depending on configs"""
+
+    model_name = config["settings"]["model_name"]
+    vision_model_name = config["settings"]["vision_model_name"]
+    num_image_with_embedding = config["settings"]["num_image_with_embedding"]
+
     # set dtype
-    if is_fp16:
+    if config["training"]["fp16"]:
         torch_dtype = torch.float16
     else:
         torch_dtype = torch.float32
@@ -74,11 +77,12 @@ def load_model(
         model = GitGPTNeoXForCausalLM.from_pretrained(
             model_name, config=git_config, torch_dtype=torch_dtype
         )
+    else:
+        raise ValueError(f"{model_name} is not supported.")
     return model
 
 
 def load_pretrained_weight(model: GitLLMForCausalLM, weight_path: str):
-
     weight = {}
     weight_path = glob.glob(f"{weight_path}/pytorch*.bin")
     for w in weight_path:
@@ -87,8 +91,9 @@ def load_pretrained_weight(model: GitLLMForCausalLM, weight_path: str):
     model.load_state_dict(weight, strict=False)
 
 
-def apply_lora_model(model: GitLLMForCausalLM, model_name: str, config: dict) -> GitLLMForCausalLM:
+def apply_lora_model(model: GitLLMForCausalLM, config: dict) -> GitLLMForCausalLM:
     """Apply LoRA"""
+    model_name = config["settings"]["model_name"]
     peft_config = LoraConfig(**config["lora"])
     # apply lora only to LLM
     if "opt" in model_name:
@@ -120,10 +125,12 @@ def apply_lora_model(model: GitLLMForCausalLM, model_name: str, config: dict) ->
         model.base_model.model.embed_out = model.embed_out
         # remove peft wrapper
         model = model.base_model.model
+    else:
+        raise ValueError(f"{model_name} is not supported.")
     return model
 
 
-def set_trainable_params(model: GitLLMForCausalLM, model_name: str, keys_finetune: list) -> None:
+def set_trainable_params(model: GitLLMForCausalLM, keys_finetune: list) -> None:
     trainable_list = []
     untrainable_list = []
     for name, p in model.named_parameters():

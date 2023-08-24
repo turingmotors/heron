@@ -1,71 +1,64 @@
 import cv2
-import datasets
 import numpy as np
+import pandas as pd
 from PIL import Image
 from torch.utils.data import Dataset
-from transformers import (
-    AutoProcessor,
-    AutoTokenizer,
-    CLIPImageProcessor,
-    LlamaTokenizer,
-)
+
+from ..models.prepare_processors import HFProcessor
 
 
 class JapaneseCSVDataset(Dataset):
-    """Dataset for Custom Japanese CSV V&L Dataset learning
-    """
+    """Dataset for Custom Japanese CSV V&L Dataset learning"""
 
     def __init__(
         self,
-        model_name: str,
-        vision_model_name: str,
-        loaded_dataset: datasets.GeneratorBasedBuilder,
+        loaded_dataset: pd.DataFrame,
+        processor: HFProcessor,
         max_length: int = 128,
+        is_inference: bool = False,
     ):
         super(JapaneseCSVDataset, self).__init__()
         self.loaded_dataset = loaded_dataset
         self.unique_img_path = loaded_dataset.img_path.unique()
 
         self.max_length = max_length
+        self.processor = processor
+        self.is_inference = is_inference
 
-        self.processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        self.processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-        if "japanese-stablelm" in model_name:
-            self.processor.tokenizer = LlamaTokenizer.from_pretrained(
-                "novelai/nerdstash-tokenizer-v1",
-                padding_side="right",
-                additional_special_tokens=["▁▁"],
-            )
-        elif (
-            "mpt" in model_name
-            or "matsuo-lab/weblab" in model_name
-            or "cyberagent/open-calm-7b" in model_name
-        ):
-            self.processor.tokenizer = AutoTokenizer.from_pretrained(
-                model_name, padding_side="right", use_fast=True
-            )
+    @classmethod
+    def create(
+        cls,
+        dataset_config: dict,
+        processor: HFProcessor,
+        split: str = "train",
+        is_inference: bool = False,
+    ):
+        target_dataset_list = []
+        if "coco" in dataset_config["dataset_names"]:
+            if split == "train":
+                df_train = pd.read_csv("./data/coco/df_train.csv")
+                target_dataset_list.append(df_train)
+            else:
+                df_val = pd.read_csv("./data/coco/df_val.csv")
+                target_dataset_list.append(df_val)
+        elif "visual_genome" in dataset_config["dataset_names"]:
+            df_vg = pd.read_csv("./data/visual_genome_ja/df_vg.csv")
+            target_dataset_list.append(df_vg)
         else:
-            self.processor.tokenizer = AutoTokenizer.from_pretrained(
-                model_name, padding_side="right", use_fast=False
+            raise ValueError(
+                f"dataset_type: {dataset_config.get('dataset_type')} is not supported."
             )
-        if "llama" in model_name:
-            self.processor.tokenizer.pad_token = self.processor.tokenizer.eos_token
-        elif "mpt" in model_name:
-            self.processor.tokenizer.pad_token = self.processor.tokenizer.eos_token
-        elif "matsuo-lab/weblab" in model_name:
-            self.processor.tokenizer.add_special_tokens(
-                {
-                    "bos_token": "<|endoftext|>",
-                    "eos_token": "<|endoftext|>",
-                    "pad_token": "<|padding|>",
-                    "unk_token": "<|endoftext|>",
-                }
-            )
+
+        target_dataframe = pd.concat(target_dataset_list, axis=0, ignore_index=True)
+
+        return cls(
+            target_dataframe, processor, dataset_config["max_length"], is_inference=is_inference
+        )
 
     def __len__(self) -> int:
         return len(self.unique_img_path)
 
-    def __getitem__(self, index) -> dict:
+    def _get_item_train(self, index):
         # cf: https://huggingface.co/datasets/MMInstruction/M3IT#data-instances
         img_path = self.unique_img_path[index]
 
@@ -77,7 +70,6 @@ class JapaneseCSVDataset(Dataset):
         # concatenate text data
         for i in np.random.randint(0, len(df_interest), len(df_interest)):
             row = df_interest.iloc[i]
-            # some of nlvr data were broken
             question = row["question"]  # str
             answer = row["caption"]  # str
             text += f"##問: {question} ##答: {answer}。"
@@ -104,3 +96,32 @@ class JapaneseCSVDataset(Dataset):
         inputs = {k: v[0] for k, v in inputs.items()}
         inputs["labels"] = inputs["input_ids"]
         return inputs
+
+    def _get_item_inference(self, index):
+        # cf: https://huggingface.co/datasets/MMInstruction/M3IT#data-instances
+        img_path = self.unique_img_path[index]
+
+        df_interest = self.loaded_dataset[self.loaded_dataset.img_path == img_path].reset_index(
+            drop=True
+        )
+        text = ""
+
+        row = df_interest.iloc[0]
+        question = row["question"]  # str
+        answer = row["caption"]  # str
+        text += f"##問: {question} ##答: "
+
+        # imageのロード
+        img = Image.open(img_path).convert("RGB")
+        img = np.array(img)
+        if img.shape[2] != 3:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+        inputs = self.processor(
+            text,
+            img,
+            return_tensors="pt",
+        )
+
+        inputs["labels"] = None
+        return inputs, img, answer

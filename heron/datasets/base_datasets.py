@@ -4,13 +4,12 @@ from torch.utils.data import Dataset
 
 
 class BaseDataset(Dataset):
-
     def __init__(self, is_inference: bool = False):
         super(BaseDataset, self).__init__()
         self.is_inference = is_inference
 
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def create(cls, *args, **kwargs):
         raise NotImplementedError
 

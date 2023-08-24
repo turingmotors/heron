@@ -1,0 +1,5 @@
+dataset_type: japanese_csv
+max_length: 512
+dataset_names:
+  - coco
+  - visual_genome

@@ -1,3 +1,7 @@
-dataset_type: coco
-
-tarain_val: true
+dataset_type: m3it
+max_length: 512
+dataset_names:
+  - coco
+  - textcap
+  - iqa
+  - vqa-v2

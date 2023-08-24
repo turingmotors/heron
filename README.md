@@ -2,7 +2,7 @@
 
 <a href='https://huggingface.co/Inoichan/GIT-Llama-2-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a> 
 
-<img src="./images/heron_image.png">
+<img src="./images/heron_image.png" width="50%">
 
 Welcome to "heron" repository. Heron is a library that seamlessly integrates multiple Vision and Language models, as well as Video and Language models. One of its standout features is its support for Japanese V&L models. Additionally, we provide pretrained weights trained on various datasets.
 
@@ -10,14 +10,14 @@ Welcome to "heron" repository. Heron is a library that seamlessly integrates mul
 # Installation
 1. Clone this repository
 ```bash
-git clone https://github.com/turingmotors/heron
+git clone https://github.com/turingmotors/heron.git
 cd heron
 ```
 
 2. Install Packages
 ```bash
-conda create -n git_llm python=3.10 -y
-conda activate git_llm
+conda create -n heron python=3.10 -y
+conda activate heron
 pip install --upgrade pip  # enable PEP 660 support
 
 pip install -r requirements.txt
@@ -48,7 +48,7 @@ See also [notebooks](./notebooks).
 ```python
 import requests
 from transformers import AutoProcessor
-from git_llm.git_llama import GitLlamaForCausalLM
+from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 
 device_id = 0
 
