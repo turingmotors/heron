@@ -47,6 +47,9 @@ See also [notebooks](./notebooks).
 
 ```python
 import requests
+from PIL import Image
+
+import torch
 from transformers import AutoProcessor
 from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 
