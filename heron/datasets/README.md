@@ -13,5 +13,3 @@
 
 Download [data](../../data/) at data directory.<br>
 For using Japanese dataset, please generate preprocessed csv files. See notebooks in [preprocess](./preprocess/).
-
-
