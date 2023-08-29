@@ -1,6 +1,13 @@
 #!/bin/bash
 
-PATH_TO_DATA_DIR="./data/visual_genome_ja"
+# Get the absolute path of the script itself
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Get the directory three levels up
+PARENT_DIR="$(dirname "$(dirname "$(dirname "$DIR")")")"
+
+# Create target dataset directory
+PATH_TO_DATA_DIR="${PARENT_DIR}/data/visual_genome_ja"
 mkdir -p $PATH_TO_DATA_DIR
 
 # download coco from http://cocodataset.org/#download
