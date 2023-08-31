@@ -12,9 +12,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Processor class for BLIP-2.
-"""
+
+'''
+NOTICE: This code is subject to the terms of the Apache License 2.0.
+
+The code is modified from the original one.
+original code: https://github.com/huggingface/transformers/blob/main/src/transformers/models/blip_2/processing_blip_2.py
+
+Additional contributions by Turing Inc. team
+'''
 
 from typing import List, Optional, Union
 

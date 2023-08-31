@@ -12,12 +12,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-""" PyTorch BLIP-2 model."""
 
 '''
 NOTICE: This code is subject to the terms of the Apache License 2.0.
 
-Additional contributions by Turing
+The code is modified from the original one.
+original code: https://github.com/huggingface/transformers/blob/main/src/transformers/models/blip_2/modeling_blip_2.py
+
+Additional contributions by Turing Inc. team
 '''
 
 import math
