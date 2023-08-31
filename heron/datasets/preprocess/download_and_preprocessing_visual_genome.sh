@@ -23,7 +23,7 @@ rm $PATH_TO_DATA_DIR/images.zip
 rm $PATH_TO_DATA_DIR/images2.zip
 
 # move images2 to images
-mv $PATH_TO_DATA_DIR/VG_100K_2/* $PATH_TO_DATA_DIR/VG_100K/
+find $PATH_TO_DATA_DIR/VG_100K_2 -name "*jpg" -print0 | xargs -0 -I {} mv {} $PATH_TO_DATA_DIR/VG_100K/
 rm -rf $PATH_TO_DATA_DIR/VG_100K_2
 
 # dwonload STAIR captions' annotation
