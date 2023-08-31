@@ -7,9 +7,9 @@ import numpy as np
 from PIL import Image
 from torch.utils.data import ConcatDataset
 
-from ..models.prepare_processors import HFProcessor
 from .base_datasets import BaseDataset
 
+HFProcessor = "HFProcessor"
 
 class M3ITDataset(BaseDataset):
     """Dataset for M3IT Dataset learning"""

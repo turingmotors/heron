@@ -13,7 +13,6 @@ class BaseDataset(Dataset):
     def create(cls, *args, **kwargs):
         raise NotImplementedError
 
-    @abc.abstractmethod
     def __getitem__(self, index):
         if self.is_inference:
             return self._get_item_inference(index)

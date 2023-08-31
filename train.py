@@ -1,3 +1,17 @@
+# Copyright 2023 Turing Inc. Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import os
 from typing import Any
 
@@ -19,44 +33,47 @@ GitLLMForCausalLM = Any
 
 
 def main(config_file: str, local_rank: int = 0):
-    # get config
     with open(config_file, "r") as i_:
         config = yaml.safe_load(i_)
+        model_config = config["model_config"]
+        training_config = config["training_config"]
 
-    if os.environ["WANDB_NAME"] is not None:
-        config["training"]["output_dir"] = os.path.join(
-            config["training"]["output_dir"], os.environ["WANDB_NAME"]
+    if os.environ.get("WANDB_NAME") is not None:
+        training_config["output_dir"] = os.path.join(
+            training_config["output_dir"], os.environ["WANDB_NAME"]
         )
 
     # distributed learning
     deepspeed.init_distributed()
 
     # configの割り当て
-    keys_finetune = config["settings"]["keys_finetune"]
+    keys_to_finetune = config["model_config"]["keys_to_finetune"]
+    keys_to_freeze = config["model_config"]["keys_to_freeze"]
+    assert len(keys_to_finetune) == 0 or len(keys_to_freeze) == 0, "either keys_to_finetune or keys_to_freeze should be empty"
 
     # DatasetのLoad
     train_dataset, val_dataset = get_dataset(config)
 
     # 訓練に関するconfig
-    training_args = TrainingArguments(**config["training"])
+    training_args = TrainingArguments(**training_config)
 
     # load model
-    model = load_model(config)
+    model = load_model(model_config)
 
-    # lora
-    if config["use_lora"]:
-        keys_finetune.append("lora")
-        model = apply_lora_model(model, config)
+    if model_config["use_lora"]:
+        keys_to_finetune.append("lora")
+        model = apply_lora_model(model, model_config)
 
     # load pretrained weight
-    if config["settings"]["load_pretrained"] is not None:
-        load_pretrained_weight(model, config["settings"]["load_pretrained"])
+    if model_config.get("pretrained_path") is not None:
+        print("load pretrained")
+        load_pretrained_weight(model, model_config["pretrained_path"])
         print(
-            f'Successfully loading pretrained weights from {config["settings"]["load_pretrained"]}'
+            f'Successfully loading pretrained weights from {model_config["pretrained_path"]}'
         )
 
     # Set trainable params
-    set_trainable_params(model, keys_finetune)
+    set_trainable_params(model, keys_to_finetune, keys_to_freeze)
 
     trainer = Trainer(
         model=model,
@@ -69,10 +86,13 @@ def main(config_file: str, local_rank: int = 0):
         trainer.train()
 
     # Save the finel checkpoint
-    final_save_path = os.path.join(
-        config["training"]["output_dir"], os.environ["WANDB_NAME"] + "_final"
-    )
-    trainer.save_model(final_save_path)
+    if os.environ.get("WANDB_NAME") is not None:
+        final_save_path = os.path.join(
+            training_config["output_dir"], os.environ["WANDB_NAME"] + "_final"
+        )
+    else:
+        final_save_path = os.path.join(training_config["output_dir"], "final_model")
+    trainer.save_pretrained(final_save_path)
 
 
 if __name__ == "__main__":

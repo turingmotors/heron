@@ -1,29 +1,23 @@
-from typing import Any
+from typing import Dict
 
 from transformers import AutoProcessor, AutoTokenizer, CLIPImageProcessor, LlamaTokenizer
 
-HFProcessor = Any
 
-
-def get_processor(model_name: str, vision_model_name: str = "") -> HFProcessor:
-    if "japanese-stablelm" in model_name:
-        processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-
-        processor.tokenizer = LlamaTokenizer.from_pretrained(
+def get_tokenizer(language_model_name: str) -> "Tokenizer":
+    
+    if "japanese-stablelm" in language_model_name:
+        tokenizer = LlamaTokenizer.from_pretrained(
             "novelai/nerdstash-tokenizer-v1",
             padding_side="right",
             additional_special_tokens=["▁▁"],
         )
-    elif "matsuo-lab/weblab" in model_name:
-        processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-
-        processor.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, padding_side="right", use_fast=True
+        return tokenizer
+    
+    elif "matsuo-lab/weblab" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=True
         )
-
-        processor.tokenizer.add_special_tokens(
+        tokenizer.add_special_tokens(
             {
                 "bos_token": "<|endoftext|>",
                 "eos_token": "<|endoftext|>",
@@ -31,36 +25,53 @@ def get_processor(model_name: str, vision_model_name: str = "") -> HFProcessor:
                 "unk_token": "<|endoftext|>",
             }
         )
-    elif "cyberagent/open-calm-7b" in model_name:
-        processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-
-        processor.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, padding_side="right", use_fast=True
+        return tokenizer
+    
+    elif "cyberagent/open-calm-7b" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=True
         )
-    elif "mpt" in model_name:
-        processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-
-        processor.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, padding_side="right", use_fast=True
+        return tokenizer
+        
+    elif "mpt" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=True
         )
-        processor.tokenizer.pad_token = processor.tokenizer.eos_token
-    elif "llama" in model_name:
-        processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-
-        processor.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, padding_side="right", use_fast=False
+        tokenizer.pad_token = tokenizer.eos_token
+        return tokenizer
+    
+    elif "llama" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=False
         )
-        processor.tokenizer.pad_token = processor.tokenizer.eos_token
-    elif "facebook/opt" in model_name:
-        processor = AutoProcessor.from_pretrained("microsoft/git-base")
-        processor.image_processor = CLIPImageProcessor.from_pretrained(vision_model_name)
-
-        processor.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, padding_side="right", use_fast=False
+        tokenizer.pad_token = tokenizer.eos_token
+        return tokenizer
+    
+    elif "facebook/opt" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=False
         )
+        return tokenizer
+
     else:
-        raise NotImplementedError(f"Processor for model_name: {model_name} is not implemented.")
+        raise NotImplementedError(f"Tokenizer for language_model_name: {language_model_name} is not implemented.")
+
+
+def get_processor(model_config: Dict) -> "Processor":
+    
+    language_model_name = model_config["language_model_name"]
+    model_type = model_config["model_type"]
+    
+    if "git" in model_type:
+        processor = AutoProcessor.from_pretrained("microsoft/git-base")
+        processor.image_processor = CLIPImageProcessor.from_pretrained(model_config["vision_model_name"])
+    
+    elif model_type == "video_blip":
+        processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
+    
+    else:
+        raise NotImplementedError(f"Processor for model_type: {model_type} is not implemented.")
+    
+    processor.tokenizer = get_tokenizer(language_model_name)
+    
     return processor

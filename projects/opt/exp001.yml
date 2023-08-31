@@ -1,4 +1,4 @@
-training:
+training_config:
   per_device_train_batch_size: 2
   gradient_accumulation_steps: 4
   num_train_epochs: 1
@@ -16,25 +16,26 @@ training:
   output_dir: ./output/
   report_to: "wandb"
 
-settings:
+model_config:
+  fp16: true
   load_pretrained: # None or path to model weight
-  model_name: facebook/opt-350m
+  language_model_name: facebook/opt-350m
   vision_model_name: openai/clip-vit-base-patch16
   num_image_with_embedding: # None or video sequence num
   max_length: 512
-  keys_finetune:
+  keys_to_finetune:
     - visual_projection
     - num_image_with_embedding
 
-use_lora: true
-lora:
-  r: 8
-  lora_alpha: 32
-  target_modules:
-    - q_proj
-    - v_proj
-  lora_dropout: 0.01
-  bias: none
-  task_type: CAUSAL_LM
+  use_lora: true
+  lora:
+    r: 8
+    lora_alpha: 32
+    target_modules:
+      - q_proj
+      - v_proj
+    lora_dropout: 0.01
+    bias: none
+    task_type: CAUSAL_LM
 
 dataset_config_path: ./configs/datasets/m3it.yaml
