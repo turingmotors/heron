@@ -20,7 +20,7 @@ settings:
   load_pretrained: # None or path to model weight
   model_name: meta-llama/Llama-2-7b-chat-hf
   vision_model_name: openai/clip-vit-base-patch16
-  num_image_with_embedding: # None or video sequence num
+  num_image_with_embedding: 1 # if 1, no img_temporal_embedding
   max_length: 512
   keys_finetune:
     - visual_projection
