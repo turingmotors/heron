@@ -21,3 +21,4 @@ jupyter
 jupyterlab
 matplotlib
 japanize-matplotlib
+pre-commit

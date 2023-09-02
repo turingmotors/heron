@@ -1,6 +1,6 @@
 # Heron - A Library for Vision/Video and Language models
 
-<a href='https://huggingface.co/Inoichan/GIT-Llama-2-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a> 
+<a href='https://huggingface.co/Inoichan/GIT-Llama-2-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a>
 
 <img src="./images/heron_image.png" width="50%">
 
@@ -22,6 +22,8 @@ pip install --upgrade pip  # enable PEP 660 support
 
 pip install -r requirements.txt
 pip install -e .
+
+pre-commit install
 ```
 
 ## For Llama 2

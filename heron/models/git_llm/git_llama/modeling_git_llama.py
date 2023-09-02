@@ -34,10 +34,12 @@ class GitLlamaConfig(LlamaConfig):
 
     def set_vision_configs(
         self,
-        num_image_with_embedding: Union[int, None] = None,
+        num_image_with_embedding: int = 1,
         vision_model_name: Union[str, None] = None,
     ):
-        self.num_image_with_embedding = num_image_with_embedding
+        self.num_image_with_embedding = (
+            None if num_image_with_embedding == 1 else num_image_with_embedding
+        )
         self.vision_model_name = vision_model_name
         self.vision_config = CLIPVisionConfig.from_pretrained(vision_model_name)
 
