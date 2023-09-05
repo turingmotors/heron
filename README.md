@@ -8,13 +8,34 @@ Welcome to "heron" repository. Heron is a library that seamlessly integrates mul
 
 
 # Installation
-1. Clone this repository
+## 1. Clone this repository
 ```bash
 git clone https://github.com/turingmotors/heron.git
 cd heron
 ```
 
-2. Install Packages
+## 2. Install Packages
+We recommend using virtual environment to install the required packages. If you want to install the packages globally, use `pip install -r requirements.txt` instead.
+### 2-a. Poetry (Recommended)
+Using [pyenv](https://github.com/pyenv/pyenv) and [Poetry](https://python-poetry.org/), you can install the required packages as follows:
+```bash
+# install pyenv environment
+pyenv install 3.10
+pyenv local 3.10
+
+# install packages from pyproject.toml
+poetry install
+
+# install local package
+pip install --upgrade pip  # enable PEP 660 support
+pip install -e .
+
+# for development, install pre-commit
+pre-commit install
+``````
+
+### 2-b. Anaconda
+Using [Anaconda](https://www.anaconda.com/), you can install the required packages as follows:
 ```bash
 conda create -n heron python=3.10 -y
 conda activate heron
@@ -23,13 +44,15 @@ pip install --upgrade pip  # enable PEP 660 support
 pip install -r requirements.txt
 pip install -e .
 
+# for development, install pre-commit
 pre-commit install
 ```
 
-## For Llama 2
+## 3. Resister for Llama-2 models
+To use Llama-2 models, you need to register for the models.
 First, you request access to the llama-2 models, in [huggingface page](https://huggingface.co/meta-llama/Llama-2-7b) and [facebook website](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)
 
-Please sign-in the huggingface account
+Please sign-in the HuggingFace account.
 ```bash
 huggingface-cli login
 ```
@@ -69,7 +92,7 @@ processor = AutoProcessor.from_pretrained('Inoichan/GIT-Llama-2-7B')
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
 image = Image.open(requests.get(url, stream=True).raw)
 
-text = f"##Instruction: Please answer the following question concletely. ##Question: What is unusual about this image? Explain precisely and concletely what he is doing? ##Answer: "
+text = f"##Instruction: Please answer the following question concretely. ##Question: What is unusual about this image? Explain precisely and concretely what he is doing? ##Answer: "
 
 # do preprocessing
 inputs = processor(
@@ -96,14 +119,14 @@ print(processor.tokenizer.batch_decode(out))
 
 # Organization
 
-Turing Inc.
+[Turing Inc.](https://www.turing-motors.com/en)
 
-# Licence
+# License
 
 Released under the Apache License 2.0.
 
 
-# Acknoledge
+# Acknowledge
 
 - [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): The main idia of the model is based on original GIT.
 - [Llava](https://github.com/haotian-liu/LLaVA): This project is learned a lot from the great Llava project.
