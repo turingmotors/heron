@@ -22,12 +22,12 @@ import numpy as np
 from PIL import Image
 from torch.utils.data import ConcatDataset
 
-from .base_datasets import BaseDataset
+from .base_datasets import ResilientDataset
 
 HFProcessor = "HFProcessor"
 
 
-class M3ITDataset(BaseDataset):
+class M3ITDataset(ResilientDataset):
     """Dataset for M3IT Dataset learning"""
 
     def __init__(
@@ -53,7 +53,7 @@ class M3ITDataset(BaseDataset):
         is_inference: bool = False,
     ):
         dataset_list = [
-            datasets.load_dataset("MMInstruction/M3IT", i) for i in dataset_config["dataset_names"]
+            datasets.load_dataset("MMInstruction/M3IT", i, num_proc=16) for i in dataset_config["dataset_names"]
         ]
 
         # some dataset have no validation
@@ -78,7 +78,7 @@ class M3ITDataset(BaseDataset):
         instruction = row["instruction"]  # str
         question = row["inputs"]  # str
         answer = row["outputs"]  # str
-        text = f"##Instruction: {instruction} ##Question: {question} ##Answer: {answer}"
+        text = f"##human: {instruction} {question}\n##gpt: {answer}"
 
         # imageのロード
         image_base64_str_list = row["image_base64_str"]  # str (base64)
@@ -88,8 +88,8 @@ class M3ITDataset(BaseDataset):
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
         inputs = self.processor(
-            text,
-            img,
+            images=img,
+            text=text,
             return_tensors="pt",
             max_length=self.max_length,
             padding="max_length",

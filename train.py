@@ -49,11 +49,11 @@ def main(config_file: str, local_rank: int = 0):
     # DatasetのLoad
     train_dataset, val_dataset = get_dataset(config)
 
-    # load model
-    model = load_model(model_config)
-
     # 訓練に関するconfig
     training_args = TrainingArguments(**training_config)
+
+    # load model
+    model = load_model(model_config)
 
     if model_config["use_lora"]:
         model = apply_lora_model(model, model_config)

@@ -33,5 +33,5 @@ tar -zxvf $PATH_TO_DATA_DIR/stair_captions_v1.2.tar.gz -C $PATH_TO_DATA_DIR
 rm $PATH_TO_DATA_DIR/stair_captions_v1.2.tar.gz
 
 # make csv files for training
-python3 ./heron/datasets/preprocess/make_STAIR_csv.py \
+python3 $PARENT_DIR/heron/datasets/preprocess/make_STAIR_csv.py \
     --path_to_coco $PATH_TO_DATA_DIR

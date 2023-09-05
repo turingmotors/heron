@@ -16,7 +16,7 @@
 import abc
 
 from torch.utils.data import Dataset
-
+import traceback
 
 class BaseDataset(Dataset):
     def __init__(self, is_inference: bool = False):
@@ -41,3 +41,23 @@ class BaseDataset(Dataset):
     @abc.abstractmethod
     def _get_item_inference(self, index):
         raise NotImplementedError
+
+
+class ResilientDataset(BaseDataset):
+    
+    def __init__(self, is_inference: bool = False,  max_trials: int = 5):
+        super().__init__(is_inference)
+        self.max_trials = max_trials
+    
+    def __getitem__(self, index: int):
+        
+        if self.is_inference:
+            return self._get_item_inference(index)
+        else:
+            for _ in range(self.max_trials):
+                try:
+                    return self._get_item_train(index)
+                except Exception as e:
+                    print("Exception in ResilientDataset", e)
+                    traceback.print_exc()
+                    index += 1
