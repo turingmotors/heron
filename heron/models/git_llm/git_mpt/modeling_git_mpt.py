@@ -9,13 +9,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
-from transformers import CLIPVisionConfig, CLIPVisionModel, MptConfig, MptForCausalLM, MptModel
+from transformers import (CLIPVisionConfig, CLIPVisionModel, MptConfig,
+                          MptForCausalLM, MptModel)
 from transformers.modeling_outputs import (
-    BaseModelOutputWithPast,
-    BaseModelOutputWithPastAndCrossAttentions,
-    BaseModelOutputWithPooling,
-    CausalLMOutputWithPast,
-)
+    BaseModelOutputWithPast, BaseModelOutputWithPastAndCrossAttentions,
+    BaseModelOutputWithPooling, CausalLMOutputWithPast)
 from transformers.models.git.modeling_git import GitProjection
 
 

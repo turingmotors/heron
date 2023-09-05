@@ -13,22 +13,14 @@
 # limitations under the License.
 from typing import TYPE_CHECKING
 
-from transformers.utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
+from transformers.utils import (OptionalDependencyNotAvailable, _LazyModule,
+                                is_torch_available)
 
-
-from .configuration_video_blip import (
-    BLIP_2_PRETRAINED_CONFIG_ARCHIVE_MAP,
-    VideoBlipConfig,
-    VideoBlipQFormerConfig,
-    VideoBlipVisionConfig,
-)
+from .configuration_video_blip import (BLIP_2_PRETRAINED_CONFIG_ARCHIVE_MAP,
+                                       VideoBlipConfig, VideoBlipQFormerConfig,
+                                       VideoBlipVisionConfig)
+from .modeling_video_blip import (BLIP_2_PRETRAINED_MODEL_ARCHIVE_LIST,
+                                  VideoBlipForConditionalGeneration,
+                                  VideoBlipModel, VideoBlipPreTrainedModel,
+                                  VideoBlipQFormerModel, VideoBlipVisionModel)
 from .processing_video_blip import VideoBlipProcessor
-
-from .modeling_video_blip import (
-    BLIP_2_PRETRAINED_MODEL_ARCHIVE_LIST,
-    VideoBlipForConditionalGeneration,
-    VideoBlipModel,
-    VideoBlipPreTrainedModel,
-    VideoBlipQFormerModel,
-    VideoBlipVisionModel,
-)

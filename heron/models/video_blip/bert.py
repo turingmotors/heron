@@ -13,17 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
+"""
 NOTICE: This code is subject to the terms of the Apache License 2.0.
 
 The code is modified from the original one.
 
 Additional contributions by Turing Inc. team
-'''
+"""
 
-from transformers.activations import ACT2FN
-from torch import Tensor, device, dtype, nn
 import torch
+from torch import Tensor, device, dtype, nn
+from transformers.activations import ACT2FN
 
 
 class BertPredictionHeadTransform(nn.Module):
@@ -61,7 +61,7 @@ class BertLMPredictionHead(nn.Module):
         hidden_states = self.transform(hidden_states)
         hidden_states = self.decoder(hidden_states)
         return hidden_states
-    
+
 
 class BertOnlyMLMHead(nn.Module):
     def __init__(self, config):
@@ -71,4 +71,3 @@ class BertOnlyMLMHead(nn.Module):
     def forward(self, sequence_output):
         prediction_scores = self.predictions(sequence_output)
         return prediction_scores
-    

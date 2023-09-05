@@ -13,32 +13,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
+"""
 NOTICE: This code is subject to the terms of the Apache License 2.0.
 
 The code is modified from the original one.
 original code: https://github.com/huggingface/transformers/blob/main/src/transformers/models/blip_2/configuration_blip_2.py
 
 Additional contributions by Turing Inc. team
-'''
+"""
 
 
 import copy
 import os
 from typing import Union
 
-from transformers.models.auto import CONFIG_MAPPING
-from transformers.utils import logging
-from transformers.models.auto.modeling_auto import MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
-from transformers.configuration_utils import PretrainedConfig
 from transformers import AutoConfig
-
+from transformers.configuration_utils import PretrainedConfig
+from transformers.models.auto import CONFIG_MAPPING
+from transformers.models.auto.modeling_auto import \
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
+from transformers.utils import logging
 
 logger = logging.get_logger(__name__)
 
 BLIP_2_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "salesforce/blip2-opt-2.7b": "https://huggingface.co/salesforce/blip2-opt-2.7b/resolve/main/config.json",
 }
+
 
 class VideoBlipVisionConfig(PretrainedConfig):
     r"""
@@ -134,14 +135,20 @@ class VideoBlipVisionConfig(PretrainedConfig):
         self.qkv_bias = qkv_bias
 
     @classmethod
-    def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
+    def from_pretrained(
+        cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs
+    ) -> "PretrainedConfig":
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
         # get the vision config dict if we are loading from Blip2Config
         if config_dict.get("model_type") == "blip-2":
             config_dict = config_dict["vision_config"]
 
-        if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
+        if (
+            "model_type" in config_dict
+            and hasattr(cls, "model_type")
+            and config_dict["model_type"] != cls.model_type
+        ):
             logger.warning(
                 f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
                 f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
@@ -254,14 +261,20 @@ class VideoBlipQFormerConfig(PretrainedConfig):
         self.encoder_hidden_size = encoder_hidden_size
 
     @classmethod
-    def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
+    def from_pretrained(
+        cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs
+    ) -> "PretrainedConfig":
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
         # get the qformer config dict if we are loading from Blip2Config
         if config_dict.get("model_type") == "blip-2":
             config_dict = config_dict["qformer_config"]
 
-        if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
+        if (
+            "model_type" in config_dict
+            and hasattr(cls, "model_type")
+            and config_dict["model_type"] != cls.model_type
+        ):
             logger.warning(
                 f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
                 f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
@@ -326,28 +339,43 @@ class VideoBlipConfig(PretrainedConfig):
     model_type = "video_blip"
     is_composition = True
 
-    def __init__(self, vision_config=None, qformer_config=None, text_config=None, num_query_tokens=32, llm_hidden_size=1000, num_frames=8, **kwargs):
+    def __init__(
+        self,
+        vision_config=None,
+        qformer_config=None,
+        text_config=None,
+        num_query_tokens=32,
+        llm_hidden_size=1000,
+        num_frames=8,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
 
         if vision_config is None:
             vision_config = {}
-            logger.info("vision_config is None. initializing the Blip2VisionConfig with default values.")
+            logger.info(
+                "vision_config is None. initializing the Blip2VisionConfig with default values."
+            )
 
         if qformer_config is None:
             qformer_config = {}
-            logger.info("qformer_config is None. Initializing the Blip2QFormerConfig with default values.")
+            logger.info(
+                "qformer_config is None. Initializing the Blip2QFormerConfig with default values."
+            )
 
         if text_config is None:
             text_config = {}
-            logger.info("text_config is None. Initializing the text config with default values (`OPTConfig`).")
+            logger.info(
+                "text_config is None. Initializing the text config with default values (`OPTConfig`)."
+            )
 
         self.vision_config = VideoBlipVisionConfig(**vision_config)
         self.qformer_config = VideoBlipQFormerConfig(**qformer_config)
         text_model_type = text_config["model_type"] if "model_type" in text_config else "opt"
         if text_model_type == "":
             text_model_type = "gpt_neox"
-        
-        #self.text_config = CONFIG_MAPPING[text_model_type](**text_config)
+
+        # self.text_config = CONFIG_MAPPING[text_model_type](**text_config)
         model_path = text_config["_name_or_path"]
         print("model_path", model_path)
         self.text_config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
@@ -360,7 +388,7 @@ class VideoBlipConfig(PretrainedConfig):
         self.use_decoder_only_language_model = True
         self.initializer_factor = 1.0
         self.initializer_range = 0.02
-        
+
         # custom
         self.num_frames = num_frames
         self.llm_hidden_size = llm_hidden_size

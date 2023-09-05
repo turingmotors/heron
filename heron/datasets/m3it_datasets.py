@@ -26,6 +26,7 @@ from .base_datasets import BaseDataset
 
 HFProcessor = "HFProcessor"
 
+
 class M3ITDataset(BaseDataset):
     """Dataset for M3IT Dataset learning"""
 
@@ -33,7 +34,7 @@ class M3ITDataset(BaseDataset):
         self,
         loaded_dataset: ConcatDataset,
         processor: HFProcessor,
-        max_length: int = 128,
+        max_length: int,
         is_inference: bool = False,
     ):
         super(M3ITDataset, self).__init__(is_inference)
@@ -47,6 +48,7 @@ class M3ITDataset(BaseDataset):
         cls,
         dataset_config: dict,
         processor: HFProcessor,
+        max_length: int,
         split: str = "train",
         is_inference: bool = False,
     ):
@@ -63,7 +65,7 @@ class M3ITDataset(BaseDataset):
                 print(f"{d['train']._info.config_name} has no {split} set.")
         target_dataframe = ConcatDataset(target_dataset_list)
 
-        return cls(target_dataframe, processor, dataset_config["max_length"], is_inference)
+        return cls(target_dataframe, processor, max_length, is_inference)
 
     def __len__(self) -> int:
         return len(self.loaded_dataset)

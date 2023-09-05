@@ -13,20 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
+"""
 NOTICE: This code is subject to the terms of the Apache License 2.0.
 
 The code is modified from the original one.
 original code: https://github.com/huggingface/transformers/blob/main/src/transformers/models/blip_2/processing_blip_2.py
 
 Additional contributions by Turing Inc. team
-'''
+"""
 
 from typing import List, Optional, Union
 
 from transformers.image_utils import ImageInput
 from transformers.processing_utils import ProcessorMixin
-from transformers.tokenization_utils_base import BatchEncoding, PaddingStrategy, PreTokenizedInput, TextInput, TruncationStrategy
+from transformers.tokenization_utils_base import (BatchEncoding,
+                                                  PaddingStrategy,
+                                                  PreTokenizedInput, TextInput,
+                                                  TruncationStrategy)
 from transformers.utils import TensorType
 
 

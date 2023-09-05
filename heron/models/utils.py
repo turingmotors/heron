@@ -1,5 +1,5 @@
 import glob
-from typing import Any, Optional, List, Dict, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
@@ -23,65 +23,77 @@ def load_model(
         torch_dtype = torch.float16
     else:
         torch_dtype = torch.float32
-    
+
     if model_type == "git_opt":
         from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
+
         git_config = GitOPTConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding, vision_model_name=model_config["vision_model_name"]
+            num_image_with_embedding=num_image_with_embedding,
+            vision_model_name=model_config["vision_model_name"],
         )
         model = GitOPTForCausalLM.from_pretrained(
             language_model, config=git_config, torch_dtype=torch_dtype
         )
-    
+
     elif model_type == "git_llama":
         from .git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
+
         git_config = GitLlamaConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding, vision_model_name=model_config["vision_model_name"]
+            num_image_with_embedding=num_image_with_embedding,
+            vision_model_name=model_config["vision_model_name"],
         )
         model = GitLlamaForCausalLM.from_pretrained(
             language_model, config=git_config, torch_dtype=torch_dtype
         )
-    
+
     elif model_type == "git_mpt":
         from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
+
         git_config = GitMptConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding, vision_model_name=model_config["vision_model_name"]
+            num_image_with_embedding=num_image_with_embedding,
+            vision_model_name=model_config["vision_model_name"],
         )
         model = GitMptForCausalLM.from_pretrained(
             language_model, config=git_config, torch_dtype=torch_dtype
         )
-    
+
     elif model_type == "git_japanese_stablelm_alpha":
         from .git_llm.git_japanese_stablelm_alpha import (
             GitJapaneseStableLMAlphaConfig,
-            GitJapaneseStableLMAlphaForCausalLM,
-        )
+            GitJapaneseStableLMAlphaForCausalLM)
+
         git_config = GitJapaneseStableLMAlphaConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding, vision_model_name=model_config["vision_model_name"]
+            num_image_with_embedding=num_image_with_embedding,
+            vision_model_name=model_config["vision_model_name"],
         )
         model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
             language_model, config=git_config, torch_dtype=torch_dtype
         )
-    
+
     elif model_type == "git_gpt_neox":
-        from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
+        from .git_llm.git_gpt_neox import (GitGPTNeoXConfig,
+                                           GitGPTNeoXForCausalLM)
+
         git_config = GitGPTNeoXConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding, vision_model_name=model_config["vision_model_name"]
+            num_image_with_embedding=num_image_with_embedding,
+            vision_model_name=model_config["vision_model_name"],
         )
         model = GitGPTNeoXForCausalLM.from_pretrained(
             language_model, config=git_config, torch_dtype=torch_dtype
         )
-    
+
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
+
         model = VideoBlipForConditionalGeneration.create(
-            language_model, num_frames=num_image_with_embedding, torch_dtype=torch_dtype)
-    
+            language_model, num_frames=num_image_with_embedding, torch_dtype=torch_dtype
+        )
+
     else:
         raise ValueError(f"{model_type} is not supported.")
     return model
@@ -103,7 +115,7 @@ def apply_lora_model(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForC
     # apply lora only to LLM
     if model_type == "git_opt":
         model.model.decoder = get_peft_model(model.model.decoder, peft_config)
-    
+
     elif model_type == "git_llama":
         target_modules = []
         for m in peft_config.target_modules:
@@ -116,44 +128,62 @@ def apply_lora_model(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForC
         model.base_model.model.lm_head = model.lm_head
         # remove peft wrapper
         model = model.base_model.model
-    
+
     elif model_type == "git_mpt":
         model = get_peft_model(model, peft_config)
         model.base_model.model.lm_head = model.lm_head
         # remove peft wrapper
         model = model.base_model.model
-    
+
     elif model_type == "git_gpt_neox" or model_type == "git_japanese_stablelm_alpha":
         model = get_peft_model(model, peft_config)
         model.base_model.model.embed_out = model.embed_out
         # remove peft wrapper
         model = model.base_model.model
     elif model_type == "video_blip":
+        # model = get_peft_model(model, peft_config)
         model.language_model = get_peft_model(model.language_model, peft_config)
+        # model.vision_model = get_peft_model(model.vision_model, peft_config)
     else:
         raise ValueError(f"{model_type} is not supported.")
     return model
 
 
 def set_trainable_params(
-        model: GitLLMForCausalLM,
-        keys_to_finetune: List[str],
-        keys_to_freeze: List[str]
-    ) -> Tuple[List, List]:
+    model: GitLLMForCausalLM,
+    keys_to_finetune: List[str],
+    keys_to_freeze: List[str],
+    train_lora: bool = True,
+) -> Tuple[List, List]:
     trainable_list = []
     untrainable_list = []
-    
+
     # There is no conflict between keys_to_finetune and keys_to_freeze because one of them is empty.
-    # However, if keys_to_finetune contains rola, it takes precedence.
-    for name, p in model.named_parameters():
-        if np.any([k in name for k in keys_to_finetune]):
-            p.requires_grad = True
-            trainable_list.append(name)
-        elif np.any([k in name for k in keys_to_freeze]):
-            p.requires_grad = False
-            untrainable_list.append(name)
-        else:
-            p.requires_grad = False
-            untrainable_list.append(name)
+    if len(keys_to_freeze) > 0 and len(keys_to_finetune) == 0:
+        for name, p in model.named_parameters():
+            if train_lora and "lora" in name:
+                p.requires_grad = True
+                trainable_list.append(name)
+            elif np.any([k in name for k in keys_to_freeze]):
+                p.requires_grad = False
+                untrainable_list.append(name)
+            else:
+                p.requires_grad = True
+                trainable_list.append(name)
+
+    elif len(keys_to_finetune) > 0 and len(keys_to_freeze) == 0:
+        for name, p in model.named_parameters():
+            if train_lora and "lora" in name:
+                p.requires_grad = True
+                trainable_list.append(name)
+            elif np.any([k in name for k in keys_to_finetune]):
+                p.requires_grad = True
+                trainable_list.append(name)
+            else:
+                p.requires_grad = False
+                untrainable_list.append(name)
+
+    else:
+        raise ValueError("either keys_to_freeze or keys_to_finetune should be specified")
 
     return trainable_list, untrainable_list

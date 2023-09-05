@@ -22,12 +22,8 @@ import yaml
 from transformers import Trainer, TrainingArguments
 
 from heron.datasets.utils import get_dataset
-from heron.models.utils import (
-    apply_lora_model,
-    load_model,
-    load_pretrained_weight,
-    set_trainable_params,
-)
+from heron.models.utils import (apply_lora_model, load_model,
+                                load_pretrained_weight, set_trainable_params)
 
 GitLLMForCausalLM = Any
 
@@ -49,31 +45,31 @@ def main(config_file: str, local_rank: int = 0):
     # configの割り当て
     keys_to_finetune = config["model_config"]["keys_to_finetune"]
     keys_to_freeze = config["model_config"]["keys_to_freeze"]
-    assert len(keys_to_finetune) == 0 or len(keys_to_freeze) == 0, "either keys_to_finetune or keys_to_freeze should be empty"
 
     # DatasetのLoad
     train_dataset, val_dataset = get_dataset(config)
 
-    # 訓練に関するconfig
-    training_args = TrainingArguments(**training_config)
-
     # load model
     model = load_model(model_config)
 
+    # 訓練に関するconfig
+    training_args = TrainingArguments(**training_config)
+
     if model_config["use_lora"]:
-        keys_to_finetune.append("lora")
         model = apply_lora_model(model, model_config)
 
     # load pretrained weight
     if model_config.get("pretrained_path") is not None:
         print("load pretrained")
         load_pretrained_weight(model, model_config["pretrained_path"])
-        print(
-            f'Successfully loading pretrained weights from {model_config["pretrained_path"]}'
-        )
+        print(f'Successfully loading pretrained weights from {model_config["pretrained_path"]}')
 
     # Set trainable params
-    set_trainable_params(model, keys_to_finetune, keys_to_freeze)
+    trainable_list, untrainable_list = set_trainable_params(
+        model, keys_to_finetune, keys_to_freeze, train_lora=model_config["use_lora"]
+    )
+    print("trainable_list", trainable_list)
+    print("untrainable_list", untrainable_list)
 
     trainer = Trainer(
         model=model,
@@ -92,7 +88,7 @@ def main(config_file: str, local_rank: int = 0):
         )
     else:
         final_save_path = os.path.join(training_config["output_dir"], "final_model")
-    trainer.save_pretrained(final_save_path)
+    model.save_pretrained(final_save_path)
 
 
 if __name__ == "__main__":
