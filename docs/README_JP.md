@@ -12,7 +12,7 @@ Heronでは、様々なモジュールを組み合わせた独自のV&Lモデル
 
 ---
 English README is [here](../README.md).<br>
-如需中文说明, 请参考[这里](./docs/README_CN.md).
+如需中文说明, 请参考[这里](./README_CN.md).
 
 # インストール方法
 ## 1. リポジトリの取得

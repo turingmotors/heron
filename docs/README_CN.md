@@ -12,7 +12,7 @@ Heron允许您结合各种模块配置自己的V&L模型。可以在配置文件
 
 ---
 English README is [here](../README.md).<br>
-日本語の説明は[こちら](./docs/README_JP.md)をご覧ください。
+日本語の説明は[こちら](./README_JP.md)をご覧ください。
 
 # 如何安装
 ## 1. 获取存储库
