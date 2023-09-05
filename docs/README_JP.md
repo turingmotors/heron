@@ -1,30 +1,30 @@
-# Heron - 视觉/视频和语言模型库
+# Heron - マルチモーダルモデル学習ライブラリ
 
 <a href='https://huggingface.co/Inoichan/GIT-Llama-2-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a>
 
 <img src="../images/heron_image.png" width="50%">
 
-Heron是一个可无缝集成多种图像/视频和语言模型的库。 此外，它还提供在各种数据集上训练的预训练权重。
+Heronは、複数の画像/動画モデルと言語モデルをシームレスに統合するライブラリです。日本語のV&Lモデルをサポートしていることです。さらに、様々なデータセットで学習された事前学習済みウェイトも提供しています。
 
-Heron允许您结合各种模块配置自己的V&L模型。可以在配置文件中配置视觉编码器、Adopter和LLM。用于训练的分布式学习方法和数据集也可以轻松配置。
+Heronでは、様々なモジュールを組み合わせた独自のV&Lモデルを構成することができます。Vision Encoder、Adopter、LLMは設定ファイルで設定できます。分散学習方法やトレーニングに使用するデータセットも簡単に設定できます。
 
 <img src="../images/build_train_model.png" width="100%">
 
 ---
 English README is [here](../README.md).<br>
-日本語の説明は[こちら](./docs/README_JP.md)をご覧ください。
+如需中文说明, 请参考[这里](./docs/README_CN.md).
 
-# 如何安装
-## 1. 获取存储库
+# インストール方法
+## 1. リポジトリの取得
 ```bash
 git clone https://github.com/turingmotors/heron.git
 cd heron
 ```
 
-## 2. 设置 Python 环境
-建议使用虚拟环境安装所需软件包。 如果要全局安装软件包，请使用 `pip install -r requirements.txt` 代替。
+## 2. Python環境のセットアップ
+必要なパッケージのインストールには仮想環境を使用することを推奨します。グローバルにパッケージをインストールしたい場合は、代わりに `pip install -r requirements.txt` を使ってください。
 ### 2-a. Poetry (Recommended)
-对于 [pyenv](https://github.com/pyenv/pyenv) 和 [Poetry](https://python-poetry.org/)，请按照以下步骤安装必要的软件包：
+[pyenv](https://github.com/pyenv/pyenv)と[Poetry](https://python-poetry.org/)の場合、次の手順で必要なパッケージをインストールしてください：
 ```bash
 # install pyenv environment
 pyenv install 3.10
@@ -42,7 +42,7 @@ pre-commit install
 ``````
 
 ### 2-b. Anaconda
-对于 [Anaconda](https://www.anaconda.com/)，请按照以下步骤安装必要的软件包：
+[Anaconda](https://www.anaconda.com/)の場合、次の手順で必要なパッケージをインストールしてください:
 ```bash
 conda create -n heron python=3.10 -y
 conda activate heron
@@ -55,27 +55,27 @@ pip install -e .
 pre-commit install
 ```
 
-## 3. 预申请 Llama-2 模型
-要使用 Llama-2 模型，您需要注册您的模型。
-首先，请访问 [HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b) 和 [Meta](https://ai.meta.com/resources/models-and-libraries/llama- downloads/) 并申请访问 llama-2 模型。
+## 3. Llama-2モデルの事前申請
+Llama-2モデルを使用するには、モデル登録が必要です。
+まず、[HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b)と[Meta](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)のサイトから、llama-2モデルへのアクセスをリクエストしてください。
 
-申请通过后，使用您的 HaggingFace 账户登录。
+リクエストが承認されたら、HaggingFaceのアカウントでサインインしてください。
 ```bash
 huggingface-cli login
 ```
 
-# 学习方法
+# 学習方法
 
-目前支持 LLaMA、MPT 和 OPT 作为 LLM 模块。
+LLMモジュールとしては現在、LLaMA, MPT, and OPTがサポートされています.
 
 ```bash
 ./scripts/run.sh
 ```
 
-# 如何使用
+# 利用方法
 
-您可以从 HuggingFace Hub 下载训练好的模型：[Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>。
-有关推理和训练方法的更多信息，请参阅 [notebooks](. /notebooks)。
+HuggingFace Hubから学習済みモデルをダウンロードすることができます: [Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>
+推論・学習の方法については[notebooks](./notebooks)も参考にしてください.
 
 ```python
 import requests
@@ -124,16 +124,16 @@ with torch.no_grad():
 print(processor.tokenizer.batch_decode(out))
 ```
 
-# 组织信息
+# 組織情報
 
-[Turing Inc.](https://www.turing-motors.com/)
+[Turing株式会社](https://www.turing-motors.com/)
 
-# 许可
+# ライセンス
 
-[Apache License 2.0](../LICENSE)
+[Apache License 2.0](../LICENSE) において公開されています。
 
 # 参考情報
 
-- [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text)
-- [Llava](https://github.com/haotian-liu/LLaVA)
+- [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): モデルの構成方法の着想はGITに基づいています.
+- [Llava](https://github.com/haotian-liu/LLaVA): 本ライブラリはLlavaプロジェクトを大いに参考にしています.
 - [GIT-LLM](https://github.com/Ino-Ichan/GIT-LLM)
