@@ -6,6 +6,9 @@
 
 Welcome to "heron" repository. Heron is a library that seamlessly integrates multiple Vision and Language models, as well as Video and Language models. One of its standout features is its support for Japanese V&L models. Additionally, we provide pretrained weights trained on various datasets.
 
+Heron allows you to configure your own V&L models combining various modules. Vision Encoder, Adopter, and LLM can be configured in the configuration file. The distributed learning method and datasets used for training can also be easily configured.
+
+<img src="./images/build_train_model.png" width="80%">
 
 # Installation
 ## 1. Clone this repository
