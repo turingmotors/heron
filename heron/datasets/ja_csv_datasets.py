@@ -81,7 +81,11 @@ class JapaneseCSVDataset(BaseDataset):
         target_dataframe = pd.concat(target_dataset_list, axis=0, ignore_index=True)
 
         return cls(
-            target_dataframe, processor, max_length, is_inference=is_inference, dataset_root=dataset_root
+            target_dataframe,
+            processor,
+            max_length,
+            is_inference=is_inference,
+            dataset_root=dataset_root,
         )
 
     def __len__(self) -> int:

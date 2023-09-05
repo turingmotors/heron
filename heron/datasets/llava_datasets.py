@@ -34,7 +34,7 @@ class LlavaDataset(BaseDataset):
         max_length: int,
         is_inference: bool,
         language: str,
-        dataset_root: str
+        dataset_root: str,
     ):
         super(LlavaDataset, self).__init__(is_inference)
         assert language in ["ja", "en"], "given language is not supported"
@@ -52,7 +52,7 @@ class LlavaDataset(BaseDataset):
         processor: HFProcessor,
         max_length: int,
         split: str = "train",
-        is_inference: bool = False
+        is_inference: bool = False,
     ):
         """
         Args:
@@ -74,7 +74,7 @@ class LlavaDataset(BaseDataset):
                 dataset_config["language"],
                 dataset_config["dataset_root"],
             )
-        
+
         elif split == "validation":
             return cls(
                 split_datasets["test"],
@@ -112,14 +112,16 @@ class LlavaDataset(BaseDataset):
     def _get_item_train(self, index):
         row = self.loaded_dataset[index]
 
-        image_path = os.path.join(self.dataset_root, "coco/train2014/COCO_train2014_" + row["image"])
+        image_path = os.path.join(
+            self.dataset_root, "coco/train2014/COCO_train2014_" + row["image"]
+        )
         images = [Image.open(image_path)]
 
         prompt = ""
         for c in row["conversations"]:
             agent = c["from"]
             message = self.get_message(c)
-            prompt += f"##{agent}: {message}\n"
+            prompt += f"##{agent}: {message}\n##gpt: \n"
 
         tokenized = self.tokenize(prompt)
         tokenized_prompt = tokenized["input_ids"][0]
@@ -136,7 +138,9 @@ class LlavaDataset(BaseDataset):
     def _get_item_inference(self, index):
         row = self.loaded_dataset[index]
 
-        image_path = os.path.join(self.dataset_root, "coco/train2014/COCO_train2014_" + row["image"])
+        image_path = os.path.join(
+            self.dataset_root, "coco/train2014/COCO_train2014_" + row["image"]
+        )
         images = [Image.open(image_path)]
 
         message = self.get_message(row["conversations"][0])
