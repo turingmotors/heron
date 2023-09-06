@@ -205,7 +205,7 @@ print(processor.tokenizer.batch_decode(out))
 *1 アダプタの事前学習のみを実施したもの
 
 ### データセット
-日本語に翻訳されたLLava-Instructデータセットです。
+日本語に翻訳されたLLava-Instructデータセットです。<br>
 [LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
 
 # 組織情報

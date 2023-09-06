@@ -206,7 +206,7 @@ print(processor.tokenizer.batch_decode(out))
 *1 This model only applies to pre-training of adapters.
 
 ### Datasets
-LLava-Instruct dataset translated into Japanese.
+LLava-Instruct dataset translated into Japanese.<br>
 [LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
 
 # Organization

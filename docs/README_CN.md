@@ -206,7 +206,7 @@ print(processor.tokenizer.batch_decode(out))
 *1 仅限适配器预研
 
 ### 数据集
-翻译成日语的 LLava-Instruct 数据集.
+翻译成日语的 LLava-Instruct 数据集.<br>
 [LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
 
 # 组织信息
