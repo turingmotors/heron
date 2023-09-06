@@ -8,7 +8,11 @@ Welcome to "heron" repository. Heron is a library that seamlessly integrates mul
 
 Heron allows you to configure your own V&L models combining various modules. Vision Encoder, Adopter, and LLM can be configured in the configuration file. The distributed learning method and datasets used for training can also be easily configured.
 
-<img src="./images/build_train_model.png" width="80%">
+<img src="./images/build_train_model.png" width="100%">
+
+---
+日本語の説明は[こちら](./docs/README_JP.md)をご覧ください。<br>
+如需中文说明, 请参考[这里](./docs/README_CN.md).
 
 # Installation
 ## 1. Clone this repository
@@ -126,10 +130,9 @@ print(processor.tokenizer.batch_decode(out))
 
 # License
 
-Released under the Apache License 2.0.
+Released under the [Apache License 2.0](./LICENSE).
 
-
-# Acknowledge
+# Acknowledgements
 
 - [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): The main idia of the model is based on original GIT.
 - [Llava](https://github.com/haotian-liu/LLaVA): This project is learned a lot from the great Llava project.
