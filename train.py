@@ -98,7 +98,7 @@ def main(config_file: str, local_rank: int = 0):
     if model_config["use_lora"]:
         model = unload_and_merge_lora(model, model_config)
     model.save_pretrained(final_save_path)
-    train_dataset.processor.save_pretrained(final_save_path)
+    train_dataset.datasets[0].processor.save_pretrained(final_save_path)
 
 
 if __name__ == "__main__":
