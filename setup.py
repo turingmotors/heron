@@ -30,7 +30,7 @@ setup(
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     keywords="Vision-Language, Multimodal, Image Captioning, Generative AI, Deep Learning, Library, PyTorch",
-    license="3-Clause BSD",
+    license="Apache License 2.0",
     packages=find_namespace_packages(include="heron.*"),
     install_requires=fetch_requirements("requirements.txt"),
 )
