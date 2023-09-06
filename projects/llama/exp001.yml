@@ -18,7 +18,8 @@ training_config:
 
 model_config:
   fp16: true
-  load_pretrained: # None or path to model weight
+  pretrained_path: # None or path to model weight
+  model_type: git_llm
   language_model_name: meta-llama/Llama-2-7b-chat-hf
   vision_model_name: openai/clip-vit-base-patch16
   num_image_with_embedding: 1 # if 1, no img_temporal_embedding
@@ -26,6 +27,7 @@ model_config:
   keys_to_finetune:
     - visual_projection
     - num_image_with_embedding
+  keys_to_freeze: []
 
 use_lora: true
 lora:
@@ -33,6 +35,7 @@ lora:
   lora_alpha: 32
   target_modules:
     - q_proj
+    - k_proj
     - v_proj
   lora_dropout: 0.01
   bias: none
