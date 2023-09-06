@@ -133,7 +133,7 @@ dataset_config_path:
 
 # 利用方法
 
-HuggingFace Hubから学習済みモデルをダウンロードすることができます: [Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>
+HuggingFace Hubから学習済みモデルをダウンロードすることができます: [turing-motors/heron-chat-git-TinyLlama-1.1b-v0](https://huggingface.co/turing-motors/heron-chat-git-TinyLlama-1.1b-v0)<br>
 推論・学習の方法については[notebooks](./notebooks)も参考にしてください。
 
 ```python
@@ -147,12 +147,12 @@ from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained('Inoichan/GIT-Llama-2-7B')
+model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('Inoichan/GIT-Llama-2-7B')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"

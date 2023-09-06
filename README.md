@@ -134,7 +134,7 @@ GPU is required for learning; we have tested on Ubuntu 20.04, CUDA 11.7.
 
 # Evaluation
 
-You can get the pretrained weight form HuggingFace Hub: [Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>
+You can get the pretrained weight form HuggingFace Hub: [turing-motors/heron-chat-git-TinyLlama-1.1b-v0](https://huggingface.co/turing-motors/heron-chat-git-TinyLlama-1.1b-v0)<br>
 See also [notebooks](./notebooks).
 
 ```python
@@ -148,12 +148,12 @@ from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained('Inoichan/GIT-Llama-2-7B')
+model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('Inoichan/GIT-Llama-2-7B')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
