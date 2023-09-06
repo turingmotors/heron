@@ -25,7 +25,7 @@ def load_model(
         torch_dtype = torch.float32
 
     if model_type == "git_llm":
-        if "facebook/opt" in language_model:
+        if "opt" in language_model:
             from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
 
             git_config = GitOPTConfig.from_pretrained(language_model)
@@ -49,7 +49,7 @@ def load_model(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
 
-        elif "mosaicml/mpt" in language_model:
+        elif "mpt" in language_model:
             from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
 
             git_config = GitMptConfig.from_pretrained(language_model)
@@ -61,7 +61,7 @@ def load_model(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
 
-        elif "stabilityai/japanese-stablelm" in language_model:
+        elif "stablelm" in language_model:
             from .git_llm.git_japanese_stablelm_alpha import (
                 GitJapaneseStableLMAlphaConfig,
                 GitJapaneseStableLMAlphaForCausalLM,
@@ -78,8 +78,8 @@ def load_model(
 
         elif (
             "line-corporation/japanese-large-lm" in language_model
-            or "matsuo-lab/weblab" in language_model
-            or "cyberagent/open-calm" in language_model
+            or "weblab" in language_model
+            or "open-calm" in language_model
         ):
             from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
 

@@ -9,7 +9,7 @@ from transformers import (
 
 
 def get_tokenizer(language_model_name: str) -> "Tokenizer":
-    if "stabilityai/japanese-stablelm" in language_model_name:
+    if "stablelm" in language_model_name:
         tokenizer = LlamaTokenizer.from_pretrained(
             "novelai/nerdstash-tokenizer-v1",
             padding_side="right",
@@ -17,7 +17,7 @@ def get_tokenizer(language_model_name: str) -> "Tokenizer":
         )
         return tokenizer
 
-    elif "matsuo-lab/weblab" in language_model_name:
+    elif "weblab" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=True
         )
@@ -35,27 +35,27 @@ def get_tokenizer(language_model_name: str) -> "Tokenizer":
         tokenizer = AutoTokenizer.from_pretrained(language_model_name, padding_side="right")
         return tokenizer
 
-    elif "cyberagent/open-calm" in language_model_name:
+    elif "open-calm" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=True
         )
         return tokenizer
 
-    elif "mosaicml/mpt" in language_model_name:
+    elif "mpt" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=True
         )
         tokenizer.pad_token = tokenizer.eos_token
         return tokenizer
 
-    elif "meta-llama/Llama-2" in language_model_name:
+    elif "Llama" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=False
         )
         tokenizer.pad_token = tokenizer.eos_token
         return tokenizer
 
-    elif "facebook/opt" in language_model_name:
+    elif "opt" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=False
         )
