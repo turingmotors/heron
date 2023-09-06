@@ -15,7 +15,7 @@ For preparing csv files, run the following commands;
 ./heron/datasets/preprocess/download_and_preprocessing_coco.sh
 
 # For Japanese Visual Genome VQA dataset
-./heron/datasets/preprocess/download_and_preprocessing_visual_genome.sh 
+./heron/datasets/preprocess/download_and_preprocessing_visual_genome.sh
 ```
 
 Data will be located as following;

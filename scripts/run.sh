@@ -1,7 +1,6 @@
 #!/bin/bash
 export WANDB_PROJECT=heron
+export PROJECT_NAME=video_blip_st_llava_ja/exp010
+export WANDB_NAME=$PROJECT_NAME
 
-# llama 7b
-# projection + lora
-export WANDB_NAME=opt/exp001
-deepspeed train.py --config_file projects/$WANDB_NAME.yml
+deepspeed train.py --config_file projects/$PROJECT_NAME.yml

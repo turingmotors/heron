@@ -6,18 +6,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
-from transformers import (
-    CLIPVisionConfig,
-    CLIPVisionModel,
-    GPTNeoXConfig,
-    GPTNeoXForCausalLM,
-    GPTNeoXModel,
-)
-from transformers.modeling_outputs import (
-    BaseModelOutputWithPast,
-    BaseModelOutputWithPooling,
-    CausalLMOutputWithPast,
-)
+from transformers import (CLIPVisionConfig, CLIPVisionModel, GPTNeoXConfig,
+                          GPTNeoXForCausalLM, GPTNeoXModel)
+from transformers.modeling_outputs import (BaseModelOutputWithPast,
+                                           BaseModelOutputWithPooling,
+                                           CausalLMOutputWithPast)
 from transformers.models.git.modeling_git import GitProjection
 
 

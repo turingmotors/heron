@@ -1,4 +1,4 @@
-training:
+training_config:
   per_device_train_batch_size: 2
   gradient_accumulation_steps: 4
   num_train_epochs: 1
@@ -16,13 +16,14 @@ training:
   output_dir: ./output/
   report_to: "wandb"
 
-settings:
+model_config:
+  fp16: true
   load_pretrained: # None or path to model weight
-  model_name: meta-llama/Llama-2-7b-chat-hf
+  language_model_name: meta-llama/Llama-2-7b-chat-hf
   vision_model_name: openai/clip-vit-base-patch16
   num_image_with_embedding: 1 # if 1, no img_temporal_embedding
   max_length: 512
-  keys_finetune:
+  keys_to_finetune:
     - visual_projection
     - num_image_with_embedding
 

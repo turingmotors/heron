@@ -1,0 +1,3 @@
+dataset_type: llava
+dataset_root: "./"
+language: "ja"

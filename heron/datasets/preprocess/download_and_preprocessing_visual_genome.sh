@@ -34,5 +34,5 @@ unzip $PATH_TO_DATA_DIR/question_answers.json.zip -d $PATH_TO_DATA_DIR
 rm $PATH_TO_DATA_DIR/question_answers.json.zip
 
 # make csv files for training
-python3 ./heron/datasets/preprocess/make_japanese_visual_genome_csv.py \
+python3 $PARENT_DIR/heron/datasets/preprocess/make_japanese_visual_genome_csv.py \
     --path_to_visual_genome $PATH_TO_DATA_DIR

@@ -1,0 +1,43 @@
+training_config:
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 16
+  num_train_epochs: 5
+  dataloader_num_workers: 8
+  fp16: true
+  optim: "adamw_torch"
+  learning_rate: 2.0e-5
+  logging_steps: 10
+  evaluation_strategy: "steps"
+  save_strategy: "steps"
+  eval_steps: 1000
+  save_steps: 4000
+  save_total_limit: 5
+  deepspeed: ./configs/deepspeed/ds_config_zero2.json
+  output_dir: model_out
+  report_to: "wandb"
+
+model_config:
+  fp16: true
+  #pretrained_path:  # None or path to model weight
+  model_type: video_blip
+  language_model_name: "stabilityai/japanese-stablelm-base-alpha-7b"
+  num_image_with_embedding: 1 # 1 for image, otherwise for number of video sequences
+  max_length: 256
+  keys_to_finetune: []
+  keys_to_freeze:
+    - vision_model
+    - language_model
+
+  use_lora: true
+  lora:
+    r: 8
+    lora_alpha: 32
+    target_modules:
+      - query_key_value
+    lora_dropout: 0.01
+    bias: none
+    task_type: CAUSAL_LM
+
+dataset_config_path:
+  - heron/configs/datasets/m3it_ipc.yaml

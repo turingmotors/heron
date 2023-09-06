@@ -7,18 +7,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
 from transformers import CLIPVisionConfig, CLIPVisionModel
-from transformers.modeling_outputs import (
-    BaseModelOutputWithPast,
-    BaseModelOutputWithPooling,
-    CausalLMOutputWithPast,
-)
+from transformers.modeling_outputs import (BaseModelOutputWithPast,
+                                           BaseModelOutputWithPooling,
+                                           CausalLMOutputWithPast)
 from transformers.models.git.modeling_git import GitProjection
 
 from .configuration_japanese_stablelm_alpha import JapaneseStableLMAlphaConfig
 from .modeling_japanese_stablelm_alpha import (
-    JapaneseStableLMAlphaForCausalLM,
-    JapaneseStableLMAlphaModel,
-)
+    JapaneseStableLMAlphaForCausalLM, JapaneseStableLMAlphaModel)
 
 
 class GitJapaneseStableLMAlphaConfig(JapaneseStableLMAlphaConfig):
