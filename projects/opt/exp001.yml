@@ -41,4 +41,5 @@ model_config:
     bias: none
     task_type: CAUSAL_LM
 
-dataset_config_path: ./configs/datasets/m3it.yaml
+dataset_config_path:
+  - ./configs/datasets/m3it.yaml
