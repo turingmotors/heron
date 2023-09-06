@@ -1871,7 +1871,7 @@ class VideoBlipForConditionalGeneration(VideoBlipPreTrainedModel):
         # print("config.use_decoder_only_language_model", config.use_decoder_only_language_model)
         if config.use_decoder_only_language_model:
             language_model = AutoModelForCausalLM.from_config(
-                config.text_config, trust_remote_code=True
+                config.text_config, trust_remote_code=True, torch_dtype=torch.float16
             )
         else:
             language_model = AutoModelForSeq2SeqLM.from_config(config.text_config)
