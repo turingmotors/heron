@@ -119,7 +119,6 @@ def apply_lora_model(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForC
     peft_config = LoraConfig(**model_config["lora"])
 
     if model_type == "git_llm":
-        peft_config = LoraConfig(**config["lora"])
         model = get_peft_model(model, peft_config)
     elif model_type == "video_blip":
         # model = get_peft_model(model, peft_config)
