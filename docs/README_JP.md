@@ -1,18 +1,21 @@
-# Heron - マルチモーダルモデル学習ライブラリ
+<div align="center">
 
-<a href='https://huggingface.co/Inoichan/GIT-Llama-2-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a>
+# Heron
+**マルチモーダルモデル学習ライブラリ**
 
-<img src="../images/heron_image.png" width="50%">
+[English](../README.md) | 日本語 | [中文](./README_CN.md)
+</div>
+
 
 Heronは、複数の画像/動画モデルと言語モデルをシームレスに統合するライブラリです。日本語のV&Lモデルをサポートしており、さらに様々なデータセットで学習された事前学習済みウェイトも提供します。
+
+<div align="center">
+<img src="../images/heron_image.png" width="50%">
+</div>
 
 Heronでは、様々なモジュールを組み合わせた独自のV&Lモデルを構成することができます。Vision Encoder、Adopter、LLMを設定ファイルで設定できます。分散学習方法やトレーニングに使用するデータセットも簡単に設定できます。
 
 <img src="../images/build_train_model.png" width="100%">
-
----
-English README is [here](../README.md).<br>
-如需中文说明, 请参考[这里](./README_CN.md).
 
 # インストール方法
 ## 1. リポジトリの取得

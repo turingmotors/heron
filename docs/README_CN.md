@@ -1,18 +1,21 @@
-# Heron - 视觉/视频和语言模型库
+<div align="center">
 
-<a href='https://huggingface.co/Inoichan/GIT-Llama-2-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a>
+# Heron
+**视觉/视频和语言模型库**
 
+[English](../README.md) | [日本語](./README_JP.md) | 中文
+</div>
+
+
+Heron是一个可无缝集成多种图像/视频和语言模型的库. 此外, 它还提供在各种数据集上训练的预训练权重.
+
+<div align="center">
 <img src="../images/heron_image.png" width="50%">
+</div>
 
-Heron是一个可无缝集成多种图像/视频和语言模型的库。 此外，它还提供在各种数据集上训练的预训练权重。
-
-Heron允许您结合各种模块配置自己的V&L模型。可以在配置文件中配置视觉编码器、Adopter和LLM。用于训练的分布式学习方法和数据集也可以轻松配置。
+Heron允许您结合各种模块配置自己的V&L模型. 可以在配置文件中配置视觉编码器, Adopter和LLM. 用于训练的分布式学习方法和数据集也可以轻松配置.
 
 <img src="../images/build_train_model.png" width="100%">
-
----
-English README is [here](../README.md).<br>
-日本語の説明は[こちら](./README_JP.md)をご覧ください。
 
 # 如何安装
 ## 1. 获取存储库
@@ -22,9 +25,9 @@ cd heron
 ```
 
 ## 2. 设置 Python 环境
-建议使用虚拟环境安装所需软件包。 如果要全局安装软件包，请使用 `pip install -r requirements.txt` 代替。
+建议使用虚拟环境安装所需软件包. 如果要全局安装软件包, 请使用 `pip install -r requirements.txt` 代替.
 ### 2-a. Poetry (Recommended)
-对于 [pyenv](https://github.com/pyenv/pyenv) 和 [Poetry](https://python-poetry.org/)，请按照以下步骤安装必要的软件包：
+对于 [pyenv](https://github.com/pyenv/pyenv) 和 [Poetry](https://python-poetry.org/), 请按照以下步骤安装必要的软件包.
 ```bash
 # install pyenv environment
 pyenv install 3.10
@@ -42,7 +45,7 @@ pre-commit install
 ``````
 
 ### 2-b. Anaconda
-对于 [Anaconda](https://www.anaconda.com/)，请按照以下步骤安装必要的软件包：
+对于 [Anaconda](https://www.anaconda.com/), 请按照以下步骤安装必要的软件包.
 ```bash
 conda create -n heron python=3.10 -y
 conda activate heron
@@ -56,17 +59,17 @@ pre-commit install
 ```
 
 ## 3. 预申请 Llama-2 模型
-要使用 Llama-2 模型，您需要注册您的模型。
-首先，请访问 [HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b) 和 [Meta](https://ai.meta.com/resources/models-and-libraries/llama- downloads/) 并申请访问 llama-2 模型。
+要使用 Llama-2 模型, 您需要注册您的模型.
+首先，请访问 [HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b) 和 [Meta](https://ai.meta.com/resources/models-and-libraries/llama- downloads/) 并申请访问 llama-2 模型.
 
-申请通过后，使用您的 HaggingFace 账户登录。
+申请通过后, 使用您的 HaggingFace 账户登录.
 ```bash
 huggingface-cli login
 ```
 
 # 学习方法
 
-目前支持 LLaMA、MPT 和 OPT 作为 LLM 模块。
+目前支持 LLaMA、MPT 和 OPT 作为 LLM 模块.
 
 ```bash
 ./scripts/run.sh
@@ -74,8 +77,8 @@ huggingface-cli login
 
 # 如何使用
 
-您可以从 HuggingFace Hub 下载训练好的模型：[Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>。
-有关推理和训练方法的更多信息，请参阅 [notebooks](. /notebooks)。
+您可以从 HuggingFace Hub 下载训练好的模型：[Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>
+有关推理和训练方法的更多信息, 请参阅 [notebooks](./notebooks).
 
 ```python
 import requests
@@ -132,7 +135,7 @@ print(processor.tokenizer.batch_decode(out))
 
 [Apache License 2.0](../LICENSE)
 
-# 参考情報
+# 参考信息
 
 - [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text)
 - [Llava](https://github.com/haotian-liu/LLaVA)

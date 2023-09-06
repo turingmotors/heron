@@ -18,8 +18,6 @@ Heron allows you to configure your own V&L models combining various modules. Vis
 
 <img src="./images/build_train_model.png" width="100%">
 
----
-
 # Installation
 ## 1. Clone this repository
 ```bash
@@ -63,7 +61,7 @@ pre-commit install
 
 ## 3. Resister for Llama-2 models
 To use Llama-2 models, you need to register for the models.
-First, you request access to the llama-2 models, in [huggingface page](https://huggingface.co/meta-llama/Llama-2-7b) and [facebook website](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)
+First, you request access to the llama-2 models, in [HuggingFace page](https://huggingface.co/meta-llama/Llama-2-7b) and [Meta website](https://ai.meta.com/resources/models-and-libraries/llama-downloads/).
 
 Please sign-in the HuggingFace account.
 ```bash
