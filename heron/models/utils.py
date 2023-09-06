@@ -63,7 +63,8 @@ def load_model(
     elif model_type == "git_japanese_stablelm_alpha":
         from .git_llm.git_japanese_stablelm_alpha import (
             GitJapaneseStableLMAlphaConfig,
-            GitJapaneseStableLMAlphaForCausalLM)
+            GitJapaneseStableLMAlphaForCausalLM,
+        )
 
         git_config = GitJapaneseStableLMAlphaConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
@@ -75,8 +76,7 @@ def load_model(
         )
 
     elif model_type == "git_gpt_neox":
-        from .git_llm.git_gpt_neox import (GitGPTNeoXConfig,
-                                           GitGPTNeoXForCausalLM)
+        from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
 
         git_config = GitGPTNeoXConfig.from_pretrained(language_model)
         git_config.set_vision_configs(
@@ -112,38 +112,27 @@ def apply_lora_model(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForC
     """Apply LoRA"""
     model_type = model_config["model_type"]
     peft_config = LoraConfig(**model_config["lora"])
-    # apply lora only to LLM
-    if model_type == "git_opt":
-        model.model.decoder = get_peft_model(model.model.decoder, peft_config)
 
-    elif model_type == "git_llama":
-        target_modules = []
-        for m in peft_config.target_modules:
-            target_modules += [
-                f"model.layers.{i}.self_attn.{m}" for i in range(len(model.model.layers))
-            ]
-
-        peft_config.target_modules = target_modules
+    if model_type == "git_llm":
+        peft_config = LoraConfig(**config["lora"])
         model = get_peft_model(model, peft_config)
-        model.base_model.model.lm_head = model.lm_head
-        # remove peft wrapper
-        model = model.base_model.model
-
-    elif model_type == "git_mpt":
-        model = get_peft_model(model, peft_config)
-        model.base_model.model.lm_head = model.lm_head
-        # remove peft wrapper
-        model = model.base_model.model
-
-    elif model_type == "git_gpt_neox" or model_type == "git_japanese_stablelm_alpha":
-        model = get_peft_model(model, peft_config)
-        model.base_model.model.embed_out = model.embed_out
-        # remove peft wrapper
-        model = model.base_model.model
     elif model_type == "video_blip":
         # model = get_peft_model(model, peft_config)
+        # apply lora only to LLM
         model.language_model = get_peft_model(model.language_model, peft_config)
         # model.vision_model = get_peft_model(model.vision_model, peft_config)
+    else:
+        raise ValueError(f"{model_type} is not supported.")
+    return model
+
+
+def unload_and_merge_lora(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForCausalLM:
+    """Unload and merge LoRA"""
+    model_type = model_config["model_type"]
+    if model_type == "git_llm":
+        model = model.merge_and_unload()
+    elif model_type == "video_blip":
+        model.language_model = model.language_model.merge_and_unload()
     else:
         raise ValueError(f"{model_type} is not supported.")
     return model
