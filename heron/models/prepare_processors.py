@@ -1,11 +1,15 @@
 from typing import Dict
 
-from transformers import (AutoProcessor, AutoTokenizer, CLIPImageProcessor,
-                          LlamaTokenizer)
+from transformers import (
+    AutoProcessor,
+    AutoTokenizer,
+    CLIPImageProcessor,
+    LlamaTokenizer,
+)
 
 
 def get_tokenizer(language_model_name: str) -> "Tokenizer":
-    if "japanese-stablelm" in language_model_name:
+    if "stabilityai/japanese-stablelm" in language_model_name:
         tokenizer = LlamaTokenizer.from_pretrained(
             "novelai/nerdstash-tokenizer-v1",
             padding_side="right",
@@ -31,20 +35,20 @@ def get_tokenizer(language_model_name: str) -> "Tokenizer":
         tokenizer = AutoTokenizer.from_pretrained(language_model_name, padding_side="right")
         return tokenizer
 
-    elif "cyberagent/open-calm-7b" in language_model_name:
+    elif "cyberagent/open-calm" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=True
         )
         return tokenizer
 
-    elif "mpt" in language_model_name:
+    elif "mosaicml/mpt" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=True
         )
         tokenizer.pad_token = tokenizer.eos_token
         return tokenizer
 
-    elif "llama" in language_model_name:
+    elif "meta-llama/Llama-2" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
             language_model_name, padding_side="right", use_fast=False
         )

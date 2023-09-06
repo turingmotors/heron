@@ -24,68 +24,73 @@ def load_model(
     else:
         torch_dtype = torch.float32
 
-    if model_type == "git_opt":
-        from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
+    if model_type == "git_llm":
+        if "facebook/opt" in language_model:
+            from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
 
-        git_config = GitOPTConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitOPTForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitOPTConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitOPTForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_llama":
-        from .git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
+        elif "Llama" in language_model:
+            from .git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
 
-        git_config = GitLlamaConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitLlamaForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitLlamaConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitLlamaForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_mpt":
-        from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
+        elif "mosaicml/mpt" in language_model:
+            from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
 
-        git_config = GitMptConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitMptForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitMptConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitMptForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_japanese_stablelm_alpha":
-        from .git_llm.git_japanese_stablelm_alpha import (
-            GitJapaneseStableLMAlphaConfig,
-            GitJapaneseStableLMAlphaForCausalLM,
-        )
+        elif "stabilityai/japanese-stablelm" in language_model:
+            from .git_llm.git_japanese_stablelm_alpha import (
+                GitJapaneseStableLMAlphaConfig,
+                GitJapaneseStableLMAlphaForCausalLM,
+            )
 
-        git_config = GitJapaneseStableLMAlphaConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitJapaneseStableLMAlphaConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_gpt_neox":
-        from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
+        elif (
+            "line-corporation/japanese-large-lm" in language_model
+            or "matsuo-lab/weblab" in language_model
+            or "cyberagent/open-calm" in language_model
+        ):
+            from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
 
-        git_config = GitGPTNeoXConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitGPTNeoXForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitGPTNeoXConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitGPTNeoXForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
