@@ -9,6 +9,10 @@ English | [日本語](./docs/README_JP.md) | [中文](./docs/README_CN.md)
 
 Welcome to "heron" repository. Heron is a library that seamlessly integrates multiple Vision and Language models, as well as Video and Language models. One of its standout features is its support for Japanese V&L models. Additionally, we provide pretrained weights trained on various datasets.
 
+Please click here to see the multimodal demo pages built with different LLMs. (Both are available in Japanese)
+- [BLIP + Japanese StableLM Base Alpha](https://huggingface.co/spaces/turing-motors/heron_chat_blip)
+- [GIT + ELYZA-japanese-Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
+
 <div align="center">
 <img src="./images/heron_image.png" width="50%">
 </div>
@@ -122,7 +126,14 @@ dataset_config_path:
 ```
 
 `training_config` sets the training configuration, `model_config` sets the model configuration, and `dataset_config_path` sets the dataset configuration.<br>
-Currently supported LLM modules that can be specified in `model_type` are LLaMA, MPT, and OPT.
+The following LLM modules are currently supported for `model_type`. We plan to add more supported modules in the future.
+
+- [LLama-2](https://ai.meta.com/llama/)
+- [MPT](https://github.com/mosaicml/llm-foundry)
+- [OPT](https://huggingface.co/docs/transformers/model_doc/opt)
+- [GPT-NeoX](https://github.com/EleutherAI/gpt-neox)
+- [Japanese StableLM](https://huggingface.co/stabilityai/japanese-stablelm-base-alpha-7b)
+- [ELYZA-japanese-Llama-2](https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast)
 
 To start learning, execute the following command.
 
@@ -134,7 +145,7 @@ GPU is required for learning; we have tested on Ubuntu 20.04, CUDA 11.7.
 
 # Evaluation
 
-You can get the pretrained weight form HuggingFace Hub: [turing-motors/heron-chat-git-TinyLlama-1.1b-v0](https://huggingface.co/turing-motors/heron-chat-git-TinyLlama-1.1b-v0)<br>
+You can get the pretrained weight form HuggingFace Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
 See also [notebooks](./notebooks).
 
 ```python
@@ -148,12 +159,12 @@ from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
+model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
@@ -183,6 +194,20 @@ with torch.no_grad():
 # print result
 print(processor.tokenizer.batch_decode(out))
 ```
+
+### Pretrained Models
+
+|model|LLM module|adapter|size|
+|:----:|:----|:----|:----|
+|[heron-chat-blip-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|BLIP|7B|
+|[heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|GIT|7B|
+|[heron-chat-git-ELYZA-fast-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ELYZA-fast-7b-v0)|ELYZA|GIT|7B|
+|[heron-preliminary-git-Llama-2-70b-v0](https://huggingface.co/turing-motors/heron-preliminary-git-Llama-2-70b-v0) *1|Llama-2|GIT|70B|
+*1 This model only applies to pre-training of adapters.
+
+### Datasets
+LLava-Instruct dataset translated into Japanese.<br>
+[LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
 
 # Organization
 

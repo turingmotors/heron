@@ -9,6 +9,10 @@
 
 Heron是一个可无缝集成多种图像/视频和语言模型的库. 此外, 它还提供在各种数据集上训练的预训练权重.
 
+点击此处查看使用不同 LLM 制作的多模态演示页面.（均有日语版本）
+- [BLIP + Japanese StableLM Base Alpha](https://huggingface.co/spaces/turing-motors/heron_chat_blip)
+- [GIT + ELYZA-japanese-Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
+
 <div align="center">
 <img src="../images/heron_image.png" width="50%">
 </div>
@@ -121,7 +125,14 @@ dataset_config_path:
 ```
 
 training_config "为训练设置, "model_config "为模型设置，"dataset_config_path "为数据集设置.<br>
-目前支持 LLaMA、MPT 和 OPT 作为可在 `model_type` 中指定的 LLM 模块.
+目前支持以下可为 `model_type` 指定的 LLM 模块. 将来会添加更多支持的模块.
+
+- [LLama-2](https://ai.meta.com/llama/)
+- [MPT](https://github.com/mosaicml/llm-foundry)
+- [OPT](https://huggingface.co/docs/transformers/model_doc/opt)
+- [GPT-NeoX](https://github.com/EleutherAI/gpt-neox)
+- [Japanese StableLM](https://huggingface.co/stabilityai/japanese-stablelm-base-alpha-7b)
+- [ELYZA-japanese-Llama-2](https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast)
 
 要开始学习, 请执行以下命令.
 
@@ -134,7 +145,7 @@ training_config "为训练设置, "model_config "为模型设置，"dataset_conf
 
 # 如何使用
 
-您可以从 HuggingFace Hub 下载训练好的模型：[turing-motors/heron-chat-git-TinyLlama-1.1b-v0](https://huggingface.co/turing-motors/heron-chat-git-TinyLlama-1.1b-v0)<br>
+您可以从 HuggingFace Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
 有关推理和训练方法的更多信息, 请参阅 [notebooks](./notebooks).
 
 ```python
@@ -148,12 +159,12 @@ from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
+model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-TinyLlama-1.1b-v0')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
@@ -183,6 +194,20 @@ with torch.no_grad():
 # print result
 print(processor.tokenizer.batch_decode(out))
 ```
+
+### 训练有素的模型列表
+
+|model|LLM module|adapter|size|
+|:----:|:----|:----|:----|
+|[heron-chat-blip-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|BLIP|7B|
+|[heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|GIT|7B|
+|[heron-chat-git-ELYZA-fast-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ELYZA-fast-7b-v0)|ELYZA|GIT|7B|
+|[heron-preliminary-git-Llama-2-70b-v0](https://huggingface.co/turing-motors/heron-preliminary-git-Llama-2-70b-v0) *1|Llama-2|GIT|70B|
+*1 仅限适配器预研
+
+### 数据集
+翻译成日语的 LLava-Instruct 数据集.<br>
+[LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
 
 # 组织信息
 
