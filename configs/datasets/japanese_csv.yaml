@@ -1,0 +1,5 @@
+dataset_type: japanese_csv
+dataset_root: "./"
+dataset_names:
+  - coco
+  - visual_genome

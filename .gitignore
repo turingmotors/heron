@@ -1,0 +1,13 @@
+__pycache__
+
+.ipynb_checkpoints
+
+output/*
+!output/.gitkeep
+
+data/*
+!data/.gitkeep
+
+wandb
+
+*egg-info
