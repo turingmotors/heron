@@ -19,11 +19,17 @@ import deepspeed
 import fire
 import torch
 import yaml
-from transformers import Trainer, TrainingArguments
+from transformers import TrainingArguments
 
 from heron.datasets.utils import get_dataset
-from heron.models.utils import (apply_lora_model, load_model,
-                                load_pretrained_weight, set_trainable_params)
+from heron.models.utils import (
+    apply_lora_model,
+    load_model,
+    load_pretrained_weight,
+    set_trainable_params,
+    unload_and_merge_lora,
+)
+from heron.models.vision_language_trainer import VisionLanguageTrainer as Trainer
 
 GitLLMForCausalLM = Any
 
@@ -88,7 +94,11 @@ def main(config_file: str, local_rank: int = 0):
         )
     else:
         final_save_path = os.path.join(training_config["output_dir"], "final_model")
+
+    if model_config["use_lora"]:
+        model = unload_and_merge_lora(model, model_config)
     model.save_pretrained(final_save_path)
+    train_dataset.datasets[0].processor.save_pretrained(final_save_path)
 
 
 if __name__ == "__main__":

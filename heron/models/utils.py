@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import glob
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 import torch
@@ -38,68 +38,73 @@ def load_model(
     else:
         torch_dtype = torch.float32
 
-    if model_type == "git_opt":
-        from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
+    if model_type == "git_llm":
+        if "opt" in language_model:
+            from .git_llm.git_opt import GitOPTConfig, GitOPTForCausalLM
 
-        git_config = GitOPTConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitOPTForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitOPTConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitOPTForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_llama":
-        from .git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
+        elif "Llama" in language_model:
+            from .git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
 
-        git_config = GitLlamaConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitLlamaForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitLlamaConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitLlamaForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_mpt":
-        from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
+        elif "mpt" in language_model:
+            from .git_llm.git_mpt import GitMptConfig, GitMptForCausalLM
 
-        git_config = GitMptConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitMptForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitMptConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitMptForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_japanese_stablelm_alpha":
-        from .git_llm.git_japanese_stablelm_alpha import (
-            GitJapaneseStableLMAlphaConfig,
-            GitJapaneseStableLMAlphaForCausalLM,
-        )
+        elif "stablelm" in language_model:
+            from .git_llm.git_japanese_stablelm_alpha import (
+                GitJapaneseStableLMAlphaConfig,
+                GitJapaneseStableLMAlphaForCausalLM,
+            )
 
-        git_config = GitJapaneseStableLMAlphaConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitJapaneseStableLMAlphaConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
-    elif model_type == "git_gpt_neox":
-        from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
+        elif (
+            "line-corporation/japanese-large-lm" in language_model
+            or "weblab" in language_model
+            or "open-calm" in language_model
+        ):
+            from .git_llm.git_gpt_neox import GitGPTNeoXConfig, GitGPTNeoXForCausalLM
 
-        git_config = GitGPTNeoXConfig.from_pretrained(language_model)
-        git_config.set_vision_configs(
-            num_image_with_embedding=num_image_with_embedding,
-            vision_model_name=model_config["vision_model_name"],
-        )
-        model = GitGPTNeoXForCausalLM.from_pretrained(
-            language_model, config=git_config, torch_dtype=torch_dtype
-        )
+            git_config = GitGPTNeoXConfig.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitGPTNeoXForCausalLM.from_pretrained(
+                language_model, config=git_config, torch_dtype=torch_dtype
+            )
 
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
@@ -126,38 +131,26 @@ def apply_lora_model(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForC
     """Apply LoRA"""
     model_type = model_config["model_type"]
     peft_config = LoraConfig(**model_config["lora"])
-    # apply lora only to LLM
-    if model_type == "git_opt":
-        model.model.decoder = get_peft_model(model.model.decoder, peft_config)
 
-    elif model_type == "git_llama":
-        target_modules = []
-        for m in peft_config.target_modules:
-            target_modules += [
-                f"model.layers.{i}.self_attn.{m}" for i in range(len(model.model.layers))
-            ]
-
-        peft_config.target_modules = target_modules
+    if model_type == "git_llm":
         model = get_peft_model(model, peft_config)
-        model.base_model.model.lm_head = model.lm_head
-        # remove peft wrapper
-        model = model.base_model.model
-
-    elif model_type == "git_mpt":
-        model = get_peft_model(model, peft_config)
-        model.base_model.model.lm_head = model.lm_head
-        # remove peft wrapper
-        model = model.base_model.model
-
-    elif model_type == "git_gpt_neox" or model_type == "git_japanese_stablelm_alpha":
-        model = get_peft_model(model, peft_config)
-        model.base_model.model.embed_out = model.embed_out
-        # remove peft wrapper
-        model = model.base_model.model
     elif model_type == "video_blip":
         # model = get_peft_model(model, peft_config)
+        # apply lora only to LLM
         model.language_model = get_peft_model(model.language_model, peft_config)
         # model.vision_model = get_peft_model(model.vision_model, peft_config)
+    else:
+        raise ValueError(f"{model_type} is not supported.")
+    return model
+
+
+def unload_and_merge_lora(model: GitLLMForCausalLM, model_config: Dict) -> GitLLMForCausalLM:
+    """Unload and merge LoRA"""
+    model_type = model_config["model_type"]
+    if model_type == "git_llm":
+        model = model.merge_and_unload()
+    elif model_type == "video_blip":
+        model.language_model = model.language_model.merge_and_unload()
     else:
         raise ValueError(f"{model_type} is not supported.")
     return model
