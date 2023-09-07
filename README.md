@@ -11,7 +11,7 @@ Welcome to "heron" repository. Heron is a library that seamlessly integrates mul
 
 Please click here to see the multimodal demo pages built with different LLMs. (Both are available in Japanese)
 - [BLIP + Japanese StableLM Base Alpha](https://huggingface.co/spaces/turing-motors/heron_chat_blip)
-- [GIT + ELYZA-japanese-Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
+- [GIT + Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
 
 <div align="center">
 <img src="./images/heron_image.png" width="50%">
