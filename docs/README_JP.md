@@ -4,9 +4,9 @@
 
 <img src="../images/heron_image.png" width="50%">
 
-Heronは、複数の画像/動画モデルと言語モデルをシームレスに統合するライブラリです。日本語のV&Lモデルをサポートしていることです。さらに、様々なデータセットで学習された事前学習済みウェイトも提供しています。
+Heronは、複数の画像/動画モデルと言語モデルをシームレスに統合するライブラリです。日本語のV&Lモデルをサポートしており、さらに様々なデータセットで学習された事前学習済みウェイトも提供します。
 
-Heronでは、様々なモジュールを組み合わせた独自のV&Lモデルを構成することができます。Vision Encoder、Adopter、LLMは設定ファイルで設定できます。分散学習方法やトレーニングに使用するデータセットも簡単に設定できます。
+Heronでは、様々なモジュールを組み合わせた独自のV&Lモデルを構成することができます。Vision Encoder、Adopter、LLMを設定ファイルで設定できます。分散学習方法やトレーニングに使用するデータセットも簡単に設定できます。
 
 <img src="../images/build_train_model.png" width="100%">
 
@@ -24,7 +24,7 @@ cd heron
 ## 2. Python環境のセットアップ
 必要なパッケージのインストールには仮想環境を使用することを推奨します。グローバルにパッケージをインストールしたい場合は、代わりに `pip install -r requirements.txt` を使ってください。
 ### 2-a. Poetry (Recommended)
-[pyenv](https://github.com/pyenv/pyenv)と[Poetry](https://python-poetry.org/)の場合、次の手順で必要なパッケージをインストールしてください：
+[pyenv](https://github.com/pyenv/pyenv)と[Poetry](https://python-poetry.org/)の場合、次の手順で必要なパッケージをインストールしてください。
 ```bash
 # install pyenv environment
 pyenv install 3.10
@@ -42,7 +42,7 @@ pre-commit install
 ``````
 
 ### 2-b. Anaconda
-[Anaconda](https://www.anaconda.com/)の場合、次の手順で必要なパッケージをインストールしてください:
+[Anaconda](https://www.anaconda.com/)の場合、次の手順で必要なパッケージをインストールしてください。
 ```bash
 conda create -n heron python=3.10 -y
 conda activate heron
@@ -56,7 +56,7 @@ pre-commit install
 ```
 
 ## 3. Llama-2モデルの事前申請
-Llama-2モデルを使用するには、モデル登録が必要です。
+Llama-2モデルを使用するには、アクセスの申請が必要です。
 まず、[HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b)と[Meta](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)のサイトから、llama-2モデルへのアクセスをリクエストしてください。
 
 リクエストが承認されたら、HaggingFaceのアカウントでサインインしてください。
@@ -66,7 +66,7 @@ huggingface-cli login
 
 # 学習方法
 
-LLMモジュールとしては現在、LLaMA, MPT, and OPTがサポートされています.
+LLMモジュールとしては現在、LLaMA, MPT, OPTがサポートされています。
 
 ```bash
 ./scripts/run.sh
@@ -75,7 +75,7 @@ LLMモジュールとしては現在、LLaMA, MPT, and OPTがサポートされ�
 # 利用方法
 
 HuggingFace Hubから学習済みモデルをダウンロードすることができます: [Inoichan/GIT-Llama-2-7B](https://huggingface.co/Inoichan/GIT-Llama-2-7B)<br>
-推論・学習の方法については[notebooks](./notebooks)も参考にしてください.
+推論・学習の方法については[notebooks](./notebooks)も参考にしてください。
 
 ```python
 import requests
@@ -134,6 +134,6 @@ print(processor.tokenizer.batch_decode(out))
 
 # 参考情報
 
-- [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): モデルの構成方法の着想はGITに基づいています.
-- [Llava](https://github.com/haotian-liu/LLaVA): 本ライブラリはLlavaプロジェクトを大いに参考にしています.
+- [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): モデルの構成方法の着想はGITに基づいています。
+- [Llava](https://github.com/haotian-liu/LLaVA): 本ライブラリはLlavaプロジェクトを参考にしています。
 - [GIT-LLM](https://github.com/Ino-Ichan/GIT-LLM)
