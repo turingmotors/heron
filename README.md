@@ -65,9 +65,9 @@ pre-commit install
 
 ## 3. Resister for Llama-2 models
 To use Llama-2 models, you need to register for the models.
-First, you request access to the llama-2 models, in [HuggingFace page](https://huggingface.co/meta-llama/Llama-2-7b) and [Meta website](https://ai.meta.com/resources/models-and-libraries/llama-downloads/).
+First, you request access to the llama-2 models, in [Hugging Face page](https://huggingface.co/meta-llama/Llama-2-7b) and [Meta website](https://ai.meta.com/resources/models-and-libraries/llama-downloads/).
 
-Please sign-in the HuggingFace account.
+Please sign-in the Hugging Face account.
 ```bash
 huggingface-cli login
 ```
@@ -145,7 +145,7 @@ GPU is required for learning; we have tested on Ubuntu 20.04, CUDA 11.7.
 
 # Evaluation
 
-You can get the pretrained weight form HuggingFace Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
+You can get the pretrained weight form Hugging Face Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
 See also [notebooks](./notebooks).
 
 ```python
