@@ -145,7 +145,7 @@ dataset_config_path:
 # 利用方法
 
 HuggingFace Hubから学習済みモデルをダウンロードすることができます: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
-推論・学習の方法については[notebooks](./notebooks)も参考にしてください。
+推論・学習の方法については[notebooks](../notebooks)も参考にしてください。
 
 ```python
 import requests

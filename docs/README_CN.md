@@ -146,7 +146,7 @@ training_config "为训练设置, "model_config "为模型设置，"dataset_conf
 # 如何使用
 
 您可以从 HuggingFace Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
-有关推理和训练方法的更多信息, 请参阅 [notebooks](./notebooks).
+有关推理和训练方法的更多信息, 请参阅 [notebooks](../notebooks).
 
 ```python
 import requests
