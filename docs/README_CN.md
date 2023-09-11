@@ -64,7 +64,7 @@ pre-commit install
 
 ## 3. 预申请 Llama-2 模型
 要使用 Llama-2 模型, 您需要注册您的模型.
-首先，请访问 [HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b) 和 [Meta](https://ai.meta.com/resources/models-and-libraries/llama- downloads/) 并申请访问 llama-2 模型.
+首先，请访问 [Hugging Face](https://huggingface.co/meta-llama/Llama-2-7b) 和 [Meta](https://ai.meta.com/resources/models-and-libraries/llama- downloads/) 并申请访问 llama-2 模型.
 
 申请通过后, 使用您的 HaggingFace 账户登录.
 ```bash
@@ -145,7 +145,7 @@ training_config "为训练设置, "model_config "为模型设置，"dataset_conf
 
 # 如何使用
 
-您可以从 HuggingFace Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
+您可以从 Hugging Face Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
 有关推理和训练方法的更多信息, 请参阅 [notebooks](../notebooks).
 
 ```python

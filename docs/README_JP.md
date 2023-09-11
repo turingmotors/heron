@@ -64,7 +64,7 @@ pre-commit install
 
 ## 3. Llama-2モデルの事前申請
 Llama-2モデルを使用するには、アクセスの申請が必要です。
-まず、[HuggingFace](https://huggingface.co/meta-llama/Llama-2-7b)と[Meta](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)のサイトから、llama-2モデルへのアクセスをリクエストしてください。
+まず、[Hugging Face](https://huggingface.co/meta-llama/Llama-2-7b)と[Meta](https://ai.meta.com/resources/models-and-libraries/llama-downloads/)のサイトから、llama-2モデルへのアクセスをリクエストしてください。
 
 リクエストが承認されたら、HaggingFaceのアカウントでサインインしてください。
 ```bash
@@ -144,7 +144,7 @@ dataset_config_path:
 
 # 利用方法
 
-HuggingFace Hubから学習済みモデルをダウンロードすることができます: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
+Hugging Face Hubから学習済みモデルをダウンロードすることができます: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
 推論・学習の方法については[notebooks](../notebooks)も参考にしてください。
 
 ```python
