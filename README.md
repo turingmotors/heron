@@ -154,7 +154,7 @@ from PIL import Image
 
 import torch
 from transformers import AutoProcessor
-from heron.models.git_llm.git_llama import GitLlamaConfig, GitLlamaForCausalLM
+from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 
 device_id = 0
 
