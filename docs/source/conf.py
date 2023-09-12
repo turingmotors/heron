@@ -26,3 +26,6 @@ exclude_patterns = []
 
 html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
+
+locale_dirs = ['locale/']
+gettext_compact = False
