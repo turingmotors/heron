@@ -12,4 +12,9 @@ wandb
 
 *egg-info
 
-docs/build
+docs/en/build
+docs/ja/build
+docs/cn/build
+
+.DS_Store
+.python-version
