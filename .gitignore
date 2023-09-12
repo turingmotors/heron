@@ -11,3 +11,5 @@ data/*
 wandb
 
 *egg-info
+
+docs/build
