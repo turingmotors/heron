@@ -277,8 +277,8 @@ Released under the Apache License 2.0.
 Acknowledgements
 ------------------------
 
-* `GenerativeImage2Text <https://github.com/microsoft/GenerativeImage2Text>`_: モデルの構成方法の着想はGITに基づいています。
-* `Llava <https://github.com/haotian-liu/LLaVA>`_ : 本ライブラリはLlavaプロジェクトを参考にしています。
+* `GenerativeImage2Text <https://github.com/microsoft/GenerativeImage2Text>`_: The main idia of the model is based on original GIT.
+* `Llava <https://github.com/haotian-liu/LLaVA>`_ : This project is learned a lot from the great Llava project.
 * `GIT-LLM <https://github.com/Ino-Ichan/GIT-LLM>`_ 
 
 
