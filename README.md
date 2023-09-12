@@ -159,18 +159,20 @@ from heron.models.git_llm.git_llama import GitLlamaForCausalLM
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
+model = GitLlamaForCausalLM.from_pretrained(
+    'turing-motors/heron-chat-git-Llama-2-7b-v0', torch_dtype=torch.float16
+)
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-Llama-2-7b-v0')
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
 image = Image.open(requests.get(url, stream=True).raw)
 
-text = f"##Instruction: Please answer the following question concretely. ##Question: What is unusual about this image? Explain precisely and concretely what he is doing? ##Answer: "
+text = f"##human: What is this picture?\n##gpt: "
 
 # do preprocessing
 inputs = processor(
@@ -192,7 +194,7 @@ with torch.no_grad():
     out = model.generate(**inputs, max_length=256, do_sample=False, temperature=0., eos_token_id=eos_token_id_list)
 
 # print result
-print(processor.tokenizer.batch_decode(out))
+print(processor.tokenizer.batch_decode(out)[0])
 ```
 
 ### Pretrained Models
@@ -202,6 +204,7 @@ print(processor.tokenizer.batch_decode(out))
 |[heron-chat-blip-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|BLIP|7B|
 |[heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|GIT|7B|
 |[heron-chat-git-ELYZA-fast-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ELYZA-fast-7b-v0)|ELYZA|GIT|7B|
+|[heron-chat-git-Llama-2-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-Llama-2-7b-v0)|Llama-2|GIT|7B|
 |[heron-preliminary-git-Llama-2-70b-v0](https://huggingface.co/turing-motors/heron-preliminary-git-Llama-2-70b-v0) *1|Llama-2|GIT|70B|
 *1 This model only applies to pre-training of adapters.
 
