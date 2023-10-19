@@ -3,13 +3,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # DeepSpeed Team
-import argparse
 import math
 import os
 import random
 import sys
 
 import deepspeed
+import fire
 import numpy as np
 import torch
 import yaml
@@ -265,8 +265,18 @@ def parse_args():
     return args
 
 
-def main():
-    args = parse_args()
+def main(config_file: str, local_rank: int = 0):
+    with open(config_file, "r") as i_:
+        config = yaml.safe_load(i_)
+        model_config = config["model_config"]
+        training_config = config["training_config"]
+
+    if os.environ.get("WANDB_NAME") is not None:
+        training_config["output_dir"] = os.path.join(
+            training_config["output_dir"], os.environ["WANDB_NAME"]
+        )
+
+    # args = parse_args()
 
     if args.local_rank == -1:
         device = torch.device("cuda")
@@ -296,26 +306,6 @@ def main():
     set_random_seed(args.seed)
 
     torch.distributed.barrier()
-    """ ↓ VisualChatのモデル定義 """
-    # tokenizer = AutoTokenizer.from_pretrained(args.lm_model_name_or_path,
-    #                                           fast_tokenizer=True)
-    # tokenizer.padding_side = 'right'
-
-    # model, image_processor, tokenizer = create_dsvl_model_and_transforms(
-    #         text_tokenizer=tokenizer,
-    #         args=args,
-    #         ds_config=ds_config)
-    # if args.lang_lora_dim > 0:
-    #     model.lang_decoder = convert_linear_layer_to_lora(model.lang_decoder, args.lang_lora_module_name, args.lang_lora_dim)
-    #     if args.only_optimize_lora:
-    #         model.lang_decoder = only_optimize_lora_parameters(model.lang_decoder)
-
-    # if args.vis_lora_dim > 0:
-    #     model.vis_encoder = convert_linear_layer_to_lora(model.vis_encoder, args.vis_lora_module_name, args.vis_lora_dim)
-    #     if args.only_optimize_lora:
-    #         model.vis_encoder = only_optimize_lora_parameters(model.vis_encoder)
-    """ ↑ VsualChatのモデル定義 """
-
     """ ↓ Heronのモデル定義 """
     # load model
     model = load_model(model_config)
@@ -325,34 +315,6 @@ def main():
     """ ↑ Heronのモデル定義 """
 
     print_rank_0(model, args.global_rank)
-
-    """ ↓ VisualChat """
-    # # Prepare the data
-    # if len(args.dataset_samples) < len(args.dataset_names):
-    #     assert len(args.dataset_samples) == 1, "when args.dataset_samples is not the same length as args.dataset_names, it should be only one number"
-    #     args.dataset_samples =  [args.dataset_samples[0]] * len(args.dataset_names)
-    # if len(args.dataset_concatenate_samples) < len(args.dataset_names):
-    #     assert len(args.dataset_concatenate_samples) == 1, "when args.dataset_concatenate_samples is not the same length as args.dataset_names, it should be only one number"
-    #     args.dataset_concatenate_samples =  [args.dataset_concatenate_samples[0]] * len(args.dataset_names)
-    # # convert to int
-    # args.dataset_concatenate_samples = [int(i) for i in args.dataset_concatenate_samples]
-
-    # dataset = build_dataset(
-    #     args.data_path,
-    #     args.data_debug_path,
-    #     args.dataset_names,
-    #     args.dataset_samples,
-    #     args.dataset_concatenate_samples,
-    #     args.max_num_image_per_sample,
-    #     vis_processor=image_processor,
-    #     tokenizer=tokenizer,
-    # )
-    # # split the dataset into train and evaluation
-    # total_data = len(dataset)
-    # np_rng = np.random.RandomState(seed=args.seed)
-    # dataset = shuffle_dataset(dataset, np_rng)
-    # train_dataset, eval_dataset = split_dataset(dataset, args.data_train_split_ratio)
-    """ ↑ VisualChat """
 
     """ ↓ Heron """
     config["dataset_config_path"] = [
@@ -365,14 +327,12 @@ def main():
         train_dataset,
         batch_size=args.per_device_train_batch_size,
         sampler=DistributedSampler(train_dataset, shuffle=True, drop_last=True),
-        # collate_fn=DataCollatorPadToMaxLen(args.max_seq_len, tokenizer.pad_token_id),  # Heronはtokenizeしない
     )
 
     eval_dataloader = DataLoader(
         eval_dataset,
         batch_size=args.per_device_eval_batch_size,
         sampler=DistributedSampler(eval_dataset, shuffle=False),
-        # collate_fn=DataCollatorPadToMaxLen(args.max_seq_len, tokenizer.pad_token_id),  # Heronはtokenizeしない
     )
 
     # Split weights in two groups, one with weight decay and the other not.
@@ -465,18 +425,6 @@ def main():
             batch = to_device(
                 batch, device
             )  # torch.size(1, 3, 224, 224]) #torch.Size([1, 1, 3, 224, 224])
-            """ ↓ VisualChatの1step """
-            # images = batch["image"].half()
-            # attention_mask = batch["attention_mask"]
-            # labels = batch["labels"]
-            # loss = model(
-            #     images,
-            #     input_ids,
-            #     attention_mask=attention_mask,
-            #     input_labels=labels,
-            #     image_num=batch["image_num"],
-            # )[0]
-            """ ↑ VisualChatの1step """
 
             """ ↓ Heronの1step """
             input_ids = batch["input_ids"]
@@ -531,4 +479,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    fire.Fire(main)
