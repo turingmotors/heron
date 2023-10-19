@@ -38,6 +38,8 @@ from heron.utils.utils import (
 
 
 def main(config_file: str, local_rank: int = 0):
+    torch.cuda.empty_cache()
+
     with open(config_file, "r") as i_:
         config = yaml.safe_load(i_)
         model_config = config["model_config"]
@@ -47,8 +49,6 @@ def main(config_file: str, local_rank: int = 0):
         training_config["output_dir"] = os.path.join(
             training_config["output_dir"], os.environ["WANDB_NAME"]
         )
-
-    # args = parse_args()
 
     if local_rank == -1:
         device = torch.device("cuda")
@@ -60,6 +60,9 @@ def main(config_file: str, local_rank: int = 0):
 
     training_config["global_rank"] = torch.distributed.get_rank()
 
+    set_random_seed(training_config["seed"])
+
+    # DeepSpeedの初期化に必要な変数を設定
     ds_config = get_train_ds_config(
         training_config, offload=False, stage=training_config["zero_stage"]
     )
@@ -70,9 +73,7 @@ def main(config_file: str, local_rank: int = 0):
         * training_config["gradient_accumulation_steps"]
     )
 
-    # If passed along, set the training seed now.
-    set_random_seed(training_config["seed"])
-
+    # すべてのプロセスの処理が終わるまで待機
     torch.distributed.barrier()
 
     # load model
@@ -161,11 +162,10 @@ def main(config_file: str, local_rank: int = 0):
             with torch.no_grad():
                 batch = to_device(batch, device)
                 loss = model(
-                    batch["image"].half(),
-                    batch["input_ids"],
+                    input_ids=batch["input_ids"],
                     attention_mask=batch["attention_mask"],
-                    input_labels=batch["labels"],
-                    image_num=batch["image_num"],
+                    pixel_values=batch["pixel_values"],
+                    labels=batch["labels"],
                 )[0]
             acc_loss += loss
         model.train()
@@ -196,7 +196,7 @@ def main(config_file: str, local_rank: int = 0):
             input_ids = batch["input_ids"]
             attention_mask = batch["attention_mask"]
             # position_ids = batch["position_ids"]
-            pixel_values = batch["pixel_values"]
+            pixel_values = batch["pixel_values"].half()
             labels = batch["labels"]
             loss = model(
                 input_ids=input_ids,
