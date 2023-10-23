@@ -93,12 +93,14 @@ def main(config_file: str, local_rank: int = 0):
         train_dataset,
         batch_size=training_config["per_device_train_batch_size"],
         sampler=DistributedSampler(train_dataset, shuffle=True, drop_last=True),
+        num_workers=training_config["dataloader_num_workers"],
     )
 
     eval_dataloader = DataLoader(
         eval_dataset,
         batch_size=training_config["per_device_eval_batch_size"],
         sampler=DistributedSampler(eval_dataset, shuffle=False),
+        num_workers=training_config["dataloader_num_workers"],
     )
 
     # Split weights in two groups, one with weight decay and the other not.
@@ -164,7 +166,7 @@ def main(config_file: str, local_rank: int = 0):
                 loss = model(
                     input_ids=batch["input_ids"],
                     attention_mask=batch["attention_mask"],
-                    pixel_values=batch["pixel_values"],
+                    pixel_values=batch["pixel_values"].half(),
                     labels=batch["labels"],
                 )[0]
             acc_loss += loss
