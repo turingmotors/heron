@@ -221,7 +221,7 @@ def main(config_file: str, local_rank: int = 0):
                         "Train/epoch": epoch,
                         "Train/step": step,
                         "Train/loss": loss.detach(),
-                        "Train/average_loss": loss.detach() / step,
+                        "Train/average_loss": acc_loss / step,
                     }
                 )
 
