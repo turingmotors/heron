@@ -17,6 +17,7 @@ training_config:
   num_warmup_steps: 0.
   lr_scheduler_type: "cosine"
   gradient_checkpointing: False
+  cpu_offload: False
 
 
 model_config:
