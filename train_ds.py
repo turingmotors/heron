@@ -17,6 +17,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from transformers import AdamW, AutoTokenizer, SchedulerType, get_scheduler
 
+import wandb
 from heron.datasets.utils import get_dataset
 from heron.models.utils import (
     apply_lora_model,
@@ -72,6 +73,9 @@ def main(config_file: str, local_rank: int = 0):
         * torch.distributed.get_world_size()
         * training_config["gradient_accumulation_steps"]
     )
+    # wandb の初期化
+    if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
+        wandb.init(project=os.environ["WANDB_PROJECT"])
 
     # すべてのプロセスの処理が終わるまで待機
     torch.distributed.barrier()
@@ -209,6 +213,18 @@ def main(config_file: str, local_rank: int = 0):
             model.backward(loss)
             # この中でgradient accumulationが行われることに注意
             model.step()
+
+            # wandbへのlog
+            if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
+                wandb.log(
+                    {
+                        "Train/epoch": epoch,
+                        "Train/step": step,
+                        "Train/loss": loss.detach(),
+                        "Train/average_loss": loss.detach() / step,
+                    }
+                )
+
         model.tput_timer.update_epoch_count()
         acc_loss = get_all_reduce_mean(acc_loss).item()
         print_rank_0(
@@ -218,6 +234,14 @@ def main(config_file: str, local_rank: int = 0):
 
         if eval_loss < best_loss:
             best_loss = eval_loss
+
+        # wandbへのlog
+        if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
+            wandb.log(
+                {
+                    "Eval/loss": eval_loss,
+                }
+            )
 
         # 途中のチェックポイントの保存
         client_state = {
