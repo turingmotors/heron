@@ -38,8 +38,6 @@ from heron.utils.utils import (
 
 
 def main(config_file: str, local_rank: int = 0):
-    torch.cuda.empty_cache()
-
     with open(config_file, "r") as i_:
         config = yaml.safe_load(i_)
         model_config = config["model_config"]
@@ -64,7 +62,9 @@ def main(config_file: str, local_rank: int = 0):
 
     # DeepSpeedの初期化に必要な変数を設定
     ds_config = get_train_ds_config(
-        training_config, offload=False, stage=training_config["zero_stage"]
+        training_config,
+        offload=training_config["cpu_offload"],
+        stage=training_config["zero_stage"],
     )
     ds_config["train_micro_batch_size_per_gpu"] = training_config["per_device_train_batch_size"]
     ds_config["train_batch_size"] = (
@@ -84,9 +84,7 @@ def main(config_file: str, local_rank: int = 0):
 
     print_rank_0(model, training_config["global_rank"])
 
-    config["dataset_config_path"] = [
-        os.path.join("/home/yuma_ochi/heron-exp", path) for path in config["dataset_config_path"]
-    ]
+    # datasetの読み込み
     train_dataset, eval_dataset = get_dataset(config)
 
     train_dataloader = DataLoader(
@@ -195,9 +193,9 @@ def main(config_file: str, local_rank: int = 0):
                 batch, device
             )  # torch.size(1, 3, 224, 224]) #torch.Size([1, 1, 3, 224, 224])
 
+            # ここはDatasetの出力とモデルのforward関数を参考にした
             input_ids = batch["input_ids"]
             attention_mask = batch["attention_mask"]
-            # position_ids = batch["position_ids"]
             pixel_values = batch["pixel_values"].half()
             labels = batch["labels"]
             loss = model(
@@ -209,6 +207,7 @@ def main(config_file: str, local_rank: int = 0):
 
             acc_loss += loss.detach().clone()
             model.backward(loss)
+            # この中でgradient accumulationが行われることに注意
             model.step()
         model.tput_timer.update_epoch_count()
         acc_loss = get_all_reduce_mean(acc_loss).item()
@@ -220,20 +219,7 @@ def main(config_file: str, local_rank: int = 0):
         if eval_loss < best_loss:
             best_loss = eval_loss
 
-        model = fuse_lora(model)
-        if training_config["global_rank"] == 0:
-            save_hf_format(model, tokenizer, training_config, f"epoch-{epoch}")
-        if training_config["zero_stage"] == 3:
-            # For zero stage 3, each gpu only has a part of the model, so we need a special save function
-            save_zero_three_model(
-                model,
-                training_config["global_rank"],
-                training_config["output_dir"],
-                zero_stage=training_config["zero_stage"],
-                sub_folder=f"epoch-{epoch}",
-            )
-        model = unfuse_lora(model)
-        # save deepspeed zero checkpoint so we can resume training if needed
+        # 途中のチェックポイントの保存
         client_state = {
             "random_rng_state": random.getstate(),
             "np_rng_state": np.random.get_state(),
@@ -245,6 +231,22 @@ def main(config_file: str, local_rank: int = 0):
         model.save_checkpoint(
             training_config["output_dir"], client_state=client_state
         )  # save to the latest
+
+        # モデルの保存(LoRAをモデルにマージしたもの)
+        if model_config["use_lora"]:
+            model = unload_and_merge_lora(model, model_config)
+
+        if training_config["global_rank"] == 0:
+            save_hf_format(model, tokenizer, training_config, f"epoch-{epoch}")
+        if training_config["zero_stage"] == 3:
+            # For zero stage 3, each gpu only has a part of the model, so we need a special save function
+            save_zero_three_model(
+                model,
+                training_config["global_rank"],
+                training_config["output_dir"],
+                zero_stage=training_config["zero_stage"],
+                sub_folder=f"epoch-{epoch}",
+            )
 
 
 if __name__ == "__main__":
