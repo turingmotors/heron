@@ -75,7 +75,7 @@ def main(config_file: str, local_rank: int = 0):
     )
     # wandb の初期化
     if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
-        wandb.init(project=os.environ["WANDB_PROJECT"])
+        wandb.init(project=os.environ["WANDB_PROJECT"], config=config)
 
     # すべてのプロセスの処理が終わるまで待機
     torch.distributed.barrier()
@@ -84,6 +84,10 @@ def main(config_file: str, local_rank: int = 0):
     model = load_model(model_config)
 
     if model_config["use_lora"]:
+        # VisualChatのLoRA実装 (w/o peft)
+        # model = convert_linear_layer_to_lora(model, ["query_key_value"], lora_dim=8)
+
+        # HeronのLoRA実装 (w/ peft)
         model = apply_lora_model(model, model_config)
 
     print_rank_0(model, training_config["global_rank"])
@@ -160,7 +164,7 @@ def main(config_file: str, local_rank: int = 0):
 
     def evaluation(model, eval_dataloader):
         model.eval()
-        print("Evaluation")
+        print_rank_0("***** Evaluation *****", training_config["global_rank"])
         acc_loss = 0
         for step, batch in enumerate(eval_dataloader):
             with torch.no_grad():
@@ -193,9 +197,7 @@ def main(config_file: str, local_rank: int = 0):
         model.train()
         acc_loss = 0
         for step, batch in enumerate(train_dataloader):
-            batch = to_device(
-                batch, device
-            )  # torch.size(1, 3, 224, 224]) #torch.Size([1, 1, 3, 224, 224])
+            batch = to_device(batch, device)
 
             # ここはDatasetの出力とモデルのforward関数を参考にした
             input_ids = batch["input_ids"]
@@ -257,11 +259,11 @@ def main(config_file: str, local_rank: int = 0):
         )  # save to the latest
 
         # モデルの保存(LoRAをモデルにマージしたもの)
-        if model_config["use_lora"]:
-            model = unload_and_merge_lora(model, model_config)
+        # if model_config["use_lora"]:
+        #     model = unload_and_merge_lora(model, model_config)
 
         if training_config["global_rank"] == 0:
-            save_hf_format(model, tokenizer, training_config, f"epoch-{epoch}")
+            save_hf_format(model, training_config)
         if training_config["zero_stage"] == 3:
             # For zero stage 3, each gpu only has a part of the model, so we need a special save function
             save_zero_three_model(
