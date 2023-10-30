@@ -31,8 +31,6 @@ from heron.utils.utils import (
     get_all_reduce_mean,
     get_optimizer_grouped_parameters,
     print_rank_0,
-    save_hf_format,
-    save_zero_three_model,
     set_random_seed,
     to_device,
 )
@@ -89,6 +87,16 @@ def main(config_file: str, local_rank: int = 0):
 
         # HeronのLoRA実装 (w/ peft)
         model = apply_lora_model(model, model_config)
+
+    # configの割り当て
+    keys_to_finetune = config["model_config"]["keys_to_finetune"]
+    keys_to_freeze = config["model_config"]["keys_to_freeze"]
+    # Set trainable params
+    trainable_list, untrainable_list = set_trainable_params(
+        model, keys_to_finetune, keys_to_freeze, train_lora=model_config["use_lora"]
+    )
+    print("trainable_list", trainable_list)
+    print("untrainable_list", untrainable_list)
 
     print_rank_0(model, training_config["global_rank"])
 
@@ -259,20 +267,14 @@ def main(config_file: str, local_rank: int = 0):
         )  # save to the latest
 
         # モデルの保存(LoRAをモデルにマージしたもの)
-        # if model_config["use_lora"]:
-        #     model = unload_and_merge_lora(model, model_config)
+        if model_config["use_lora"]:
+            # model <- base_model <- module (DeepSpeedEngine) と2重にwrapされている
+            model_unlora = unload_and_merge_lora(model.module, model_config).base_model
+        else:
+            model_unlora = model
 
-        if training_config["global_rank"] == 0:
-            save_hf_format(model, training_config)
-        if training_config["zero_stage"] == 3:
-            # For zero stage 3, each gpu only has a part of the model, so we need a special save function
-            save_zero_three_model(
-                model,
-                training_config["global_rank"],
-                training_config["output_dir"],
-                zero_stage=training_config["zero_stage"],
-                sub_folder=f"epoch-{epoch}",
-            )
+        save_path = os.path.join(training_config["output_dir"], f"epoch_{epoch}")
+        model_unlora.save_pretrained(save_path)
 
 
 if __name__ == "__main__":
