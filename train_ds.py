@@ -83,9 +83,6 @@ def main(config_file: str, local_rank: int = 0):
     model = load_model(model_config)
 
     if model_config["use_lora"]:
-        # VisualChatのLoRA実装 (w/o peft)
-        # model = convert_linear_layer_to_lora(model, ["query_key_value"], lora_dim=8)
-
         # HeronのLoRA実装 (w/ peft)
         model = apply_lora_model(model, model_config)
 
