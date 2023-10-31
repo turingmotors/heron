@@ -163,12 +163,12 @@ def moving_average(model, model_ema, beta=0.992, device=None, zero_stage=0):
                 param_ema.data.copy_(torch.lerp(data, param_ema.data, beta))
 
 
-def save_hf_format(model, config, sub_folder=""):
+def save_hf_format(model, tokenizer, args, sub_folder=""):
     # used to save huggingface format, so we can use it for hf.from_pretrained
     model_to_save = model.module if hasattr(model, "module") else model
     CONFIG_NAME = "config.json"
     WEIGHTS_NAME = "pytorch_model.bin"
-    output_dir = os.path.join(config["output_dir"], sub_folder)
+    output_dir = os.path.join(args.output_dir, sub_folder)
     os.makedirs(output_dir, exist_ok=True)
     output_model_file = os.path.join(output_dir, WEIGHTS_NAME)
     output_config_file = os.path.join(output_dir, CONFIG_NAME)
@@ -180,11 +180,11 @@ def save_hf_format(model, config, sub_folder=""):
     try:
         model_to_save.config.to_json_file(output_config_file)
     except:
-        # args_dict = vars(args)
-        torch.save(config, os.path.join(output_dir, "train_args.pt"))
+        args_dict = vars(args)
+        torch.save(args_dict, os.path.join(output_dir, "train_args.pt"))
         print("config can't be saved")
     # tokenizer.save_vocabulary(output_dir)
-    # tokenizer.save_pretrained(output_dir)  # this will save all tokenizer files
+    tokenizer.save_pretrained(output_dir)  # this will save all tokenizer files
 
 
 def save_zero_three_model(model_ema, global_rank, save_dir, zero_stage=0, sub_folder=""):
