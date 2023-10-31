@@ -95,8 +95,8 @@ def main(config_file: str, local_rank: int = 0):
     trainable_list, untrainable_list = set_trainable_params(
         model, keys_to_finetune, keys_to_freeze, train_lora=model_config["use_lora"]
     )
-    print("trainable_list", trainable_list)
-    print("untrainable_list", untrainable_list)
+    print_rank_0(f"trainable_list {trainable_list}", training_config["global_rank"])
+    print_rank_0(f"untrainable_list {untrainable_list}", training_config["global_rank"])
 
     print_rank_0(model, training_config["global_rank"])
 
