@@ -126,7 +126,9 @@ def main(config_file: str, local_rank: int = 0):
     )
 
     optimizer = AdamW(
-        optimizer_grouped_parameters, lr=training_config["learning_rate"], betas=(0.9, 0.95)
+        optimizer_grouped_parameters,
+        lr=training_config["learning_rate"],
+        betas=tuple(training_config["optim_betas"]),
     )
 
     num_update_steps_per_epoch = math.ceil(
