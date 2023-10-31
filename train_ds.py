@@ -15,6 +15,7 @@ import torch
 import yaml
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
+from tqdm import tqdm
 from transformers import AdamW, AutoTokenizer, SchedulerType, get_scheduler
 
 import wandb
@@ -174,7 +175,8 @@ def main(config_file: str, local_rank: int = 0):
         model.eval()
         print_rank_0("***** Evaluation *****", training_config["global_rank"])
         acc_loss = 0
-        for step, batch in enumerate(eval_dataloader):
+        progress_bar = tqdm(eval_dataloader, dynamic_ncols=True)
+        for step, batch in enumerate(progress_bar):
             with torch.no_grad():
                 batch = to_device(batch, device)
                 loss = model(
@@ -184,6 +186,8 @@ def main(config_file: str, local_rank: int = 0):
                     labels=batch["labels"],
                 )[0]
             acc_loss += loss
+            text = f"step {step}, loss: {loss.detach():.5f} the average_loss: {acc_loss/step:.5f}"
+            progress_bar.set_description(text)
         model.train()
         acc_loss = get_all_reduce_mean(acc_loss).item()
         ave_loss = acc_loss / (step + 1)
@@ -204,7 +208,8 @@ def main(config_file: str, local_rank: int = 0):
         )
         model.train()
         acc_loss = 0
-        for step, batch in enumerate(train_dataloader):
+        progress_bar = tqdm(train_dataloader, dynamic_ncols=True)
+        for step, batch in enumerate(progress_bar):
             batch = to_device(batch, device)
 
             # ここはDatasetの出力とモデルのforward関数を参考にした
@@ -234,6 +239,9 @@ def main(config_file: str, local_rank: int = 0):
                         "Train/average_loss": acc_loss / step,
                     }
                 )
+
+            text = f"step {step}, loss: {loss.detach():.5f} the average_loss: {acc_loss/step:.5f}"
+            progress_bar.set_description(text)
 
         model.tput_timer.update_epoch_count()
         acc_loss = get_all_reduce_mean(acc_loss).item()
@@ -266,15 +274,19 @@ def main(config_file: str, local_rank: int = 0):
             training_config["output_dir"], client_state=client_state
         )  # save to the latest
 
-        # モデルの保存(LoRAをモデルにマージしたもの)
-        if model_config["use_lora"]:
-            # model <- base_model <- module (DeepSpeedEngine) と2重にwrapされている
-            model_unlora = unload_and_merge_lora(model.module, model_config).base_model
-        else:
-            model_unlora = model
-
         save_path = os.path.join(training_config["output_dir"], f"epoch_{epoch}")
-        model_unlora.save_pretrained(save_path)
+        model_to_save = (
+            model.module.base_model if hasattr(model, "module.base_model") else model.module
+        )
+        model_to_save.save_pretrained(save_path)
+
+    if model_config["use_lora"]:
+        # model <- base_model <- module (DeepSpeedEngine) と2重にwrapされている
+        model = unload_and_merge_lora(model.module, model_config).base_model
+    else:
+        model = model.module
+    save_path = os.path.join(training_config["output_dir"], f"epoch_final")
+    model.save_pretrained(save_path)
 
 
 if __name__ == "__main__":
