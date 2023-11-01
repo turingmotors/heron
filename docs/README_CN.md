@@ -9,10 +9,6 @@
 
 Heron是一个可无缝集成多种图像/视频和语言模型的库. 此外, 它还提供在各种数据集上训练的预训练权重.
 
-点击此处查看使用不同 LLM 制作的多模态演示页面.（均有日语版本）
-- [BLIP + Japanese StableLM Base Alpha](https://huggingface.co/spaces/turing-motors/heron_chat_blip)
-- [GIT + ELYZA-japanese-Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
-
 <div align="center">
 <img src="../images/heron_image.png" width="50%">
 </div>

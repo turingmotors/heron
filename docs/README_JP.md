@@ -9,10 +9,6 @@
 
 Heronは、複数の画像/動画モデルと言語モデルをシームレスに統合するライブラリです。日本語のV&Lモデルをサポートしており、さらに様々なデータセットで学習された事前学習済みウェイトも提供します。
 
-異なるLLMで構築されたマルチモーダルのデモページはこちらをご覧ください。（ともに日本語対応）
-- [BLIP + Japanese StableLM Base Alpha](https://huggingface.co/spaces/turing-motors/heron_chat_blip)
-- [GIT + ELYZA-japanese-Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
-
 <div align="center">
 <img src="../images/heron_image.png" width="50%">
 </div>

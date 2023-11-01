@@ -9,10 +9,6 @@ English | [日本語](./docs/README_JP.md) | [中文](./docs/README_CN.md)
 
 Welcome to "heron" repository. Heron is a library that seamlessly integrates multiple Vision and Language models, as well as Video and Language models. One of its standout features is its support for Japanese V&L models. Additionally, we provide pretrained weights trained on various datasets.
 
-Please click here to see the multimodal demo pages built with different LLMs. (Both are available in Japanese)
-- [BLIP + Japanese StableLM Base Alpha](https://huggingface.co/spaces/turing-motors/heron_chat_blip)
-- [GIT + Llama-2](https://huggingface.co/spaces/turing-motors/heron_chat_git)
-
 <div align="center">
 <img src="./images/heron_image.png" width="50%">
 </div>
