@@ -227,12 +227,14 @@ def main(config_file: str, local_rank: int = 0):
 
             # Log to wandb
             if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
+                now_lr = lr_scheduler.get_lr()[0]
                 wandb.log(
                     {
                         "Train/epoch": epoch,
                         "Train/step": step,
                         "Train/loss": loss.detach(),
                         "Train/average_loss": acc_loss / step,
+                        "Train/learning_rate": now_lr,
                     }
                 )
 
