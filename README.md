@@ -225,3 +225,4 @@ Released under the [Apache License 2.0](./LICENSE).
 - [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): The main idia of the model is based on original GIT.
 - [Llava](https://github.com/haotian-liu/LLaVA): This project is learned a lot from the great Llava project.
 - [GIT-LLM](https://github.com/Ino-Ichan/GIT-LLM)
+- [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples)
