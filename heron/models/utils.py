@@ -31,6 +31,10 @@ def load_model(
     model_type = model_config["model_type"]
     language_model = model_config["language_model_name"]
     num_image_with_embedding = model_config["num_image_with_embedding"]
+    if "mlp_adapter" in model_config:
+        adapter_name = model_config["mlp_adapter"]
+    else:
+        adapter_name = "linear"
 
     # set dtype
     if model_config.get("fp16", False):
@@ -47,6 +51,7 @@ def load_model(
                 num_image_with_embedding=num_image_with_embedding,
                 vision_model_name=model_config["vision_model_name"],
             )
+            git_config.mlp_adapter = adapter_name
             model = GitOPTForCausalLM.from_pretrained(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
@@ -59,6 +64,7 @@ def load_model(
                 num_image_with_embedding=num_image_with_embedding,
                 vision_model_name=model_config["vision_model_name"],
             )
+            git_config.mlp_adapter = adapter_name
             model = GitLlamaForCausalLM.from_pretrained(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
@@ -71,6 +77,7 @@ def load_model(
                 num_image_with_embedding=num_image_with_embedding,
                 vision_model_name=model_config["vision_model_name"],
             )
+            git_config.mlp_adapter = adapter_name
             model = GitMptForCausalLM.from_pretrained(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
@@ -86,6 +93,7 @@ def load_model(
                 num_image_with_embedding=num_image_with_embedding,
                 vision_model_name=model_config["vision_model_name"],
             )
+            git_config.mlp_adapter = adapter_name
             model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
@@ -102,6 +110,7 @@ def load_model(
                 num_image_with_embedding=num_image_with_embedding,
                 vision_model_name=model_config["vision_model_name"],
             )
+            git_config.mlp_adapter = adapter_name
             model = GitGPTNeoXForCausalLM.from_pretrained(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
