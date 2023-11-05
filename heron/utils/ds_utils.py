@@ -1,5 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # SPDX-License-Identifier: Apache-2.0
+# Modifications copyright 2023 Turing Inc.
 
 # DeepSpeed Team
 GLOBAL_BATCH_SIZE = 32
