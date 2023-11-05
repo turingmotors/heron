@@ -1,8 +1,17 @@
-#!/usr/bin/env python
-# Copyright (c) Microsoft Corporation.
-# SPDX-License-Identifier: Apache-2.0
+# Copyright 2023 Turing Inc. Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# DeepSpeed Team
 import math
 import os
 import random
@@ -155,8 +164,6 @@ def main(config_file: str, local_rank: int = 0):
     start_epoch = 0
     # let load checkpoint
     if os.path.exists(os.path.join(training_config["output_dir"], "latest")):
-        # we have the deepspeed chekpoint so it is a resumed job
-        # TODO: after loading the ckpt, the global step is not loaded. Need to ask Tunji/Ammar for help.
         _, client_state = model.load_checkpoint(training_config["output_dir"])
         start_epoch = client_state["epoch"]
         best_loss = client_state["best_loss"]
