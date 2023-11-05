@@ -48,4 +48,4 @@ model_config:
     task_type: CAUSAL_LM
 
 dataset_config_path:
-  - ./configs/datasets/coco.yaml  # cocoのみの訓練
+  - ./configs/datasets/coco.yaml  # only coco dataset

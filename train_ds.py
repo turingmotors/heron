@@ -60,7 +60,7 @@ def main(config_file: str, local_rank: int = 0):
 
     set_random_seed(training_config["seed"])
 
-    # DeepSpeedの初期化に必要な変数を設定
+    # Get configs for initialize DeepSpeed
     ds_config = get_train_ds_config(
         training_config,
         offload=training_config["cpu_offload"],
@@ -72,24 +72,22 @@ def main(config_file: str, local_rank: int = 0):
         * torch.distributed.get_world_size()
         * training_config["gradient_accumulation_steps"]
     )
-    # wandb の初期化
+    # Initialization of wandb
     if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
         wandb.init(project=os.environ["WANDB_PROJECT"], config=config)
 
-    # すべてのプロセスの処理が終わるまで待機
+    # Wait for all processes
     torch.distributed.barrier()
 
-    # load model
+    # Load model
     model = load_model(model_config)
 
     if model_config["use_lora"]:
-        # HeronのLoRA実装 (w/ peft)
         model = apply_lora_model(model, model_config)
 
-    # configの割り当て
+    # Set trainable params
     keys_to_finetune = config["model_config"]["keys_to_finetune"]
     keys_to_freeze = config["model_config"]["keys_to_freeze"]
-    # Set trainable params
     trainable_list, untrainable_list = set_trainable_params(
         model, keys_to_finetune, keys_to_freeze, train_lora=model_config["use_lora"]
     )
@@ -98,7 +96,7 @@ def main(config_file: str, local_rank: int = 0):
 
     print_rank_0(model, training_config["global_rank"])
 
-    # datasetの読み込み
+    # Load datasets
     train_dataset, eval_dataset = get_dataset(config)
 
     train_dataloader = DataLoader(
@@ -211,7 +209,6 @@ def main(config_file: str, local_rank: int = 0):
         for step, batch in enumerate(progress_bar):
             batch = to_device(batch, device)
 
-            # ここはDatasetの出力とモデルのforward関数を参考にした
             input_ids = batch["input_ids"]
             attention_mask = batch["attention_mask"]
             pixel_values = batch["pixel_values"].half()
@@ -225,10 +222,10 @@ def main(config_file: str, local_rank: int = 0):
 
             acc_loss += loss.detach().clone()
             model.backward(loss)
-            # この中でgradient accumulationが行われることに注意
+            # Attention: gradient accumulation in the function
             model.step()
 
-            # wandbへのlog
+            # Log to wandb
             if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
                 wandb.log(
                     {
@@ -252,7 +249,7 @@ def main(config_file: str, local_rank: int = 0):
         if eval_loss < best_loss:
             best_loss = eval_loss
 
-        # wandbへのlog
+        # Log to wandb
         if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
             wandb.log(
                 {
@@ -260,7 +257,7 @@ def main(config_file: str, local_rank: int = 0):
                 }
             )
 
-        # 途中のチェックポイントの保存
+        # Save the checkpoint
         client_state = {
             "random_rng_state": random.getstate(),
             "np_rng_state": np.random.get_state(),
@@ -280,7 +277,7 @@ def main(config_file: str, local_rank: int = 0):
         model_to_save.save_pretrained(save_path)
 
     if model_config["use_lora"]:
-        # model <- base_model <- module (DeepSpeedEngine) と2重にwrapされている
+        # model is double-warapped: model <- base_model <- module (DeepSpeedEngine)
         model = unload_and_merge_lora(model.module, model_config).base_model
     else:
         model = model.module
