@@ -1,0 +1,46 @@
+training_config:
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 16
+  num_train_epochs: 1
+  dataloader_num_workers: 16
+  fp16: true
+  logging_steps: 1
+  evaluation_strategy: "steps"
+  save_strategy: "steps"
+  eval_steps: 4000
+  save_steps: 4000
+  save_total_limit: 1
+  deepspeed: ./configs/deepspeed/ds_config_zero1.json
+  output_dir: ./output/
+  report_to: "wandb"
+  gradient_checkpointing: true
+
+model_config:
+  fp16: true
+  pretrained_path: # None or path to model weight
+  model_type: git_llm
+  language_model_name: gpt2-medium
+  # language_model_name: llm-jp/llm-jp-13b-v1.0
+  # language_model_name: llm-jp/llm-jp-1.3b-v1.0
+  vision_model_name: openai/clip-vit-base-patch16
+  num_image_with_embedding: 1 # if 1, no img_temporal_embedding
+  max_length: 512
+  keys_to_finetune:
+    - visual_projection
+    - num_image_with_embedding
+  keys_to_freeze: []
+
+  use_lora: true
+  lora:
+    r: 8
+    lora_alpha: 32
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+    lora_dropout: 0.01
+    bias: none
+    task_type: CAUSAL_LM
+
+dataset_config_path:
+  - ./configs/datasets/m3it.yaml
