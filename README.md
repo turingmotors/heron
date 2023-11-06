@@ -143,6 +143,80 @@ To start learning, execute the following command.
 
 GPU is required for learning; we have tested on Ubuntu 20.04, CUDA 11.7.
 
+# Training (w/o Trainer)
+
+We offer `train_ds.py`, a training script independent of Hugging Face's `Trainer` class for more flexible learning configurations.
+For example, the contents of [projects/opt/exp002_ds.yml](. projects/opt/exp002_ds.yml) has the following contents:
+
+```yaml
+training_config:
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 4
+  num_train_epochs: 5
+  dataloader_num_workers: 16
+  learning_rate: 5.0e-5
+  # logging_steps: 100
+  output_dir: ./output/
+  report_to: "wandb"
+  zero_stage: 2
+  precision: "fp16"
+  enable_tensorboard: False
+  seed: 0
+  weight_decay: 0.
+  learning_rate_pretraining_components: 0.
+  num_warmup_steps: 0.
+  optim_betas:
+    - 0.9
+    - 0.95
+  lr_scheduler_type: "cosine"
+  gradient_checkpointing: False
+  cpu_offload: False
+
+
+model_config:
+  pretrained_path: # None or path to model weight
+  model_type: git_llm
+  language_model_name: facebook/opt-125m
+  vision_model_name: openai/clip-vit-base-patch16
+  num_image_with_embedding: 1 # if 1, no img_temporal_embedding
+  max_length: 512
+  keys_to_finetune:
+    - visual_projection
+    - num_image_with_embedding
+  keys_to_freeze: []
+
+  use_lora: true
+  lora:
+    r: 8
+    lora_alpha: 32
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+    lora_dropout: 0.01
+    bias: none
+    task_type: CAUSAL_LM
+
+dataset_config_path:
+  - ./configs/datasets/m3it_coco.yaml  # only coco dataset
+```
+
+To start learning, execute the following command.
+
+```bash
+./scripts/run_ds.sh
+```
+
+## [ZeRO-3] Conversion
+
+After training the model with ZeRO-3, you can obtain a model for inference by generating `pytorch_model.bin` from the checkpoint with the following steps:
+
+```bash
+cd output/opt/exp002_ds  # Move to the output dir of your experiment.
+python zero_to_fp32.py . pytorch_model.bin  # Generating the PyTorch model in the current directory.
+```
+
 # Evaluation
 
 You can get the pretrained weight form Hugging Face Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
