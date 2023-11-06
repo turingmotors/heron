@@ -1,16 +1,14 @@
-# Copyright 2023 Turing Inc. Team. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: Apache-2.0
+
+"""
+NOTICE: This code is subject to the terms of the Apache License 2.0.
+
+The code is modified from the original one.
+original code: https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-VisualChat/training/main.py
+
+Additional contributions by Turing Inc. team
+"""
 
 import math
 import os
@@ -81,6 +79,7 @@ def main(config_file: str, local_rank: int = 0):
         * torch.distributed.get_world_size()
         * training_config["gradient_accumulation_steps"]
     )
+
     # Initialization of wandb
     if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
         wandb.init(project=os.environ["WANDB_PROJECT"], config=config)
@@ -146,6 +145,7 @@ def main(config_file: str, local_rank: int = 0):
         )
     else:
         training_config["num_warmup_steps"] = int(training_config["num_warmup_steps"])
+
     lr_scheduler = get_scheduler(
         name=training_config["lr_scheduler_type"],
         optimizer=optimizer,
@@ -290,6 +290,7 @@ def main(config_file: str, local_rank: int = 0):
         model = unload_and_merge_lora(model.module, model_config).base_model
     else:
         model = model.module
+
     save_path = os.path.join(training_config["output_dir"], f"epoch_final")
     model.save_pretrained(save_path)
 
