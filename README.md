@@ -146,7 +146,7 @@ GPU is required for learning; we have tested on Ubuntu 20.04, CUDA 11.7.
 # Training (w/o Trainer)
 
 We offer `train_ds.py`, a training script independent of Hugging Face's `Trainer` class for more flexible learning configurations.
-For example, the contents of [projects/opt/exp002_ds.yml](. projects/opt/exp002_ds.yml) has the following contents:
+For example, the contents of [projects/opt/exp002_ds.yml](projects/opt/exp002_ds.yml) has the following contents:
 
 ```yaml
 training_config:
@@ -156,7 +156,6 @@ training_config:
   num_train_epochs: 5
   dataloader_num_workers: 16
   learning_rate: 5.0e-5
-  # logging_steps: 100
   output_dir: ./output/
   report_to: "wandb"
   zero_stage: 2
