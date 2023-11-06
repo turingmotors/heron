@@ -30,9 +30,9 @@ model_config:
   vision_model_name: openai/clip-vit-base-patch16
   num_image_with_embedding: 1 # if 1, no img_temporal_embedding
   max_length: 512
-  keys_to_finetune:
-    - visual_projection
-    - num_image_with_embedding
+  keys_to_finetune: []
+    #     - visual_projection
+    #     - num_image_with_embedding
   keys_to_freeze: []
 
   use_lora: true
@@ -48,4 +48,4 @@ model_config:
     task_type: CAUSAL_LM
 
 dataset_config_path:
-  - ./configs/datasets/coco.yaml  # only coco dataset
+  - ./configs/datasets/m3it_coco.yaml  # only coco dataset
