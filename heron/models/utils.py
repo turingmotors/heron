@@ -106,6 +106,20 @@ def load_model(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
 
+        elif "gpt2" in language_model or "llm-jp/llm-jp-" in language_model:
+            from .git_llm.git_gpt2 import GitGPT2Config, GitGPT2ForCausalLM
+
+            git_config = GitGPT2Config.from_pretrained(language_model)
+            git_config.set_vision_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = GitGPT2ForCausalLM.from_pretrained(
+                language_model,
+                config=git_config,
+                torch_dtype=torch_dtype,
+            )
+
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
 
@@ -191,6 +205,9 @@ def set_trainable_params(
                 untrainable_list.append(name)
 
     else:
-        raise ValueError("either keys_to_freeze or keys_to_finetune should be specified")
+        for name, p in model.named_parameters():
+            p.requires_grad = True
+            trainable_list.append(name)
+        # raise ValueError("either keys_to_freeze or keys_to_finetune should be specified")
 
     return trainable_list, untrainable_list
