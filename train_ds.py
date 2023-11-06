@@ -285,14 +285,16 @@ def main(config_file: str, local_rank: int = 0):
         )
         model_to_save.save_pretrained(save_path)
 
-    if model_config["use_lora"]:
-        # model is double-warapped: model <- base_model <- module (DeepSpeedEngine)
-        model = unload_and_merge_lora(model.module, model_config).base_model
-    else:
-        model = model.module
+    # TODO: support merging LoRA for ZeRO3 training
+    if training_config["zero_stage"] != 3:
+        if model_config["use_lora"]:
+            # model is double-warapped: model <- base_model <- module (DeepSpeedEngine)
+            model = unload_and_merge_lora(model.module, model_config).base_model
+        else:
+            model = model.module
 
-    save_path = os.path.join(training_config["output_dir"], f"epoch_final")
-    model.save_pretrained(save_path)
+        save_path = os.path.join(training_config["output_dir"], f"epoch_final")
+        model.save_pretrained(save_path)
 
 
 if __name__ == "__main__":
