@@ -283,7 +283,7 @@ def main(config_file: str, local_rank: int = 0):
     if training_config["zero_stage"] != 3:
         if model_config["use_lora"]:
             # model is double-warapped: model <- base_model <- module (DeepSpeedEngine)
-            model = unload_and_merge_lora(model.module, model_config).base_model
+            model = unload_and_merge_lora(model.module, model_config)
         else:
             model = model.module
 
