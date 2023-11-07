@@ -189,11 +189,11 @@ def main(config_file: str, local_rank: int = 0):
                     pixel_values=batch["pixel_values"].half(),
                     labels=batch["labels"],
                 )[0]
-            acc_loss += loss
-            text = f"step {step}, loss: {loss.detach():.5f} the average_loss: {acc_loss/step:.5f}"
+            loss_log = get_all_reduce_mean(loss.detach().clone()).item()
+            acc_loss += loss_log
+            text = f"step {step}, loss: {loss_log:.5f} the average_loss: {acc_loss/(step+1):.5f}"
             progress_bar.set_description(text)
         model.train()
-        acc_loss = get_all_reduce_mean(acc_loss).item()
         ave_loss = acc_loss / (step + 1)
         print_rank_0(f"the eval average_loss: {ave_loss}", training_config["global_rank"])
         return ave_loss
@@ -227,7 +227,8 @@ def main(config_file: str, local_rank: int = 0):
                 labels=labels,
             )[0]
 
-            acc_loss += loss.detach().clone()
+            loss_log = get_all_reduce_mean(loss.detach().clone()).item()
+            acc_loss += loss_log
             model.backward(loss)
             # Attention: gradient accumulation in the function
             model.step()
@@ -239,17 +240,16 @@ def main(config_file: str, local_rank: int = 0):
                     {
                         "Train/epoch": epoch,
                         "Train/step": step,
-                        "Train/loss": loss.detach(),
-                        "Train/average_loss": acc_loss / step,
+                        "Train/loss": loss_log,
+                        "Train/average_loss": acc_loss / (step + 1),
                         "Train/learning_rate": now_lr,
                     }
                 )
 
-            text = f"step {step}, loss: {loss.detach():.5f} the average_loss: {acc_loss/step:.5f}"
+            text = f"step {step}, loss: {loss.detach():.5f} the average_loss: {acc_loss/(step + 1):.5f}"
             progress_bar.set_description(text)
 
         model.tput_timer.update_epoch_count()
-        acc_loss = get_all_reduce_mean(acc_loss).item()
         print_rank_0(
             f"Epoch {epoch+1}, the average_loss: {acc_loss/step}", training_config["global_rank"]
         )
