@@ -285,7 +285,7 @@ def main(config_file: str, local_rank: int = 0):
         )
         model_to_save.save_pretrained(save_path)
 
-    # TODO: support merging LoRA for ZeRO3 training
+    # TODO: support merging LoRA for ZeRO-3 training
     if training_config["zero_stage"] != 3:
         if model_config["use_lora"]:
             # model is double-warapped: model <- base_model <- module (DeepSpeedEngine)
