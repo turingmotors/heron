@@ -279,12 +279,6 @@ def main(config_file: str, local_rank: int = 0):
             training_config["output_dir"], client_state=client_state
         )  # save to the latest
 
-        save_path = os.path.join(training_config["output_dir"], f"epoch_{epoch}")
-        model_to_save = (
-            model.module.base_model if hasattr(model, "module.base_model") else model.module
-        )
-        model_to_save.save_pretrained(save_path)
-
     # TODO: support merging LoRA for ZeRO-3 training
     if training_config["zero_stage"] != 3:
         if model_config["use_lora"]:
