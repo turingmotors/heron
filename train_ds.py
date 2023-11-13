@@ -189,9 +189,9 @@ def main(config_file: str, local_rank: int = 0):
                     pixel_values=batch["pixel_values"].half(),
                     labels=batch["labels"],
                 )[0]
-            loss_log = get_all_reduce_mean(loss.detach().clone()).item()
-            acc_loss += loss_log
-            text = f"step {step}, loss: {loss_log:.5f} the average_loss: {acc_loss/(step+1):.5f}"
+            acc_loss += loss.float()
+            text = f"step {step}, loss: {loss:.5f} the average_loss: {acc_loss.item()/(step+1)=}"
+            # print_rank_0(text)
             progress_bar.set_description(text)
         model.train()
         ave_loss = acc_loss / (step + 1)
@@ -227,8 +227,7 @@ def main(config_file: str, local_rank: int = 0):
                 labels=labels,
             )[0]
 
-            loss_log = get_all_reduce_mean(loss.detach().clone()).item()
-            acc_loss += loss_log
+            acc_loss += loss.float()
             model.backward(loss)
             # Attention: gradient accumulation in the function
             model.step()
@@ -240,7 +239,7 @@ def main(config_file: str, local_rank: int = 0):
                     {
                         "Train/epoch": epoch,
                         "Train/step": step,
-                        "Train/loss": loss_log,
+                        "Train/loss": loss,
                         "Train/average_loss": acc_loss / (step + 1),
                         "Train/learning_rate": now_lr,
                     }
