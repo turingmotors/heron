@@ -1,6 +1,15 @@
 # Copyright (c) Microsoft Corporation.
 # SPDX-License-Identifier: Apache-2.0
 
+"""
+NOTICE: This code is subject to the terms of the Apache License 2.0.
+
+The code is modified from the original one.
+original code: https://github.com/microsoft/DeepSpeedExamples/blob/master/applications/DeepSpeed-VisualChat/utils/ds_utils.py
+
+Additional contributions by Turing Inc. team
+"""
+
 import json
 
 # DeepSpeed Team
