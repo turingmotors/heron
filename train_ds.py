@@ -90,14 +90,11 @@ def main(config_file: str, local_rank: int = 0):
     # Load model
     model = load_model(model_config)
 
-    if model_config["use_lora"]:
-        model = apply_lora_model(model, model_config)
-
     # Set trainable params
     keys_to_finetune = config["model_config"]["keys_to_finetune"]
     keys_to_freeze = config["model_config"]["keys_to_freeze"]
     trainable_list, untrainable_list = set_trainable_params(
-        model, keys_to_finetune, keys_to_freeze, train_lora=model_config["use_lora"]
+        model, keys_to_finetune, keys_to_freeze, train_lora=False
     )
     print_rank_0(f"trainable_list {trainable_list}", training_config["global_rank"])
     print_rank_0(f"untrainable_list {untrainable_list}", training_config["global_rank"])
@@ -280,11 +277,7 @@ def main(config_file: str, local_rank: int = 0):
 
     # TODO: support merging LoRA for ZeRO-3 training
     if training_config["zero_stage"] != 3:
-        if model_config["use_lora"]:
-            # model is double-warapped: model <- base_model <- module (DeepSpeedEngine)
-            model = unload_and_merge_lora(model.module, model_config)
-        else:
-            model = model.module
+        model = model.module
 
         save_path = os.path.join(training_config["output_dir"], f"epoch_final")
         model.save_pretrained(save_path)
