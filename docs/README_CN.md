@@ -269,21 +269,21 @@ print(processor.tokenizer.batch_decode(out))
 如果模型是用 ZeRO-3 训练的，请进行以下更改.
 
 ```diff
--# prepare a pretrained model
--model = GitLlamaForCausalLM.from_pretrained(
--    'turing-motors/heron-chat-git-Llama-2-7b-v0', torch_dtype=torch.float16
--)
-+from heron.models.utils import load_model, load_pretrained_weight
-+import yaml
-+
-+config_file = f"./projects/opt/exp002_ds.yml"
-+
-+# get config
-+with open(config_file, "r") as i_:
-+    config = yaml.safe_load(i_)
-+
-+model = load_model(config["model_config"])
-+model.load_state_dict(torch.load('./output/opt/exp002_ds/pytorch_model.bin'), strict=True)
+- # prepare a pretrained model
+- model = GitLlamaForCausalLM.from_pretrained(
+-     'turing-motors/heron-chat-git-Llama-2-7b-v0', torch_dtype=torch.float16
+- )
++ from heron.models.utils import load_model, load_pretrained_weight
++ import yaml
++ 
++ config_file = f"./projects/opt/exp002_ds.yml"
++ 
++ # get config
++ with open(config_file, "r") as i_:
++     config = yaml.safe_load(i_)
++ 
++ model = load_model(config["model_config"])
++ model.load_state_dict(torch.load('./output/opt/exp002_ds/pytorch_model.bin'), strict=True)
 ```
 
 ### 训练有素的模型列表
