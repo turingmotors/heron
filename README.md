@@ -185,17 +185,18 @@ model_config:
     - num_image_with_embedding
   keys_to_freeze: []
 
-  use_lora: true
-  lora:
-    r: 8
-    lora_alpha: 32
-    target_modules:
-      - q_proj
-      - k_proj
-      - v_proj
-    lora_dropout: 0.01
-    bias: none
-    task_type: CAUSAL_LM
+  # TODO: support LoRA
+  # use_lora: false
+  # lora:
+  #   r: 8
+  #   lora_alpha: 32
+  #   target_modules:
+  #     - q_proj
+  #     - k_proj
+  #     - v_proj
+  #   lora_dropout: 0.01
+  #   bias: none
+  #   task_type: CAUSAL_LM
 
 dataset_config_path:
   - ./configs/datasets/m3it_coco.yaml  # only coco dataset
