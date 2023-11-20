@@ -218,6 +218,7 @@ python zero_to_fp32.py . pytorch_model.bin  # Generating the PyTorch model in th
 
 # Evaluation
 
+If you have the model trained by ZeRO-3
 You can get the pretrained weight form Hugging Face Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
 See also [notebooks](./notebooks).
 
@@ -268,6 +269,26 @@ with torch.no_grad():
 
 # print result
 print(processor.tokenizer.batch_decode(out)[0])
+```
+
+If you have a model trained using ZeRO-3, it must be modified as follows:
+
+```diff
+- # prepare a pretrained model
+- model = GitLlamaForCausalLM.from_pretrained(
+-     'turing-motors/heron-chat-git-Llama-2-7b-v0', torch_dtype=torch.float16
+- )
++ from heron.models.utils import load_model, load_pretrained_weight
++ import yaml
++ 
++ config_file = f"./projects/opt/exp002_ds.yml"
++ 
++ # get config
++ with open(config_file, "r") as i_:
++     config = yaml.safe_load(i_)
++ 
++ model = load_model(config["model_config"])
++ model.load_state_dict(torch.load('./output/opt/exp002_ds/pytorch_model.bin'), strict=True)
 ```
 
 ### Pretrained Models
