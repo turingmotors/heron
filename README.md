@@ -208,15 +208,6 @@ To start learning, execute the following command.
 ./scripts/run_ds.sh
 ```
 
-## [ZeRO-3] Conversion
-
-After training the model with ZeRO-3, you can obtain a model for inference by generating `pytorch_model.bin` from the checkpoint with the following steps:
-
-```bash
-cd output/opt/exp002_ds  # Move to the output dir of your experiment.
-python zero_to_fp32.py . pytorch_model.bin  # Generating the PyTorch model in the current directory.
-```
-
 # Evaluation
 
 If you have the model trained by ZeRO-3
@@ -289,7 +280,7 @@ If you have a model trained using ZeRO-3, it must be modified as follows:
 +     config = yaml.safe_load(i_)
 + 
 + model = load_model(config["model_config"])
-+ model.load_state_dict(torch.load('./output/opt/exp002_ds/pytorch_model.bin'), strict=True)
++ model.load_state_dict(torch.load('./output/opt/exp002_ds/epoch-1/pytorch_model.bin'), strict=True)
 ```
 
 ### Pretrained Models

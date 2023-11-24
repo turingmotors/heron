@@ -207,14 +207,6 @@ dataset_config_path:
 ./scripts/run_ds.sh
 ```
 
-## [ZeRO-3] 转化
-
-使用ZeRO-3训练模型后，可以通过以下步骤从检查点生成 `pytorch_model.bin` ，从而获得用于推理的模型:
-
-```bash
-cd output/opt/exp002_ds  # 実験のアウトプットディレクトリに移動します
-python zero_to_fp32.py . pytorch_model.bin  # PyTorchモデルを生成します
-```
 # 如何使用
 
 您可以从 Hugging Face Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
@@ -284,7 +276,7 @@ print(processor.tokenizer.batch_decode(out))
 +     config = yaml.safe_load(i_)
 + 
 + model = load_model(config["model_config"])
-+ model.load_state_dict(torch.load('./output/opt/exp002_ds/pytorch_model.bin'), strict=True)
++ model.load_state_dict(torch.load('./output/opt/exp002_ds/epoch-1/pytorch_model.bin'), strict=True)
 ```
 
 ### 训练有素的模型列表

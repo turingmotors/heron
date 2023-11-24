@@ -206,15 +206,6 @@ dataset_config_path:
 ./scripts/run_ds.sh
 ```
 
-## [ZeRO-3] モデルの変換
-
-ZeRO-3で訓練した後、推論に使う `pytorch_model.bin` を生成するには次の手順を実行します。
-
-```bash
-cd output/opt/exp002_ds  # 実験のアウトプットディレクトリに移動します
-python zero_to_fp32.py . pytorch_model.bin  # PyTorchモデルを生成します
-```
-
 # 利用方法
 
 Hugging Face Hubから学習済みモデルをダウンロードすることができます: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
@@ -284,7 +275,7 @@ print(processor.tokenizer.batch_decode(out))
 +     config = yaml.safe_load(i_)
 + 
 + model = load_model(config["model_config"])
-+ model.load_state_dict(torch.load('./output/opt/exp002_ds/pytorch_model.bin'), strict=True)
++ model.load_state_dict(torch.load('./output/opt/exp002_ds/epoch-1/pytorch_model.bin'), strict=True)
 ```
 
 ### 学習済みモデル一覧
