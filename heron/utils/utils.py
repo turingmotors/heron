@@ -209,7 +209,7 @@ def save_zero_three_model(model_ema, global_rank, save_dir, zero_stage=0, sub_fo
             torch.save(model_to_save.state_dict(), output_model_file)
     else:
         output_state_dict = {}
-        for k, v in model_to_save.named_parameters():
+        for k, v in model_to_save.named_parameters(remove_duplicate=False):
             if hasattr(v, "ds_id"):
                 with deepspeed.zero.GatheredParameters(
                     _z3_params_to_fetch([v]), enabled=zero_stage_3

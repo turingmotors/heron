@@ -40,6 +40,7 @@ from heron.utils.utils import (
     get_optimizer_grouped_parameters,
     print_rank_0,
     set_random_seed,
+    save_zero_three_model,
     to_device,
 )
 
@@ -274,6 +275,14 @@ def main(config_file: str, local_rank: int = 0):
         model.save_checkpoint(
             training_config["output_dir"], client_state=client_state
         )  # save to the latest
+
+        if training_config["zero_stage"] == 3:
+            save_zero_three_model(model,
+                                training_config["global_rank"],
+                                training_config["output_dir"],
+                                zero_stage=training_config["zero_stage"],
+                                sub_folder=f'epoch-{epoch}')
+
 
     # TODO: support merging LoRA for ZeRO-3 training
     if training_config["zero_stage"] != 3:
