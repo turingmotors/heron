@@ -24,6 +24,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm
 from transformers import AdamW, AutoTokenizer, SchedulerType, get_scheduler
+from transformers.integrations import HfDeepSpeedConfig
 
 import wandb
 from heron.datasets.utils import get_dataset
@@ -39,8 +40,8 @@ from heron.utils.utils import (
     get_all_reduce_mean,
     get_optimizer_grouped_parameters,
     print_rank_0,
-    set_random_seed,
     save_zero_three_model,
+    set_random_seed,
     to_device,
 )
 
@@ -80,6 +81,9 @@ def main(config_file: str, local_rank: int = 0):
         * torch.distributed.get_world_size()
         * training_config["gradient_accumulation_steps"]
     )
+
+    if training_config["zero_stage"] == 2:
+        dschf = HFDeepSpeedConfig(ds_config)
 
     # Initialization of wandb
     if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
@@ -277,12 +281,13 @@ def main(config_file: str, local_rank: int = 0):
         )  # save to the latest
 
         if training_config["zero_stage"] == 3:
-            save_zero_three_model(model,
-                                training_config["global_rank"],
-                                training_config["output_dir"],
-                                zero_stage=training_config["zero_stage"],
-                                sub_folder=f'epoch-{epoch}')
-
+            save_zero_three_model(
+                model,
+                training_config["global_rank"],
+                training_config["output_dir"],
+                zero_stage=training_config["zero_stage"],
+                sub_folder=f"epoch-{epoch}",
+            )
 
     # TODO: support merging LoRA for ZeRO-3 training
     if training_config["zero_stage"] != 3:
