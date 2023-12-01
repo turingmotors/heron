@@ -82,8 +82,8 @@ def main(config_file: str, local_rank: int = 0):
         * training_config["gradient_accumulation_steps"]
     )
 
-    if training_config["zero_stage"] == 2:
-        dschf = HFDeepSpeedConfig(ds_config)
+    if training_config["zero_stage"] == 3:
+        dschf = HfDeepSpeedConfig(ds_config)
 
     # Initialization of wandb
     if os.environ.get("WANDB_NAME") is not None and local_rank == 0:
