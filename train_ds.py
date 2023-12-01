@@ -59,6 +59,13 @@ def main(config_file: str, local_rank: int = 0):
 
     if local_rank == -1:
         device = torch.device("cuda")
+    elif local_rank == -100:
+        # for mpirun launcher
+        # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
+        deepspeed.init_distributed()
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        device = torch.device("cuda", local_rank)
     else:
         torch.cuda.set_device(local_rank)
         device = torch.device("cuda", local_rank)
