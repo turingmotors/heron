@@ -191,6 +191,9 @@ def set_trainable_params(
                 untrainable_list.append(name)
 
     else:
-        raise ValueError("either keys_to_freeze or keys_to_finetune should be specified")
+        # Full parameter Tuning
+        for name, p in model.named_parameters():
+            p.requires_grad = True
+            trainable_list.append(name)
 
     return trainable_list, untrainable_list
