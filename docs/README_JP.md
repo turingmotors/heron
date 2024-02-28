@@ -67,6 +67,22 @@ Llama-2モデルを使用するには、アクセスの申請が必要です。
 huggingface-cli login
 ```
 
+## 4. Flash Attentionの使用
+flash-attentionを使うために、以下のパッケージをインストールしてください。
+```bash
+pip install packaging wheel
+pip uninstall -y ninja && pip install ninja --no-cache-dir
+pip install flash-attn --no-build-isolation
+```
+
+もしflash-attentionがうまく動かない場合は、Sourceからインストールしてください。（[関連issue](https://github.com/Dao-AILab/flash-attention/issues/821)）
+```bash
+cd /path/to/download
+git clone https://github.com/Dao-AILab/flash-attention.git
+cd flash-attention
+python setup.py install
+```
+
 # 学習方法
 
 学習を行う場合、`projects`ディレクトリ配下のyaml設定ファイルを使用します。<br>

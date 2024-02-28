@@ -1,3 +1,6 @@
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==2.1.2+cu121
+
 PyYAML
 accelerate
 datasets
@@ -9,7 +12,6 @@ protobuf
 scikit-learn
 scipy
 sentencepiece
-torch>=2.0.1
 fire
 pillow
 transformers
