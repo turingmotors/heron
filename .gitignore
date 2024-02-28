@@ -13,3 +13,5 @@ wandb
 *egg-info
 
 poetry.lock
+
+.env
