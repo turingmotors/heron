@@ -96,7 +96,6 @@ class M3ITInstructDataset(ResilientDataset):
         tokenized_list = []
         labels_list = []
         attn_mask_list = []
-        input_text_all = ""
 
         # some of nlvr data were broken
         instruction = row["instruction"]  # str
@@ -122,10 +121,10 @@ class M3ITInstructDataset(ResilientDataset):
         # tokenize answer text
         # ================================
         tokenized = self.tokenize(prompt_a)
-        tokenized_prompt = tokenized["input_ids"][0]
+        tokenized_prompt = tokenized["input_ids"][0][1:]
         # all label should be included in loss
         labels = tokenized_prompt
-        prompt_attn_mask = tokenized["attention_mask"][0]
+        prompt_attn_mask = tokenized["attention_mask"][0][1:]
 
         tokenized_list.append(tokenized_prompt)
         labels_list.append(labels)

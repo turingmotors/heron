@@ -143,6 +143,9 @@ class LlavaInstructDataset(BaseDataset):
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         images = [image]
 
+        # ================================
+        # tokenize question and answer text
+        # ================================
         language = self.get_language()
 
         tokenized_list = []
@@ -176,6 +179,9 @@ class LlavaInstructDataset(BaseDataset):
             labels_list.append(labels)
             attn_mask_list.append(prompt_attn_mask)
 
+        # =================================================
+        # concat question and answer, apply max_length
+        # =================================================
         tokenized_prompt = torch.cat(tokenized_list, dim=-1)
         labels = torch.cat(labels_list, dim=-1)
         prompt_attn_mask = torch.cat(attn_mask_list, dim=-1)
