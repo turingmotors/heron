@@ -176,7 +176,7 @@ class JapaneseCSVInstructDataset(BaseDataset):
                 ],
                 dim=-1,
             )
-            labels = torch.cat([labels, torch.tensor([-100] * pad_length)], dim=-1)
+            labels = torch.cat([labels, torch.tensor([IGNORE_INDEX] * pad_length)], dim=-1)
             prompt_attn_mask = torch.cat(
                 [prompt_attn_mask, torch.tensor([0] * pad_length)], dim=-1
             )

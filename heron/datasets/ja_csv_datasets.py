@@ -23,7 +23,7 @@ import torch
 from PIL import Image
 from torch.utils.data import Dataset
 
-from .base_datasets import BaseDataset
+from .base_datasets import IGNORE_INDEX, BaseDataset
 
 HFProcessor = "HFProcessor"
 
@@ -129,7 +129,7 @@ class JapaneseCSVDataset(BaseDataset):
 
         tokenized = self.tokenize(prompt)
         tokenized_prompt = tokenized["input_ids"][0]
-        labels = torch.full_like(tokenized_prompt, -100)
+        labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
         prompt_attn_mask = tokenized["attention_mask"][0]
 
         index_ignore_loss = prompt_attn_mask.sum().item() + 1
