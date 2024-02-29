@@ -1,6 +1,6 @@
 dataset_type: llava
 dataset_root: ./
-language: "en"
+language: "both"
 jsonl_path:
 n_train: 157000
 n_val: 712
