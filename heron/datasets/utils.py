@@ -46,6 +46,16 @@ def get_each_dataset(dataset_config: Dict, processor, max_length: int) -> Tuple[
             dataset_config, processor, max_length, "validation"
         )
 
+    elif dataset_config["dataset_type"] == "japanese_csv_instruct":
+        from .ja_csv_instruct_datasets import JapaneseCSVInstructDataset
+
+        train_dataset = JapaneseCSVInstructDataset.create(
+            dataset_config, processor, max_length, "train"
+        )
+        val_dataset = JapaneseCSVInstructDataset.create(
+            dataset_config, processor, max_length, "validation"
+        )
+
     elif dataset_config["dataset_type"] == "llava":
         from .llava_datasets import LlavaDataset
 
