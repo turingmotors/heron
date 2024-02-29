@@ -68,6 +68,7 @@ huggingface-cli login
 ```
 
 ## 4. 使用 Flash Attention
+确保您的环境可以使用 CUDA Toolkit。另请参阅 flash-attention 中的安装和功能。
 为了使用 flash-attention，请安装以下包。
 ```bash
 pip install packaging wheel

@@ -69,6 +69,8 @@ huggingface-cli login
 ```
 
 ## 4. Flash Attention
+Make sure that your environment can use the CUDA toolkit. See also [installation-and-features](https://github.com/Dao-AILab/flash-attention?tab=readme-ov-file#installation-and-features) in flash-attention.
+
 To use flash-attention, you need to install following packages.
 ```bash
 pip install packaging wheel
