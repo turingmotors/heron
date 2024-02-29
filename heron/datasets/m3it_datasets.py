@@ -19,10 +19,11 @@ from io import BytesIO
 import cv2
 import datasets
 import numpy as np
+import torch
 from PIL import Image
 from torch.utils.data import ConcatDataset
 
-from .base_datasets import ResilientDataset
+from .base_datasets import IGNORE_INDEX, ResilientDataset
 
 HFProcessor = "HFProcessor"
 
@@ -53,7 +54,8 @@ class M3ITDataset(ResilientDataset):
         is_inference: bool = False,
     ):
         dataset_list = [
-            datasets.load_dataset("MMInstruction/M3IT", i, num_proc=16) for i in dataset_config["dataset_names"]
+            datasets.load_dataset("MMInstruction/M3IT", i, num_proc=16)
+            for i in dataset_config["dataset_names"]
         ]
 
         # some dataset have no validation
@@ -67,6 +69,16 @@ class M3ITDataset(ResilientDataset):
 
         return cls(target_dataframe, processor, max_length, is_inference)
 
+    def preprocess_image(self, images):
+        return self.processor(images=images, return_tensors="pt")["pixel_values"][0]
+
+    def tokenize(self, text):
+        if self.is_inference:
+            kwargs = {}
+        else:
+            kwargs = {"padding": "max_length", "max_length": self.max_length, "truncation": True}
+        return self.processor.tokenizer(text=text, return_tensors="pt", **kwargs)
+
     def __len__(self) -> int:
         return len(self.loaded_dataset)
 
@@ -74,31 +86,35 @@ class M3ITDataset(ResilientDataset):
         # cf: https://huggingface.co/datasets/MMInstruction/M3IT#data-instances
         row = self.loaded_dataset[index]
 
+        # imageのロード
+        image_base64_str_list = row["image_base64_str"]  # str (base64)
+        image = Image.open(BytesIO(b64decode(image_base64_str_list[0]))).convert("RGB")
+        image = np.array(image)
+        if image.shape[2] != 3:
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+        images = [image]
+
         # some of nlvr data were broken
         instruction = row["instruction"]  # str
         question = row["inputs"]  # str
         answer = row["outputs"]  # str
-        text = f"##human: {instruction} {question}\n##gpt: {answer}"
+        prompt = f"##human: {instruction} {question}\n##gpt: {answer}"
 
-        # imageのロード
-        image_base64_str_list = row["image_base64_str"]  # str (base64)
-        img = Image.open(BytesIO(b64decode(image_base64_str_list[0]))).convert("RGB")
-        img = np.array(img)
-        if img.shape[2] != 3:
-            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        tokenized = self.tokenize(prompt)
+        tokenized_prompt = tokenized["input_ids"][0]
+        labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
+        prompt_attn_mask = tokenized["attention_mask"][0]
 
-        inputs = self.processor(
-            images=img,
-            text=text,
-            return_tensors="pt",
-            max_length=self.max_length,
-            padding="max_length",
-            truncation=True,
-        )
-        # batch size 1 -> unbatch
-        inputs = {k: v[0] for k, v in inputs.items()}
-        inputs["labels"] = inputs["input_ids"]
-        return inputs
+        index_ignore_loss = prompt_attn_mask.sum().item() + 1
+        labels[:index_ignore_loss] = tokenized_prompt[:index_ignore_loss]
+
+        return_dict = {
+            "input_ids": tokenized_prompt,
+            "labels": labels,
+            "attention_mask": prompt_attn_mask,
+            "pixel_values": self.preprocess_image(images),
+        }
+        return return_dict
 
     def _get_item_inference(self, index):
         # cf: https://huggingface.co/datasets/MMInstruction/M3IT#data-instances
