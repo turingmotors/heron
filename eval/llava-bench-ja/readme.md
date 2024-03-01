@@ -10,8 +10,17 @@
 採点に使う画像のデータをCOCOからダウンロードしてください。
 
 ```
+mkdir eval/llava-bench-ja/datasets
+cd eval/llava-bench-ja/datasets
 wget http://images.cocodataset.org/zips/val2014.zip
 unzip val2014.zip
+```
+
+2. OpenAI API Keyの設定
+
+LLaVA-BenchではGPT-4を使用するため、以下のOpenAI API Keyを環境変数に設定してください。
+```
+export OPENAI_API_KEY="sk-..."
 ```
 
 2. 回答文の推論
@@ -20,13 +29,16 @@ unzip val2014.zip
 
 3. 評価プログラムの実行
 
-以下のコマンドによって採点スクリプトを実行してください。answer.jsonlはステップ1で出力した回答文です。score.jsonは採点プログラムによって出力されるスコアファイルです。
+ShellScript :
+
+JupyterNotebook :
+
+以下のコマンドによって採点スクリプトを実行してください。`answer.jsonl`はステップ1で出力した回答文です。`score.json`は採点プログラムによって出力されるスコアファイルです。
 
 ```
-OPENAI_API_KEY="sk-..." python gpt_review.py --question qa90_questions_ja.jsonl --contex caps_boxes_coco2014_val_80.jsonl --answer-list qa90_gpt4_answer_ja_v2.jsonl sample_answer.jsonl --rule rule.json --output sample_review.json
+python gpt_review.py --question qa90_questions_ja.jsonl --contex caps_boxes_coco2014_val_80.jsonl --answer-list qa90_gpt4_answer_ja_v2.jsonl sample_answer.jsonl --rule rule.json --output sample_review.json
 ```
 
 4. スコアの計算と可視化
 
-visualize.ipynbを用いて3の結果からLLaVA-Benchのスコアを算出したり、結果を比較して可視化することが可能です。
-
+`visualize.ipynb`を用いて3の結果からLLaVA-Benchのスコアを算出したり、結果を比較して可視化することが可能です。

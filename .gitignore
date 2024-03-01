@@ -11,3 +11,5 @@ data/*
 wandb
 
 *egg-info
+
+eval/llava-bench-ja/datasets/val2014
