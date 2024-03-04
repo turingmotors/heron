@@ -29,12 +29,12 @@ from .m3it_datasets import M3ITDataset
 from .m3it_instruct_datasets import M3ITInstructDataset
 
 dataset_classes = {
-    "m3it": M3ITDataset,
-    "m3it_instruct": M3ITInstructDataset,
     "japanese_csv": JapaneseCSVDataset,
     "japanese_csv_instruct": JapaneseCSVInstructDataset,
     "llava": LlavaDataset,
     "llava_instruct": LlavaInstructDataset,
+    "m3it": M3ITDataset,
+    "m3it_instruct": M3ITInstructDataset,
 }
 
 
