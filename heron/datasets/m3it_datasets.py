@@ -90,8 +90,6 @@ class M3ITDataset(ResilientDataset):
         image_base64_str_list = row["image_base64_str"]  # str (base64)
         image = Image.open(BytesIO(b64decode(image_base64_str_list[0]))).convert("RGB")
         image = np.array(image)
-        if image.shape[2] != 3:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         images = [image]
 
         # some of nlvr data were broken
@@ -128,15 +126,14 @@ class M3ITDataset(ResilientDataset):
 
         # imageのロード
         image_base64_str_list = row["image_base64_str"]  # str (base64)
-        img = Image.open(BytesIO(b64decode(image_base64_str_list[0]))).convert("RGB")
-        img = np.array(img)
-        if img.shape[2] != 3:
-            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        image = Image.open(BytesIO(b64decode(image_base64_str_list[0]))).convert("RGB")
+        image = np.array(image)
+        images = [image]
 
         inputs = self.processor(
             text,
-            img,
+            images,
             return_tensors="pt",
         )
         inputs["labels"] = None
-        return inputs, img, answer
+        return inputs, image, answer

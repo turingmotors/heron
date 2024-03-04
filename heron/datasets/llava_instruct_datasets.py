@@ -139,8 +139,6 @@ class LlavaInstructDataset(BaseDataset):
         )
         image = Image.open(image_path).convert("RGB")
         image = np.array(image)
-        if image.shape[2] != 3:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         images = [image]
 
         # ================================
@@ -220,8 +218,6 @@ class LlavaInstructDataset(BaseDataset):
         )
         image = Image.open(image_path).convert("RGB")
         image = np.array(image)
-        if image.shape[2] != 3:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         images = [image]
 
         language = self.get_language()

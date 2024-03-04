@@ -111,8 +111,6 @@ class JapaneseCSVInstructDataset(BaseDataset):
         # imageのロード
         image = Image.open(os.path.join(self.dataset_root, img_path)).convert("RGB")
         image = np.array(image)
-        if image.shape[2] != 3:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         images = [image]
 
         tokenized_list = []
@@ -210,8 +208,6 @@ class JapaneseCSVInstructDataset(BaseDataset):
         # imageのロード
         img = Image.open(os.path.join(self.dataset_root, img_path)).convert("RGB")
         img = np.array(img)
-        if img.shape[2] != 3:
-            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
         inputs = self.processor(
             text,
