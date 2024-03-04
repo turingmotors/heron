@@ -28,8 +28,10 @@ from .base_datasets import IGNORE_INDEX, ResilientDataset
 HFProcessor = "HFProcessor"
 
 
-class M3ITDataset(ResilientDataset):
-    """Dataset for M3IT Dataset learning"""
+class M3ITInstructDataset(ResilientDataset):
+    """Dataset for M3IT Dataset learning
+    This dataset is designed for instruction tuning, meaning it considers the lossese associated with gpt responses.
+    """
 
     def __init__(
         self,
@@ -38,7 +40,7 @@ class M3ITDataset(ResilientDataset):
         max_length: int,
         is_inference: bool = False,
     ):
-        super(M3ITDataset, self).__init__(is_inference)
+        super(M3ITInstructDataset, self).__init__(is_inference)
         self.loaded_dataset = loaded_dataset
         self.max_length = max_length
         self.processor = processor
@@ -73,10 +75,7 @@ class M3ITDataset(ResilientDataset):
         return self.processor(images=images, return_tensors="pt")["pixel_values"][0]
 
     def tokenize(self, text):
-        if self.is_inference:
-            kwargs = {}
-        else:
-            kwargs = {"padding": "max_length", "max_length": self.max_length, "truncation": True}
+        kwargs = {}
         return self.processor.tokenizer(text=text, return_tensors="pt", **kwargs)
 
     def __len__(self) -> int:
@@ -92,19 +91,67 @@ class M3ITDataset(ResilientDataset):
         image = np.array(image)
         images = [image]
 
+        tokenized_list = []
+        labels_list = []
+        attn_mask_list = []
+
         # some of nlvr data were broken
         instruction = row["instruction"]  # str
         question = row["inputs"]  # str
         answer = row["outputs"]  # str
-        prompt = f"##human: {instruction} {question}\n##gpt: {answer}"
+        prompt_q = f"##human: {instruction} {question}\n##gpt: "
+        prompt_a = f"{answer}"
 
-        tokenized = self.tokenize(prompt)
+        # ================================
+        # tokenize question text
+        # ================================
+        tokenized = self.tokenize(prompt_q)
         tokenized_prompt = tokenized["input_ids"][0]
+        # all label should be ignored
         labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
         prompt_attn_mask = tokenized["attention_mask"][0]
 
-        index_ignore_loss = prompt_attn_mask.sum().item() + 1
-        labels[:index_ignore_loss] = tokenized_prompt[:index_ignore_loss]
+        tokenized_list.append(tokenized_prompt)
+        labels_list.append(labels)
+        attn_mask_list.append(prompt_attn_mask)
+
+        # ================================
+        # tokenize answer text
+        # ================================
+        tokenized = self.tokenize(prompt_a)
+        tokenized_prompt = tokenized["input_ids"][0][1:]
+        # all label should be included in loss
+        labels = tokenized_prompt
+        prompt_attn_mask = tokenized["attention_mask"][0][1:]
+
+        tokenized_list.append(tokenized_prompt)
+        labels_list.append(labels)
+        attn_mask_list.append(prompt_attn_mask)
+
+        # =================================================
+        # concat question and answer, apply max_length
+        # =================================================
+        tokenized_prompt = torch.cat(tokenized_list, dim=-1)
+        labels = torch.cat(labels_list, dim=-1)
+        prompt_attn_mask = torch.cat(attn_mask_list, dim=-1)
+
+        if len(tokenized_prompt) < self.max_length:
+            pad_length = self.max_length - len(tokenized_prompt)
+            tokenized_prompt = torch.cat(
+                [
+                    tokenized_prompt,
+                    torch.tensor([self.processor.tokenizer.pad_token_id] * pad_length),
+                ],
+                dim=-1,
+            )
+            labels = torch.cat([labels, torch.tensor([IGNORE_INDEX] * pad_length)], dim=-1)
+            prompt_attn_mask = torch.cat(
+                [prompt_attn_mask, torch.tensor([0] * pad_length)], dim=-1
+            )
+        else:
+            tokenized_prompt = tokenized_prompt[: self.max_length]
+            labels = labels[: self.max_length]
+            prompt_attn_mask = prompt_attn_mask[: self.max_length]
 
         return_dict = {
             "input_ids": tokenized_prompt,

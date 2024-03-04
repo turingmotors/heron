@@ -22,28 +22,30 @@ from torch.utils.data import ConcatDataset, Dataset
 
 from ..models.prepare_processors import get_processor
 from .ja_csv_datasets import JapaneseCSVDataset
+from .ja_csv_instruct_datasets import JapaneseCSVInstructDataset
 from .llava_datasets import LlavaDataset
+from .llava_instruct_datasets import LlavaInstructDataset
 from .m3it_datasets import M3ITDataset
+from .m3it_instruct_datasets import M3ITInstructDataset
+
+dataset_classes = {
+    "japanese_csv": JapaneseCSVDataset,
+    "japanese_csv_instruct": JapaneseCSVInstructDataset,
+    "llava": LlavaDataset,
+    "llava_instruct": LlavaInstructDataset,
+    "m3it": M3ITDataset,
+    "m3it_instruct": M3ITInstructDataset,
+}
 
 
 def get_each_dataset(dataset_config: Dict, processor, max_length: int) -> Tuple[Dataset, Dataset]:
-    if dataset_config["dataset_type"] == "m3it":
-        train_dataset = M3ITDataset.create(dataset_config, processor, max_length, "train")
-        val_dataset = M3ITDataset.create(dataset_config, processor, max_length, "validation")
+    dataset_type = dataset_config["dataset_type"]
+    if dataset_type not in dataset_classes:
+        raise ValueError(f"dataset_type: {dataset_type} is not supported.")
 
-    elif dataset_config["dataset_type"] == "japanese_csv":
-        train_dataset = JapaneseCSVDataset.create(dataset_config, processor, max_length, "train")
-        val_dataset = JapaneseCSVDataset.create(
-            dataset_config, processor, max_length, "validation"
-        )
-
-    elif dataset_config["dataset_type"] == "llava":
-        train_dataset = LlavaDataset.create(dataset_config, processor, max_length, "train")
-        val_dataset = LlavaDataset.create(dataset_config, processor, max_length, "validation")
-
-    else:
-        raise ValueError(f"dataset_type: {dataset_config['dataset_type']} is not supported.")
-
+    DatasetClass = dataset_classes[dataset_type]
+    train_dataset = DatasetClass.create(dataset_config, processor, max_length, "train")
+    val_dataset = DatasetClass.create(dataset_config, processor, max_length, "validation")
     return train_dataset, val_dataset
 
 

@@ -27,8 +27,10 @@ from .base_datasets import IGNORE_INDEX, BaseDataset
 HFProcessor = "HFProcessor"
 
 
-class LlavaDataset(BaseDataset):
-    """Dataset for LLaVA"""
+class LlavaInstructDataset(BaseDataset):
+    """Dataset for LLaVA
+    This dataset is designed for instruction tuning, meaning it considers the lossese associated with gpt responses.
+    """
 
     def __init__(
         self,
@@ -39,7 +41,7 @@ class LlavaDataset(BaseDataset):
         language: str,
         dataset_root: str,
     ):
-        super(LlavaDataset, self).__init__(is_inference)
+        super(LlavaInstructDataset, self).__init__(is_inference)
         assert language in ["ja", "en"], "given language is not supported"
         self.loaded_dataset = loaded_dataset
         self.max_length = max_length
@@ -109,10 +111,7 @@ class LlavaDataset(BaseDataset):
         return self.processor(images=images, return_tensors="pt")["pixel_values"][0]
 
     def tokenize(self, text):
-        if self.is_inference:
-            kwargs = {}
-        else:
-            kwargs = {"padding": "max_length", "max_length": self.max_length, "truncation": True}
+        kwargs = {}
         return self.processor.tokenizer(text=text, return_tensors="pt", **kwargs)
 
     def __len__(self) -> int:
@@ -142,20 +141,66 @@ class LlavaDataset(BaseDataset):
         image = np.array(image)
         images = [image]
 
-        prompt = ""
+        # ================================
+        # tokenize question and answer text
+        # ================================
         language = self.get_language()
-        for c in row["conversations"]:
+
+        tokenized_list = []
+        labels_list = []
+        attn_mask_list = []
+        input_text_all = ""
+        for i, c in enumerate(row["conversations"]):
+            if i > 0:
+                drop_eos_token = 1
+            else:
+                drop_eos_token = 0
             agent = c["from"]
+            if agent == "gpt":
+                agent_prompt = ""
+                next_agent_prompt = f"{self.processor.tokenizer.eos_token}\n"
+            elif agent == "human":
+                agent_prompt = "##human: "
+                next_agent_prompt = "\n##gpt: "
             message = c[language]
-            prompt += f"##{agent}: {message}\n"
+            input_text = f"{agent_prompt}{message}{next_agent_prompt}"
+            input_text_all += input_text
+            tokenized = self.tokenize(input_text)
+            tokenized_prompt = tokenized["input_ids"][0][drop_eos_token:]
+            if agent == "gpt":
+                labels = tokenized_prompt
+            elif agent == "human":
+                labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
+            prompt_attn_mask = tokenized["attention_mask"][0][drop_eos_token:]
 
-        tokenized = self.tokenize(prompt)
-        tokenized_prompt = tokenized["input_ids"][0]
-        labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
-        prompt_attn_mask = tokenized["attention_mask"][0]
+            tokenized_list.append(tokenized_prompt)
+            labels_list.append(labels)
+            attn_mask_list.append(prompt_attn_mask)
 
-        index_ignore_loss = prompt_attn_mask.sum().item() + 1
-        labels[:index_ignore_loss] = tokenized_prompt[:index_ignore_loss]
+        # =================================================
+        # concat question and answer, apply max_length
+        # =================================================
+        tokenized_prompt = torch.cat(tokenized_list, dim=-1)
+        labels = torch.cat(labels_list, dim=-1)
+        prompt_attn_mask = torch.cat(attn_mask_list, dim=-1)
+
+        if len(tokenized_prompt) < self.max_length:
+            pad_length = self.max_length - len(tokenized_prompt)
+            tokenized_prompt = torch.cat(
+                [
+                    tokenized_prompt,
+                    torch.tensor([self.processor.tokenizer.pad_token_id] * pad_length),
+                ],
+                dim=-1,
+            )
+            labels = torch.cat([labels, torch.tensor([IGNORE_INDEX] * pad_length)], dim=-1)
+            prompt_attn_mask = torch.cat(
+                [prompt_attn_mask, torch.tensor([0] * pad_length)], dim=-1
+            )
+        else:
+            tokenized_prompt = tokenized_prompt[: self.max_length]
+            labels = labels[: self.max_length]
+            prompt_attn_mask = prompt_attn_mask[: self.max_length]
 
         return_dict = {
             "input_ids": tokenized_prompt,

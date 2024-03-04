@@ -1,0 +1,22 @@
+dataset_type: m3it
+dataset_names:
+  - textcap
+  - image-paragraph-captioning
+  - coco-goi
+  - coco-itm
+  - vqa-v2
+  - shapes
+  - docvqa
+  - ocr-vqa
+  - st-vqa
+  - text-vqa
+  - gqa
+  - okvqa
+  - a-okvqa
+  - viquae
+  - clevr
+  - nlvr
+  - vcr
+  - visual-mrc
+  - visual-dialog
+  - multi30k

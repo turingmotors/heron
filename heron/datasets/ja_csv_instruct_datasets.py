@@ -28,8 +28,10 @@ from .base_datasets import IGNORE_INDEX, BaseDataset
 HFProcessor = "HFProcessor"
 
 
-class JapaneseCSVDataset(BaseDataset):
-    """Dataset for Custom Japanese CSV V&L Dataset learning"""
+class JapaneseCSVInstructDataset(BaseDataset):
+    """Dataset for Custom Japanese CSV V&L Dataset learning
+    This dataset is designed for instruction tuning, meaning it considers the lossese associated with gpt responses.
+    """
 
     def __init__(
         self,
@@ -39,7 +41,7 @@ class JapaneseCSVDataset(BaseDataset):
         dataset_root: str,
         is_inference: bool = False,
     ):
-        super(JapaneseCSVDataset, self).__init__()
+        super(JapaneseCSVInstructDataset, self).__init__()
         self.loaded_dataset = loaded_dataset
         self.unique_img_path = loaded_dataset.img_path.unique()
 
@@ -96,10 +98,7 @@ class JapaneseCSVDataset(BaseDataset):
         return self.processor(images=images, return_tensors="pt")["pixel_values"][0]
 
     def tokenize(self, text):
-        if self.is_inference:
-            kwargs = {}
-        else:
-            kwargs = {"padding": "max_length", "max_length": self.max_length, "truncation": True}
+        kwargs = {}
         return self.processor.tokenizer(text=text, return_tensors="pt", **kwargs)
 
     def _get_item_train(self, index):
@@ -114,24 +113,75 @@ class JapaneseCSVDataset(BaseDataset):
         image = np.array(image)
         images = [image]
 
-        prompt = ""
+        tokenized_list = []
+        labels_list = []
+        attn_mask_list = []
 
         # concatenate text data
         order = list(range(len(df_interest)))
         random.shuffle(order)
-        for i in order:
+        for i, c in enumerate(order):
+            if i > 0:
+                drop_eos_token = 1
+            else:
+                drop_eos_token = 0
+
             row = df_interest.iloc[i]
             question = row["question"]  # str
             answer = row["caption"]  # str
-            prompt += f"##human: {question}\n##gpt: {answer}\n"
+            prompt_q = f"##human: {question}\n##gpt: "
+            prompt_a = f"{answer}"
 
-        tokenized = self.tokenize(prompt)
-        tokenized_prompt = tokenized["input_ids"][0]
-        labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
-        prompt_attn_mask = tokenized["attention_mask"][0]
+            # ================================
+            # tokenize question text
+            # ================================
+            tokenized = self.tokenize(prompt_q)
+            tokenized_prompt = tokenized["input_ids"][0][drop_eos_token:]
+            # all label should be ignored
+            labels = torch.full_like(tokenized_prompt, IGNORE_INDEX)
+            prompt_attn_mask = tokenized["attention_mask"][0][drop_eos_token:]
 
-        index_ignore_loss = prompt_attn_mask.sum().item() + 1
-        labels[:index_ignore_loss] = tokenized_prompt[:index_ignore_loss]
+            tokenized_list.append(tokenized_prompt)
+            labels_list.append(labels)
+            attn_mask_list.append(prompt_attn_mask)
+
+            # ================================
+            # tokenize answer text
+            # ================================
+            tokenized = self.tokenize(prompt_a)
+            tokenized_prompt = tokenized["input_ids"][0][1:]
+            # all label should be included in loss
+            labels = tokenized_prompt
+            prompt_attn_mask = tokenized["attention_mask"][0][1:]
+
+            tokenized_list.append(tokenized_prompt)
+            labels_list.append(labels)
+            attn_mask_list.append(prompt_attn_mask)
+
+        # =================================================
+        # concat question and answer, apply max_length
+        # =================================================
+        tokenized_prompt = torch.cat(tokenized_list, dim=-1)
+        labels = torch.cat(labels_list, dim=-1)
+        prompt_attn_mask = torch.cat(attn_mask_list, dim=-1)
+
+        if len(tokenized_prompt) < self.max_length:
+            pad_length = self.max_length - len(tokenized_prompt)
+            tokenized_prompt = torch.cat(
+                [
+                    tokenized_prompt,
+                    torch.tensor([self.processor.tokenizer.pad_token_id] * pad_length),
+                ],
+                dim=-1,
+            )
+            labels = torch.cat([labels, torch.tensor([IGNORE_INDEX] * pad_length)], dim=-1)
+            prompt_attn_mask = torch.cat(
+                [prompt_attn_mask, torch.tensor([0] * pad_length)], dim=-1
+            )
+        else:
+            tokenized_prompt = tokenized_prompt[: self.max_length]
+            labels = labels[: self.max_length]
+            prompt_attn_mask = prompt_attn_mask[: self.max_length]
 
         return_dict = {
             "input_ids": tokenized_prompt,
