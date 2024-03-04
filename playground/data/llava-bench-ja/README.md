@@ -10,8 +10,7 @@
 採点に使う画像のデータをCOCOからダウンロードしてください。
 
 ```
-mkdir eval/llava-bench-ja/datasets
-cd eval/llava-bench-ja/datasets
+cd playground/data/llava-bench-ja/
 wget http://images.cocodataset.org/zips/val2014.zip
 unzip val2014.zip
 ```
@@ -20,7 +19,7 @@ unzip val2014.zip
 
 LLaVA-BenchではGPT-4を使用するため、以下のOpenAI API Keyを環境変数に設定してください。
 ```
-export OPENAI_API_KEY="sk-..."
+export OPENAI_API_KEY=sk-...
 ```
 
 2. 回答文の推論

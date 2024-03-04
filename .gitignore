@@ -12,4 +12,4 @@ wandb
 
 *egg-info
 
-eval/llava-bench-ja/datasets/val2014
+playground/data/llava-bench-ja/val2014/*
