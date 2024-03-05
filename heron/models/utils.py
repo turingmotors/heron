@@ -109,9 +109,14 @@ def load_model(
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
 
-        model = VideoBlipForConditionalGeneration.create(
-            language_model, num_frames=num_image_with_embedding, torch_dtype=torch_dtype
-        )
+        if "heron" in language_model:
+            model = VideoBlipForConditionalGeneration.from_pretrained(
+                language_model, torch_dtype=torch.float16, ignore_mismatched_sizes=False
+            )
+        else:
+            model = VideoBlipForConditionalGeneration.create(
+                language_model, num_frames=num_image_with_embedding, torch_dtype=torch_dtype
+            )
 
     else:
         raise ValueError(f"{model_type} is not supported.")

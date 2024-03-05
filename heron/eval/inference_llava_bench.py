@@ -56,7 +56,6 @@ def process_questions(img_root, questions, model, processor, device, verbose):
         image = Image.open(os.path.join(img_root, f"COCO_val2014_{q['image']}"))
         question = q["text_JA"]
         answer = generate_response(question, image, model, processor, device)
-        answer = answer.split("##gpt: ")[1].split("##human: ")[0]
         if verbose:
             print(
                 f"### ID: {q['question_id']}\n## question: {q['text_JA']}\n## answer: {answer}\n"
