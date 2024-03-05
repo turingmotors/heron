@@ -93,7 +93,7 @@ def get_processor(model_config: Dict) -> "Processor":
             model_config["vision_model_name"]
         )
 
-    elif model_type == "video_blip":
+    elif "video_blip" in model_type:
         if "heron" in language_model_name:
             processor = VideoBlipProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
         else:
