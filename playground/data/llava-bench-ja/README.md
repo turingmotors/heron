@@ -17,27 +17,15 @@ unzip val2014.zip
 
 2. OpenAI API Keyの設定
 
-LLaVA-BenchではGPT-4を使用するため、以下のOpenAI API Keyを環境変数に設定してください。
+LLaVA-BenchではGPT-4を使用するため、OpenAI API Keyを環境変数に設定してください。
 ```
 export OPENAI_API_KEY=sk-...
 ```
 
-2. 回答文の推論
-
-`inference_coco_bench.ipynb`ノートブックを使って、評価対象の画像に対して回答文を生成する推論を行なってください。
-
 3. 評価プログラムの実行
 
-ShellScript :
+`llava_bench.sh`を実行して、推論と評価を行ってください。（環境変数やConfigファイルは、実行環境に応じて変更してください）
 
-JupyterNotebook :
+Notebookで実行する場合：
 
-以下のコマンドによって採点スクリプトを実行してください。`answer.jsonl`はステップ1で出力した回答文です。`score.json`は採点プログラムによって出力されるスコアファイルです。
-
-```
-python gpt_review.py --question qa90_questions_ja.jsonl --contex caps_boxes_coco2014_val_80.jsonl --answer-list qa90_gpt4_answer_ja_v2.jsonl sample_answer.jsonl --rule rule.json --output sample_review.json
-```
-
-4. スコアの計算と可視化
-
-`visualize.ipynb`を用いて3の結果からLLaVA-Benchのスコアを算出したり、結果を比較して可視化することが可能です。
+推論は、`heron/eval/notebook/inference_coco_bench.ipynb`のノートブックでも行えます。推論の結果は、`gpt_review.py`スクリプトを実行することで評価できます。また、これらの結果を可視化する場合は、`visualize.ipynb`ノートブックを実行してください。
