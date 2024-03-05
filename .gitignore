@@ -13,3 +13,7 @@ wandb
 *egg-info
 
 playground/data/llava-bench-ja/val2014/*
+
+poetry.lock
+
+.env

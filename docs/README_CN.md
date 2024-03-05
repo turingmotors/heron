@@ -67,6 +67,23 @@ pre-commit install
 huggingface-cli login
 ```
 
+## 4. 使用 Flash Attention
+确保您的环境可以使用 CUDA Toolkit。另请参阅 flash-attention 中的安装和功能。
+为了使用 flash-attention，请安装以下包。
+```bash
+pip install packaging wheel
+pip uninstall -y ninja && pip install ninja --no-cache-dir
+pip install flash-attn --no-build-isolation
+```
+
+如果 flash-attention 无法正常工作，请从源代码安装。（[相关issue](https://github.com/Dao-AILab/flash-attention/issues/821)）
+```bash
+cd /path/to/download
+git clone https://github.com/Dao-AILab/flash-attention.git
+cd flash-attention
+python setup.py install
+```
+
 # 学习方法
 
 学习时，请使用 `projects` 目录下的 yaml 配置文件.<br>
