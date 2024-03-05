@@ -209,7 +209,8 @@ async def main(args):
         if args.is_upload_result:
             import wandb
 
-            wandb.init(project="heron-eval-llava-bench-sasaki-ja", name=name)
+            project_name = os.getenv("WANDB_PROJECT_NAME", "default-project")
+            wandb.init(project=project_name, name=name)
             table = wandb.Table(columns=["Name", "mean", "conv", "detail", "complex"])
             for name, ret in model_results.items():
                 table.add_data(

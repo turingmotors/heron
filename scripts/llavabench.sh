@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Common paths and settings
-WANDB_PROJECT_NAME=project-name
+export WANDB_PROJECT_NAME="project-name"
+
 PLAYGROUND_PATH=./playground/data/llava-bench-ja
 MODEL_CONFIG=./projects/video_blip/exp001.yml
 OUTPUT_PATH=./output/llava-bench-ja
 
-# Inference script execution
+# Inference
 python heron/eval/inference_llava_bench.py \
     --config_file $MODEL_CONFIG \
     --questions_path "$PLAYGROUND_PATH/qa90_questions_ja.jsonl" \
@@ -16,10 +16,9 @@ python heron/eval/inference_llava_bench.py \
     --verbose True \
     is_upload_result
 
-# Extract experiment name
 EXP_NAME=$(basename "${MODEL_CONFIG}" | cut -d'/' -f 5 | cut -d'.' -f 1)
 
-# Evaluation script execution
+# Evaluation
 QUESTION_PATH="$PLAYGROUND_PATH/qa90_questions_ja.jsonl"
 CONTEXT_PATH="$PLAYGROUND_PATH/captions_boxes_coco2014_val_80.jsonl"
 ANSWER_LIST_PATHS="$PLAYGROUND_PATH/qa90_gpt4_answers_ja.jsonl $PLAYGROUND_PATH/sample_answers.jsonl"

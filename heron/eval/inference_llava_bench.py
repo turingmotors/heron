@@ -70,7 +70,8 @@ def upload_results(img_root, results, name):
     """
     Uploads the results to Weights & Biases.
     """
-    wandb.init(project="project-name", name=name)
+    project_name = os.getenv("WANDB_PROJECT_NAME", "default-project")
+    wandb.init(project=project_name, name=name)
     table = wandb.Table(columns=["ID", "Name", "Image", "Question", "Answer"])
     for r in results:
         image = wandb.Image(
