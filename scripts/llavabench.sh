@@ -1,31 +1,35 @@
 #!/bin/bash
 
+# Common paths and settings
 WANDB_PROJECT_NAME=project-name
-
-MODEL_CONFIG=./projects/opt/exp001.yml
+PLAYGROUND_PATH=./playground/data/llava-bench-ja
+MODEL_CONFIG=./projects/video_blip/exp001.yml
 OUTPUT_PATH=./output/llava-bench-ja
-QUESTION_PATH=./playground/data/llava-bench-ja/qa90_questions_ja.jsonl
 
-python heron/eval/inference_llava_bench.py\
-    --config_file $MODEL_CONFIG\
-    --questions_path $QUESTION_PATH\
-    --img_root ./playground/data/llava-bench-ja/val2014\
+# Inference script execution
+python heron/eval/inference_llava_bench.py \
+    --config_file $MODEL_CONFIG \
+    --questions_path "$PLAYGROUND_PATH/qa90_questions_ja.jsonl" \
+    --img_root $PLAYGROUND_PATH/val2014 \
     --output_path $OUTPUT_PATH \
-    --device 0\
-    --verbose True\
+    --device 0 \
+    --verbose True \
     is_upload_result
 
+# Extract experiment name
 EXP_NAME=$(basename "${MODEL_CONFIG}" | cut -d'/' -f 5 | cut -d'.' -f 1)
 
-CONTEXT_PATH="./playground/data/llava-bench-ja/captions_boxes_coco2014_val_80.jsonl"
-ANSWER_LIST_PATHS="./playground/data/llava-bench-ja/qa90_gpt4_answers_ja.jsonl ./playground/data/llava-bench-ja/sample_answers.jsonl"
-RULE_PATH="./playground/data/llava-bench-ja/rule.json"
-OUTPUT_FILE="${OUTPUT_PATH}/${EXP_NAME}_review.json"
+# Evaluation script execution
+QUESTION_PATH="$PLAYGROUND_PATH/qa90_questions_ja.jsonl"
+CONTEXT_PATH="$PLAYGROUND_PATH/captions_boxes_coco2014_val_80.jsonl"
+ANSWER_LIST_PATHS="$PLAYGROUND_PATH/qa90_gpt4_answers_ja.jsonl $PLAYGROUND_PATH/sample_answers.jsonl"
+RULE_PATH="$PLAYGROUND_PATH/rule.json"
+OUTPUT_FILE="${OUTPUT_PATH}/${EXP_NAME}_reviews.json"
 
 python heron/eval/eval_gpt_review_visual.py \
     --question "${QUESTION_PATH}" \
     --context "${CONTEXT_PATH}" \
     --answer-list ${ANSWER_LIST_PATHS} \
     --rule "${RULE_PATH}" \
-    --output "${OUTPUT_FILE}"\
+    --output "${OUTPUT_FILE}" \
     --is_upload_result
