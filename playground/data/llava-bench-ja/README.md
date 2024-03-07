@@ -1,12 +1,17 @@
-# LLaVA-Bench (COCO) 日本語版
+<div align="center">
 
-これは、[LLaVA](https://github.com/haotian-liu/LLaVA)で用いられているベンチマークの一つであるLLaVA-Bench (COCO)の日本語版です。
-DeepL翻訳を用いて、QAのみを日本語に対応させています。
+# LLaVA-Bench (COCO) Japanese
+
+</div>
+
+LLaVA-Bench (COCO) Japanese is the Japanese version dataset of LLaVA-Bench. It has been translated into Japanese using DeepL.
+
 
 ## LLaVA-Bench (COCO)
-LLaVA-Bench (COCO)は、LLaVAの評価ベンチマークとして提案されました。LLaVA-Benchでは、COCO-Val-2014データセットから無作為に30枚の画像を選び、各画像について3種類の質問(conversation, detailed description, complex reasoning)を生成して、合計で90個の質問を行います。
 
-例えば、`COCO_val2014_000000441147.jpg`に対する質問は以下のようになっています。カッコ内はLLaVA-Bench (COCO)で用いている日本語訳です。
+LLaVA-Bench (COCO) was proposed as an evaluation benchmark for [LLaVA](https://github.com/haotian-liu/LLaVA). In LLaVA-Bench, 30 images are randomly selected from the COCO-Val-2014 dataset, and for each image, three types of questions (conversation, detailed description, complex reasoning) are generated, totaling 90 questions.
+
+For example, questions for `COCO_val2014_000000441147.jpg` are as follows.
 
 - Conversation: What is the color of the two suitcases in the image? (画像に写っている2つのスーツケースの色は？)
 
@@ -16,47 +21,32 @@ LLaVA-Bench (COCO)は、LLaVAの評価ベンチマークとして提案されま
 
 <img src="../../../images/COCO_val2014_000000441147.jpg" width="30%">
 
-## 実行手順
+## Execution
 
-1. COCO(2014)データセットのダウンロード
+### Download COCO (2014) Dataset
 
-COCO-Val-2014データセットをダウンロードしてください。
+Download the COCO-Val-2014 dataset.
 
-```
+```bash
 cd playground/data/llava-bench-ja/
 wget http://images.cocodataset.org/zips/val2014.zip
 unzip val2014.zip
 ```
 
-2. OpenAI API Keyの設定
+### Set your OpenAI API Key
 
-LLaVA-BenchではGPT-4を使用するため、OpenAI API Keyを環境変数に設定してください。
-```
+```bash
 export OPENAI_API_KEY=sk-...
 ```
 
-3. 評価プログラムの実行
+### Evaluation
 
-`llava_bench.sh`を実行して、推論と評価を行ってください。（環境変数やConfigファイルは、実行環境に応じて変更してください）
+Run llava_bench.sh for inference and evaluation. (Please adjust the environment variables and config file according to your execution environment).
 
-Notebookで実行する場合：
+If you want to run in JupyterNotebook:
 
-推論は、`heron/eval/notebook/inference_coco_bench.ipynb`のノートブックでも行えます。推論の結果は、`gpt_review.py`スクリプトを実行することで評価できます。また、これらの結果を可視化する場合は、`visualize.ipynb`ノートブックを実行してください。
+Run `heron/eval/notebook/inference_coco_bench.ipynb` notebook. For evaluation, run `gpt_review.py` and `visualize.ipynb`.
 
-## Citation
+# License
 
-```
-@misc{liu2023improvedllava,
-      title={Improved Baselines with Visual Instruction Tuning},
-      author={Liu, Haotian and Li, Chunyuan and Li, Yuheng and Lee, Yong Jae},
-      publisher={arXiv:2310.03744},
-      year={2023},
-}
-
-@misc{liu2023llava,
-      title={Visual Instruction Tuning},
-      author={Liu, Haotian and Li, Chunyuan and Wu, Qingyang and Lee, Yong Jae},
-      publisher={NeurIPS},
-      year={2023},
-}
-```
+Released under the [Apache License 2.0](./LICENSE).

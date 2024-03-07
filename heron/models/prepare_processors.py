@@ -94,10 +94,7 @@ def get_processor(model_config: Dict) -> "Processor":
         )
 
     elif "video_blip" in model_type:
-        if "heron" in language_model_name:
-            processor = VideoBlipProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
-        else:
-            processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
+        processor = VideoBlipProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
 
     else:
         raise NotImplementedError(f"Processor for model_type: {model_type} is not implemented.")
