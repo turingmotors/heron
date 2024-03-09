@@ -155,6 +155,70 @@ dataset_config_path:
 
 学習にはGPUが必要です。Ubuntu20.04, CUDA11.7で動作確認をしています。
 
+# 学習方法 (Trainerなし)
+Hugging Faceの `Trainer` クラスに依存しない訓練スクリプト `train_ds.py` を提供しています。<br>
+例えば、[projects/opt/exp002_ds.yml](../projects/opt/exp_002_ds.yml)の内容は次のようになっています。
+
+```yaml
+training_config:
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 4
+  num_train_epochs: 5
+  dataloader_num_workers: 16
+  learning_rate: 5.0e-5
+  output_dir: ./output/
+  report_to: "wandb"
+  zero_stage: 2
+  precision: "fp16"
+  enable_tensorboard: False
+  seed: 0
+  weight_decay: 0.
+  learning_rate_pretraining_components: 0.
+  num_warmup_steps: 0.
+  optim_betas:
+    - 0.9
+    - 0.95
+  lr_scheduler_type: "cosine"
+  gradient_checkpointing: False
+  cpu_offload: False
+
+
+model_config:
+  pretrained_path: # None or path to model weight
+  model_type: git_llm
+  language_model_name: facebook/opt-125m
+  vision_model_name: openai/clip-vit-base-patch16
+  num_image_with_embedding: 1 # if 1, no img_temporal_embedding
+  max_length: 512
+  keys_to_finetune:
+    - visual_projection
+    - num_image_with_embedding
+  keys_to_freeze: []
+
+  # TODO: support LoRA
+  # use_lora: false
+  # lora:
+  #   r: 8
+  #   lora_alpha: 32
+  #   target_modules:
+  #     - q_proj
+  #     - k_proj
+  #     - v_proj
+  #   lora_dropout: 0.01
+  #   bias: none
+  #   task_type: CAUSAL_LM
+
+dataset_config_path:
+  - ./configs/datasets/m3it_coco.yaml  # only coco dataset
+```
+
+学習を開始する場合は、次のコマンドを実行してください。
+
+```bash
+./scripts/run_ds.sh
+```
+
 # 利用方法
 
 Hugging Face Hubから学習済みモデルをダウンロードすることができます: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
@@ -207,6 +271,26 @@ with torch.no_grad():
 print(processor.tokenizer.batch_decode(out))
 ```
 
+もしZeRO-3で訓練されたモデルならば、推論用コードに次の変更を加えます。
+
+```diff
+- # prepare a pretrained model
+- model = GitLlamaForCausalLM.from_pretrained(
+-     'turing-motors/heron-chat-git-Llama-2-7b-v0', torch_dtype=torch.float16
+- )
++ from heron.models.utils import load_model, load_pretrained_weight
++ import yaml
++ 
++ config_file = f"./projects/opt/exp002_ds.yml"
++ 
++ # get config
++ with open(config_file, "r") as i_:
++     config = yaml.safe_load(i_)
++ 
++ model = load_model(config["model_config"])
++ model.load_state_dict(torch.load('./output/opt/exp002_ds/epoch-1/pytorch_model.bin'), strict=True)
+```
+
 ### 学習済みモデル一覧
 
 |model|LLM module|adapter|size|
@@ -234,3 +318,4 @@ print(processor.tokenizer.batch_decode(out))
 - [GenerativeImage2Text](https://github.com/microsoft/GenerativeImage2Text): モデルの構成方法の着想はGITに基づいています。
 - [Llava](https://github.com/haotian-liu/LLaVA): 本ライブラリはLlavaプロジェクトを参考にしています。
 - [GIT-LLM](https://github.com/Ino-Ichan/GIT-LLM)
+- [DeepSpeedExamples](https://github.com/microsoft/DeepSpeedExamples)

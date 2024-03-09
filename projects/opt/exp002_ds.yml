@@ -1,0 +1,49 @@
+training_config:
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 4
+  num_train_epochs: 3
+  dataloader_num_workers: 16
+  learning_rate: 5.0e-5
+  output_dir: ./output/
+  report_to: "wandb"
+  zero_stage: 3
+  precision: "fp16"
+  enable_tensorboard: False
+  seed: 0
+  weight_decay: 0.
+  learning_rate_pretraining_components: 0.
+  num_warmup_steps: 0.
+  optim_betas:
+    - 0.9
+    - 0.95
+  lr_scheduler_type: "cosine"
+  gradient_checkpointing: False
+  cpu_offload: False
+
+
+model_config:
+  pretrained_path: # None or path to model weight
+  model_type: git_llm
+  language_model_name: facebook/opt-125m
+  vision_model_name: openai/clip-vit-base-patch16
+  num_image_with_embedding: 1 # if 1, no img_temporal_embedding
+  max_length: 512
+  keys_to_finetune: []
+  keys_to_freeze: []
+
+  # TODO: support LoRA
+  # use_lora: false
+  # lora:
+  #   r: 8
+  #   lora_alpha: 32
+  #   target_modules:
+  #     - q_proj
+  #     - k_proj
+  #     - v_proj
+  #   lora_dropout: 0.01
+  #   bias: none
+  #   task_type: CAUSAL_LM
+
+dataset_config_path:
+  - ./configs/datasets/m3it_coco.yaml  # only coco dataset
