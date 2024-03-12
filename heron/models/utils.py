@@ -109,8 +109,11 @@ def load_model(
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
 
-        model = VideoBlipForConditionalGeneration.create(
-            language_model, num_frames=num_image_with_embedding, torch_dtype=torch_dtype
+        model = VideoBlipForConditionalGeneration.from_pretrained(
+            language_model,
+            num_frames=num_image_with_embedding,
+            torch_dtype=torch_dtype,
+            ignore_mismatched_sizes=False,
         )
 
     else:

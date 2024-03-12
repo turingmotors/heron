@@ -21,6 +21,8 @@ from transformers import (
     LlamaTokenizer,
 )
 
+from heron.models.video_blip import VideoBlipProcessor
+
 
 def get_tokenizer(language_model_name: str) -> "Tokenizer":
     if "stablelm" in language_model_name:
@@ -91,8 +93,8 @@ def get_processor(model_config: Dict) -> "Processor":
             model_config["vision_model_name"]
         )
 
-    elif model_type == "video_blip":
-        processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
+    elif "video_blip" in model_type:
+        processor = VideoBlipProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
 
     else:
         raise NotImplementedError(f"Processor for model_type: {model_type} is not implemented.")

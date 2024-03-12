@@ -21,7 +21,7 @@ model_config:
   fp16: true
   #pretrained_path:  # None or path to model weight
   model_type: video_blip
-  language_model_name: "stabilityai/japanese-stablelm-base-alpha-7b"
+  language_model_name: "turing-motors/heron-chat-blip-ja-stablelm-base-7b-v1-llava-620k"
   num_image_with_embedding: 1 # 1 for image, otherwise for number of video sequences
   max_length: 256
   keys_to_finetune: []
