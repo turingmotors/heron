@@ -12,7 +12,7 @@
 {"question_id": 11, "image": "000000514915.jpg", "text": "Why might the dog have chosen to lay down on the floor in this location?", "category": "complex", "_idx": 11, "text_JA": "なぜ犬はこの場所で床に横になることを選んだのでしょうか？"}
 {"question_id": 12, "image": "000000056013.jpg", "text": "Where is the cart with luggage bags located?", "category": "conv", "_idx": 12, "text_JA": "荷物が入ったカートはどこにありますか？"}
 {"question_id": 13, "image": "000000056013.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 13, "text_JA": "次の画像を説明してください。"}
-{"question_id": 14, "image": "000000056013.jpg", "text": "What challenges might the staff encounter with handling luggage in the lobby?", "category": "complex", "_idx": 14, "text_JA": "ロビーでの荷物の取り扱いについて、スタッフはどのような問題に遭遇するでしょうか？"}
+{"question_id": 14, "image": "000000056013.jpg", "text": "What challenges might the staff encounter with handling luggage in the lobby?", "category": "complex", "_idx": 14, "text_JA": "ロビーでの荷物の取り扱いについて、スタッフはどのような問題に遭遇するかもしれないでしょうか？"}
 {"question_id": 15, "image": "000000408439.jpg", "text": "What is the body of water seen in the image?", "category": "conv", "_idx": 15, "text_JA": "画像に写っている水域は何ですか？"}
 {"question_id": 16, "image": "000000408439.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 16, "text_JA": "提供された写真の要素について詳しく説明してもらえますか？"}
 {"question_id": 17, "image": "000000408439.jpg", "text": "What are potential reasons for the train to be traveling in such a scenic route?", "category": "complex", "_idx": 17, "text_JA": "列車がこのような風光明媚なルートを走行する理由は何でしょうか？"}
