@@ -13,6 +13,8 @@ wandb
 *egg-info
 
 playground/data/llava-bench-ja/val2014/*
+playground/data/llava-bench-in-the-wild/images/*
+playground/data/llava-bench-in-the-wild/ja/output/*
 
 poetry.lock
 
