@@ -15,6 +15,7 @@ wandb
 playground/data/llava-bench-ja/val2014/*
 playground/data/llava-bench-in-the-wild/images/*
 playground/data/llava-bench-in-the-wild/ja/output/*
+playground/data/heron-bench-ja/images/*
 
 poetry.lock
 
