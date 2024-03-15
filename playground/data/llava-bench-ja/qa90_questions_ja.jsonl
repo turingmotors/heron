@@ -1,90 +1,90 @@
-{"question_id": 0, "image": "000000441147.jpg", "text": "What is the color of the two suitcases in the image?", "category": "conv", "_idx": 0, "text_JA": "画像に写っている2つのスーツケースの色は？"}
-{"question_id": 1, "image": "000000441147.jpg", "text": "Analyze the image in a comprehensive and detailed manner.", "category": "detail", "_idx": 1, "text_JA": "包括的かつ詳細に画像を分析する。"}
-{"question_id": 2, "image": "000000441147.jpg", "text": "What potential factors could make these suitcases valuable?", "category": "complex", "_idx": 2, "text_JA": "これらのスーツケースを価値あるものにする可能性のある要素とは？"}
+{"question_id": 0, "image": "000000441147.jpg", "text": "What is the color of the two suitcases in the image?", "category": "conv", "_idx": 0, "text_JA": "画像の2つのスーツケースの色は何色ですか？"}
+{"question_id": 1, "image": "000000441147.jpg", "text": "Analyze the image in a comprehensive and detailed manner.", "category": "detail", "_idx": 1, "text_JA": "画像を包括的かつ詳細な方法で分析してください。"}
+{"question_id": 2, "image": "000000441147.jpg", "text": "What potential factors could make these suitcases valuable?", "category": "complex", "_idx": 2, "text_JA": "これらのスーツケースを価値あるものにできそうな潜在的な要因は何ですか？"}
 {"question_id": 3, "image": "000000353536.jpg", "text": "What are the main objects on the table in the image?", "category": "conv", "_idx": 3, "text_JA": "画像のテーブルの上にある主なものは何ですか？"}
-{"question_id": 4, "image": "000000353536.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 4, "text_JA": "次のイメージを説明してください。"}
-{"question_id": 5, "image": "000000353536.jpg", "text": "What activity might have recently taken place around this table and what could be its aftermath?", "category": "complex", "_idx": 5, "text_JA": "最近、このテーブルの周りでどのような活動が行われ、その余波は何だったのだろうか？"}
-{"question_id": 6, "image": "000000506095.jpg", "text": "What is the main focus of the image?", "category": "conv", "_idx": 6, "text_JA": "画像の主眼は何か？"}
+{"question_id": 4, "image": "000000353536.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 4, "text_JA": "次の画像を説明してください。"}
+{"question_id": 5, "image": "000000353536.jpg", "text": "What activity might have recently taken place around this table and what could be its aftermath?", "category": "complex", "_idx": 5, "text_JA": "最近、このテーブルの周りでどのような活動が行われ、その余波はどのようなものだったのでしょうか？"}
+{"question_id": 6, "image": "000000506095.jpg", "text": "What is the main focus of the image?", "category": "conv", "_idx": 6, "text_JA": "画像の主な関心は何ですか。"}
 {"question_id": 7, "image": "000000506095.jpg", "text": "What is this photo about'?", "category": "detail", "_idx": 7, "text_JA": "この写真は何についてのものですか？"}
-{"question_id": 8, "image": "000000506095.jpg", "text": "What could be a reason for the cat's interest in the laptop?", "category": "complex", "_idx": 8, "text_JA": "猫がノートパソコンに興味を持った理由は何だろう？"}
+{"question_id": 8, "image": "000000506095.jpg", "text": "What could be a reason for the cat's interest in the laptop?", "category": "complex", "_idx": 8, "text_JA": "猫がノートパソコンに興味を持った理由は何でしょうか？"}
 {"question_id": 9, "image": "000000514915.jpg", "text": "What color is the dog in the image?", "category": "conv", "_idx": 9, "text_JA": "画像の犬は何色ですか？"}
-{"question_id": 10, "image": "000000514915.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 10, "text_JA": "次のイメージを説明してください。"}
-{"question_id": 11, "image": "000000514915.jpg", "text": "Why might the dog have chosen to lay down on the floor in this location?", "category": "complex", "_idx": 11, "text_JA": "なぜ犬はこの場所を選んだのだろう？"}
-{"question_id": 12, "image": "000000056013.jpg", "text": "Where is the cart with luggage bags located?", "category": "conv", "_idx": 12, "text_JA": "荷物袋を積んだカートはどこにありますか？"}
-{"question_id": 13, "image": "000000056013.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 13, "text_JA": "次のイメージを説明してください。"}
-{"question_id": 14, "image": "000000056013.jpg", "text": "What challenges might the staff encounter with handling luggage in the lobby?", "category": "complex", "_idx": 14, "text_JA": "ロビーでの荷物の取り扱いについて、スタッフはどのような問題に遭遇する可能性がありますか？"}
+{"question_id": 10, "image": "000000514915.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 10, "text_JA": "次の画像を説明してください。"}
+{"question_id": 11, "image": "000000514915.jpg", "text": "Why might the dog have chosen to lay down on the floor in this location?", "category": "complex", "_idx": 11, "text_JA": "なぜ犬はこの場所で床に横になることを選んだのでしょうか？"}
+{"question_id": 12, "image": "000000056013.jpg", "text": "Where is the cart with luggage bags located?", "category": "conv", "_idx": 12, "text_JA": "荷物が入ったカートはどこにありますか？"}
+{"question_id": 13, "image": "000000056013.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 13, "text_JA": "次の画像を説明してください。"}
+{"question_id": 14, "image": "000000056013.jpg", "text": "What challenges might the staff encounter with handling luggage in the lobby?", "category": "complex", "_idx": 14, "text_JA": "ロビーでの荷物の取り扱いについて、スタッフはどのような問題に遭遇するかもしれないでしょうか？"}
 {"question_id": 15, "image": "000000408439.jpg", "text": "What is the body of water seen in the image?", "category": "conv", "_idx": 15, "text_JA": "画像に写っている水域は何ですか？"}
-{"question_id": 16, "image": "000000408439.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 16, "text_JA": "提供された写真の要素について詳しく教えてください。"}
-{"question_id": 17, "image": "000000408439.jpg", "text": "What are potential reasons for the train to be traveling in such a scenic route?", "category": "complex", "_idx": 17, "text_JA": "列車がこのような風光明媚なルートを走行する理由は何だろうか？"}
-{"question_id": 18, "image": "000000164255.jpg", "text": "What is the main object in the image?", "category": "conv", "_idx": 18, "text_JA": "画像の主役は何ですか？"}
-{"question_id": 19, "image": "000000164255.jpg", "text": "What do you think is going on in this snapshot?", "category": "detail", "_idx": 19, "text_JA": "このスナップショットで何が起こっていると思う？"}
-{"question_id": 20, "image": "000000164255.jpg", "text": "What purpose does the umbrella serve on the beach?", "category": "complex", "_idx": 20, "text_JA": "ビーチでの傘の役割は？"}
-{"question_id": 21, "image": "000000034096.jpg", "text": "What stage is the house in regarding its construction?", "category": "conv", "_idx": 21, "text_JA": "家の建設はどの段階ですか？"}
+{"question_id": 16, "image": "000000408439.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 16, "text_JA": "提供された写真の要素について詳しく説明してもらえますか？"}
+{"question_id": 17, "image": "000000408439.jpg", "text": "What are potential reasons for the train to be traveling in such a scenic route?", "category": "complex", "_idx": 17, "text_JA": "列車がこのような風光明媚なルートを走行する理由は何でしょうか？"}
+{"question_id": 18, "image": "000000164255.jpg", "text": "What is the main object in the image?", "category": "conv", "_idx": 18, "text_JA": "画像に写っている主なものは何ですか？"}
+{"question_id": 19, "image": "000000164255.jpg", "text": "What do you think is going on in this snapshot?", "category": "detail", "_idx": 19, "text_JA": "このスナップショットで何が起こっていると思いますか？"}
+{"question_id": 20, "image": "000000164255.jpg", "text": "What purpose does the umbrella serve on the beach?", "category": "complex", "_idx": 20, "text_JA": "その傘のビーチでの役割は何ですか？"}
+{"question_id": 21, "image": "000000034096.jpg", "text": "What stage is the house in regarding its construction?", "category": "conv", "_idx": 21, "text_JA": "その家は建設のどの段階にありますか？"}
 {"question_id": 22, "image": "000000034096.jpg", "text": "What is this photo about'?", "category": "detail", "_idx": 22, "text_JA": "この写真は何についてのものですか？"}
-{"question_id": 23, "image": "000000034096.jpg", "text": "What may be a potential obstacle for the house construction in its current state?", "category": "complex", "_idx": 23, "text_JA": "現状で家づくりの障害になりそうなことは？"}
-{"question_id": 24, "image": "000000385873.jpg", "text": "How many pizzas are there in the image?", "category": "conv", "_idx": 24, "text_JA": "画像には何枚のピザが写っていますか？"}
-{"question_id": 25, "image": "000000385873.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 25, "text_JA": "画像のビジュアルコンテンツを詳細に説明する。"}
-{"question_id": 26, "image": "000000385873.jpg", "text": "What are the possible challenges one might face when dividing these pizzas equitably among a group of people?", "category": "complex", "_idx": 26, "text_JA": "このピザをグループで公平に分ける際に直面する可能性のある課題とは？"}
-{"question_id": 27, "image": "000000367571.jpg", "text": "How many doughnuts are in the box?", "category": "conv", "_idx": 27, "text_JA": "ドーナツは何個入っていますか？"}
-{"question_id": 28, "image": "000000367571.jpg", "text": "Write a detailed description of the given image.", "category": "detail", "_idx": 28, "text_JA": "与えられた画像の詳細な説明を書きなさい。"}
-{"question_id": 29, "image": "000000367571.jpg", "text": "What unique taste combinations can be found in this box of doughnuts?", "category": "complex", "_idx": 29, "text_JA": "このドーナツの箱にはどんなユニークな味の組み合わせがあるのだろう？"}
-{"question_id": 30, "image": "000000319432.jpg", "text": "What is the man doing in the image?", "category": "conv", "_idx": 30, "text_JA": "その男は画像の中で何をしているのか？"}
-{"question_id": 31, "image": "000000319432.jpg", "text": "Can you describe the main features of this image for me?", "category": "detail", "_idx": 31, "text_JA": "この画像の主な特徴を教えていただけますか？"}
-{"question_id": 32, "image": "000000319432.jpg", "text": "Why might the man be holding the clothes on hangers?", "category": "complex", "_idx": 32, "text_JA": "なぜ男はハンガーに掛かったままの服を持っているのだろう？"}
+{"question_id": 23, "image": "000000034096.jpg", "text": "What may be a potential obstacle for the house construction in its current state?", "category": "complex", "_idx": 23, "text_JA": "現状において家づくりの障害になりそうなことは何でしょうか？"}
+{"question_id": 24, "image": "000000385873.jpg", "text": "How many pizzas are there in the image?", "category": "conv", "_idx": 24, "text_JA": "画像の中にピザは何枚ありますか？"}
+{"question_id": 25, "image": "000000385873.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 25, "text_JA": "画像の視覚的な内容を詳しく説明してください。"}
+{"question_id": 26, "image": "000000385873.jpg", "text": "What are the possible challenges one might face when dividing these pizzas equitably among a group of people?", "category": "complex", "_idx": 26, "text_JA": "これらのピザをグループ間で公平に分けるときに直面する可能性のある課題は何でしょうか？"}
+{"question_id": 27, "image": "000000367571.jpg", "text": "How many doughnuts are in the box?", "category": "conv", "_idx": 27, "text_JA": "ドーナツは箱の中に何個入っていますか？"}
+{"question_id": 28, "image": "000000367571.jpg", "text": "Write a detailed description of the given image.", "category": "detail", "_idx": 28, "text_JA": "与えられた画像の詳細な説明を書いてください。"}
+{"question_id": 29, "image": "000000367571.jpg", "text": "What unique taste combinations can be found in this box of doughnuts?", "category": "complex", "_idx": 29, "text_JA": "このドーナツの箱には、どんなユニークな味の組み合わせがありますか？"}
+{"question_id": 30, "image": "000000319432.jpg", "text": "What is the man doing in the image?", "category": "conv", "_idx": 30, "text_JA": "この男性は画像の中で何をしているのでしょうか？"}
+{"question_id": 31, "image": "000000319432.jpg", "text": "Can you describe the main features of this image for me?", "category": "detail", "_idx": 31, "text_JA": "この画像の主な特徴を説明していただけますか？"}
+{"question_id": 32, "image": "000000319432.jpg", "text": "Why might the man be holding the clothes on hangers?", "category": "complex", "_idx": 32, "text_JA": "なぜ男はハンガーに掛かったままの服を持っているのでしょうか？"}
 {"question_id": 33, "image": "000000225738.jpg", "text": "How many giraffes are depicted in the image?", "category": "conv", "_idx": 33, "text_JA": "画像には何頭のキリンが描かれていますか？"}
-{"question_id": 34, "image": "000000225738.jpg", "text": "Write a detailed description of the given image.", "category": "detail", "_idx": 34, "text_JA": "与えられた画像の詳細な説明を書きなさい。"}
-{"question_id": 35, "image": "000000225738.jpg", "text": "Why might these giraffes be gathering near the same tree?", "category": "complex", "_idx": 35, "text_JA": "なぜキリンたちは同じ木の近くに集まっているのだろう？"}
-{"question_id": 36, "image": "000000092109.jpg", "text": "What is the main focus of the image?", "category": "conv", "_idx": 36, "text_JA": "画像の主眼は何か？"}
+{"question_id": 34, "image": "000000225738.jpg", "text": "Write a detailed description of the given image.", "category": "detail", "_idx": 34, "text_JA": "与えられた画像の詳細な説明を書いてください。"}
+{"question_id": 35, "image": "000000225738.jpg", "text": "Why might these giraffes be gathering near the same tree?", "category": "complex", "_idx": 35, "text_JA": "なぜこれらのキリンが同じ木の近くに集まっているのでしょうか？"}
+{"question_id": 36, "image": "000000092109.jpg", "text": "What is the main focus of the image?", "category": "conv", "_idx": 36, "text_JA": "画像の主な関心は何ですか。"}
 {"question_id": 37, "image": "000000092109.jpg", "text": "What is this photo about'?", "category": "detail", "_idx": 37, "text_JA": "この写真は何についてのものですか？"}
-{"question_id": 38, "image": "000000092109.jpg", "text": "What can be inferred about the giraffe's habitat from this image?", "category": "complex", "_idx": 38, "text_JA": "この画像から、キリンの生息地について何が推測できるだろうか？"}
-{"question_id": 39, "image": "000000506483.jpg", "text": "What kind of objects are included in the art installation?", "category": "conv", "_idx": 39, "text_JA": "アートインスタレーションにはどのようなものが含まれているのですか？"}
-{"question_id": 40, "image": "000000506483.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 40, "text_JA": "画像のビジュアルコンテンツを詳細に説明する。"}
-{"question_id": 41, "image": "000000506483.jpg", "text": "How might the art installation encourage interaction among people?", "category": "complex", "_idx": 41, "text_JA": "アート・インスタレーションは人々の交流をどのように促すだろうか？"}
-{"question_id": 42, "image": "000000097131.jpg", "text": "What is the main focus of the image?", "category": "conv", "_idx": 42, "text_JA": "画像の主眼は何か？"}
-{"question_id": 43, "image": "000000097131.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 43, "text_JA": "提供された写真の要素について詳しく教えてください。"}
-{"question_id": 44, "image": "000000097131.jpg", "text": "What might be the reason for the car to be parked on the side of the road?", "category": "complex", "_idx": 44, "text_JA": "車が道路脇に駐車されている理由は何だろう？"}
-{"question_id": 45, "image": "000000052312.jpg", "text": "What is unusual about the elderly man's facial appearance in the image?", "category": "conv", "_idx": 45, "text_JA": "画像に写っている老人の顔立ちのどこが変わっているのか？"}
-{"question_id": 46, "image": "000000052312.jpg", "text": "What's happening in the scene?", "category": "detail", "_idx": 46, "text_JA": "そのシーンで何が起きているのか？"}
-{"question_id": 47, "image": "000000052312.jpg", "text": "What message could be conveyed by the man's unusual facial adornment?", "category": "complex", "_idx": 47, "text_JA": "この男の変わった顔の装飾は、どんなメッセージを伝えているのだろうか？"}
-{"question_id": 48, "image": "000000258285.jpg", "text": "How many airplanes are visible in the image?", "category": "conv", "_idx": 48, "text_JA": "画像には何機の飛行機が写っていますか？"}
-{"question_id": 49, "image": "000000258285.jpg", "text": "What do you see happening in this image?", "category": "detail", "_idx": 49, "text_JA": "この映像の中で何が起こっていると思う？"}
-{"question_id": 50, "image": "000000258285.jpg", "text": "What environmental impact might these planes' activity have on the birds?", "category": "complex", "_idx": 50, "text_JA": "このような飛行機の活動は、鳥たちにどのような環境影響を与えるのだろうか？"}
-{"question_id": 51, "image": "000000081552.jpg", "text": "What is the cat doing on the red couch?", "category": "conv", "_idx": 51, "text_JA": "猫は赤いソファの上で何をしているのだろう？"}
-{"question_id": 52, "image": "000000081552.jpg", "text": "Write a detailed description of the given image.", "category": "detail", "_idx": 52, "text_JA": "与えられた画像の詳細な説明を書きなさい。"}
-{"question_id": 53, "image": "000000081552.jpg", "text": "What factors may have led the cat to choose this location for sleep?", "category": "complex", "_idx": 53, "text_JA": "猫が眠るためにこの場所を選んだ要因は何だろう？"}
-{"question_id": 54, "image": "000000066144.jpg", "text": "What type of car is parked next to the stop sign in the image?", "category": "conv", "_idx": 54, "text_JA": "画像の停止標識の横に停まっている車はどんな車ですか？"}
-{"question_id": 55, "image": "000000066144.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 55, "text_JA": "画像のビジュアルコンテンツを詳細に説明する。"}
-{"question_id": 56, "image": "000000066144.jpg", "text": "What can be inferred about the traffic situation in the area?", "category": "complex", "_idx": 56, "text_JA": "この地域の交通状況について推測できることは？"}
-{"question_id": 57, "image": "000000203629.jpg", "text": "What is the man doing in the image?", "category": "conv", "_idx": 57, "text_JA": "その男は画像の中で何をしているのか？"}
-{"question_id": 58, "image": "000000203629.jpg", "text": "Can you describe the main features of this image for me?", "category": "detail", "_idx": 58, "text_JA": "この画像の主な特徴を説明していただけますか？"}
-{"question_id": 59, "image": "000000203629.jpg", "text": "What might be the reason behind the man's thumbs-up gesture while on the phone?", "category": "complex", "_idx": 59, "text_JA": "電話中に男性が親指を立てるジェスチャーをした理由は何だろう？"}
-{"question_id": 60, "image": "000000109532.jpg", "text": "What breed is the dog in the image?", "category": "conv", "_idx": 60, "text_JA": "画像の犬の犬種は？"}
-{"question_id": 61, "image": "000000109532.jpg", "text": "What are the key elements in this picture?", "category": "detail", "_idx": 61, "text_JA": "この写真で重要な要素は何か？"}
+{"question_id": 38, "image": "000000092109.jpg", "text": "What can be inferred about the giraffe's habitat from this image?", "category": "complex", "_idx": 38, "text_JA": "この画像から、キリンの生息場所について何が推測できますか？"}
+{"question_id": 39, "image": "000000506483.jpg", "text": "What kind of objects are included in the art installation?", "category": "conv", "_idx": 39, "text_JA": "アート・インスタレーションにはどのようなものが含まれていますか？"}
+{"question_id": 40, "image": "000000506483.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 40, "text_JA": "画像の視覚的な内容を詳しく説明してください。"}
+{"question_id": 41, "image": "000000506483.jpg", "text": "How might the art installation encourage interaction among people?", "category": "complex", "_idx": 41, "text_JA": "アート・インスタレーションは、どのように人々の交流を促すのでしょうか？"}
+{"question_id": 42, "image": "000000097131.jpg", "text": "What is the main focus of the image?", "category": "conv", "_idx": 42, "text_JA": "画像の主な関心は何ですか。"}
+{"question_id": 43, "image": "000000097131.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 43, "text_JA": "提供された写真の要素について詳しく説明していただけますか？"}
+{"question_id": 44, "image": "000000097131.jpg", "text": "What might be the reason for the car to be parked on the side of the road?", "category": "complex", "_idx": 44, "text_JA": "車が道路脇に駐車されている理由は何でしょうか？"}
+{"question_id": 45, "image": "000000052312.jpg", "text": "What is unusual about the elderly man's facial appearance in the image?", "category": "conv", "_idx": 45, "text_JA": "画像に写っている老人の顔立ちのどこが変わっているのでしょうか？"}
+{"question_id": 46, "image": "000000052312.jpg", "text": "What's happening in the scene?", "category": "detail", "_idx": 46, "text_JA": "このシーンで何が起こっているのでしょうか？"}
+{"question_id": 47, "image": "000000052312.jpg", "text": "What message could be conveyed by the man's unusual facial adornment?", "category": "complex", "_idx": 47, "text_JA": "この男性の変わった顔の装飾は、どんなメッセージを伝えているのでしょうか？"}
+{"question_id": 48, "image": "000000258285.jpg", "text": "How many airplanes are visible in the image?", "category": "conv", "_idx": 48, "text_JA": "画像には何機の飛行機が見えますか？"}
+{"question_id": 49, "image": "000000258285.jpg", "text": "What do you see happening in this image?", "category": "detail", "_idx": 49, "text_JA": "この画像では何が起こっていると思いますか？"}
+{"question_id": 50, "image": "000000258285.jpg", "text": "What environmental impact might these planes' activity have on the birds?", "category": "complex", "_idx": 50, "text_JA": "このような飛行機の活動は、鳥たちにどのような環境影響を与えるのでしょうか？"}
+{"question_id": 51, "image": "000000081552.jpg", "text": "What is the cat doing on the red couch?", "category": "conv", "_idx": 51, "text_JA": "猫は赤いソファーの上で何をしているのでしょうか？"}
+{"question_id": 52, "image": "000000081552.jpg", "text": "Write a detailed description of the given image.", "category": "detail", "_idx": 52, "text_JA": "与えられた画像の詳細な説明を書いてください。"}
+{"question_id": 53, "image": "000000081552.jpg", "text": "What factors may have led the cat to choose this location for sleep?", "category": "complex", "_idx": 53, "text_JA": "猫がこの場所を寝る場所として選んだ可能性がある要因は何ですか？"}
+{"question_id": 54, "image": "000000066144.jpg", "text": "What type of car is parked next to the stop sign in the image?", "category": "conv", "_idx": 54, "text_JA": "画像の停止標識の横に停まっている車の種類は？"}
+{"question_id": 55, "image": "000000066144.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 55, "text_JA": "画像の視覚的な内容を詳しく説明してください。"}
+{"question_id": 56, "image": "000000066144.jpg", "text": "What can be inferred about the traffic situation in the area?", "category": "complex", "_idx": 56, "text_JA": "この地域の交通状況について、どのようなことが推測できますか？"}
+{"question_id": 57, "image": "000000203629.jpg", "text": "What is the man doing in the image?", "category": "conv", "_idx": 57, "text_JA": "この男性は画像の中で何をしているのでしょうか？"}
+{"question_id": 58, "image": "000000203629.jpg", "text": "Can you describe the main features of this image for me?", "category": "detail", "_idx": 58, "text_JA": "この画像の主な特徴を説明してもらえますか？"}
+{"question_id": 59, "image": "000000203629.jpg", "text": "What might be the reason behind the man's thumbs-up gesture while on the phone?", "category": "complex", "_idx": 59, "text_JA": "この男性が電話中に親指を立てるジェスチャーをした理由は何でしょうか？"}
+{"question_id": 60, "image": "000000109532.jpg", "text": "What breed is the dog in the image?", "category": "conv", "_idx": 60, "text_JA": "画像の犬は何という犬種ですか？"}
+{"question_id": 61, "image": "000000109532.jpg", "text": "What are the key elements in this picture?", "category": "detail", "_idx": 61, "text_JA": "この写真の重要な要素は何ですか？"}
 {"question_id": 62, "image": "000000109532.jpg", "text": "What measures may be taken by the dog's owner to make the dog feel comfortable in the room?", "category": "complex", "_idx": 62, "text_JA": "犬が部屋で快適に過ごすために、飼い主はどのような対策をとればよいでしょうか？"}
 {"question_id": 63, "image": "000000431165.jpg", "text": "What is the color of the elephant in the image?", "category": "conv", "_idx": 63, "text_JA": "画像の象の色は何色ですか？"}
-{"question_id": 64, "image": "000000431165.jpg", "text": "What do you think is going on in this snapshot?", "category": "detail", "_idx": 64, "text_JA": "このスナップショットで何が起こっていると思う？"}
-{"question_id": 65, "image": "000000431165.jpg", "text": "What could be a potential concern for the baby elephant in this setting?", "category": "complex", "_idx": 65, "text_JA": "このような状況において、子ゾウにとってどのようなことが懸念されるでしょうか？"}
-{"question_id": 66, "image": "000000020650.jpg", "text": "What type of food items are present on the orange plate?", "category": "conv", "_idx": 66, "text_JA": "オレンジ色の皿の上にはどのような食べ物が載っているのだろうか？"}
-{"question_id": 67, "image": "000000020650.jpg", "text": "What are the key elements in this picture?", "category": "detail", "_idx": 67, "text_JA": "この写真で重要な要素は何か？"}
-{"question_id": 68, "image": "000000020650.jpg", "text": "What can be inferred about the individual's dietary choices?", "category": "complex", "_idx": 68, "text_JA": "個人の食事の選択について何が推測できるか？"}
-{"question_id": 69, "image": "000000205183.jpg", "text": "What type of bird is pictured in the image?", "category": "conv", "_idx": 69, "text_JA": "画像に写っている鳥の種類は？"}
-{"question_id": 70, "image": "000000205183.jpg", "text": "What do you see happening in this image?", "category": "detail", "_idx": 70, "text_JA": "この映像の中で何が起こっていると思う？"}
-{"question_id": 71, "image": "000000205183.jpg", "text": "What challenges could the duck face while walking along the paved road?", "category": "complex", "_idx": 71, "text_JA": "舗装された道路を歩いている間、アヒルはどんな困難に直面するだろうか？"}
-{"question_id": 72, "image": "000000210299.jpg", "text": "Is the little boy wearing any safety gear while riding his bike?", "category": "conv", "_idx": 72, "text_JA": "少年は自転車に乗るとき、安全装置をつけているのだろうか？"}
-{"question_id": 73, "image": "000000210299.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 73, "text_JA": "提供された写真の要素について詳しく教えてください。"}
-{"question_id": 74, "image": "000000210299.jpg", "text": "Why is the little boy's precaution noteworthy?", "category": "complex", "_idx": 74, "text_JA": "なぜ少年の用心が注目されるのか？"}
-{"question_id": 75, "image": "000000515716.jpg", "text": "How many people are visible in the image?", "category": "conv", "_idx": 75, "text_JA": "画像には何人写っていますか？"}
-{"question_id": 76, "image": "000000515716.jpg", "text": "What do you see happening in this image?", "category": "detail", "_idx": 76, "text_JA": "この映像の中で何が起こっていると思う？"}
-{"question_id": 77, "image": "000000515716.jpg", "text": "What might be the reason behind this gathering?", "category": "complex", "_idx": 77, "text_JA": "この集まりの背景には何があるのだろうか？"}
+{"question_id": 64, "image": "000000431165.jpg", "text": "What do you think is going on in this snapshot?", "category": "detail", "_idx": 64, "text_JA": "このスナップショットでは何が起こっていると思いますか？"}
+{"question_id": 65, "image": "000000431165.jpg", "text": "What could be a potential concern for the baby elephant in this setting?", "category": "complex", "_idx": 65, "text_JA": "このような状況で、赤ちゃんゾウにとってどのようなことが懸念されるでしょうか？"}
+{"question_id": 66, "image": "000000020650.jpg", "text": "What type of food items are present on the orange plate?", "category": "conv", "_idx": 66, "text_JA": "オレンジ色のお皿の上にはどのような食べ物がありますか？"}
+{"question_id": 67, "image": "000000020650.jpg", "text": "What are the key elements in this picture?", "category": "detail", "_idx": 67, "text_JA": "この写真の重要な要素は何ですか？"}
+{"question_id": 68, "image": "000000020650.jpg", "text": "What can be inferred about the individual's dietary choices?", "category": "complex", "_idx": 68, "text_JA": "その個人の食事の選択について何が推測できますか？"}
+{"question_id": 69, "image": "000000205183.jpg", "text": "What type of bird is pictured in the image?", "category": "conv", "_idx": 69, "text_JA": "画像に写っている鳥の種類は何ですか？"}
+{"question_id": 70, "image": "000000205183.jpg", "text": "What do you see happening in this image?", "category": "detail", "_idx": 70, "text_JA": "この画像では何が起こっていると思いますか？"}
+{"question_id": 71, "image": "000000205183.jpg", "text": "What challenges could the duck face while walking along the paved road?", "category": "complex", "_idx": 71, "text_JA": "舗装された道路を歩いている間、アヒルはどんな困難に直面するでしょうか？"}
+{"question_id": 72, "image": "000000210299.jpg", "text": "Is the little boy wearing any safety gear while riding his bike?", "category": "conv", "_idx": 72, "text_JA": "少年は自転車に乗っている間、安全装置をつけていますか？"}
+{"question_id": 73, "image": "000000210299.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 73, "text_JA": "提供された写真の要素について詳しく説明していただけますか？"}
+{"question_id": 74, "image": "000000210299.jpg", "text": "Why is the little boy's precaution noteworthy?", "category": "complex", "_idx": 74, "text_JA": "なぜその小さな男の子の予防措置が注目に値するのでしょうか？"}
+{"question_id": 75, "image": "000000515716.jpg", "text": "How many people are visible in the image?", "category": "conv", "_idx": 75, "text_JA": "画像には何人の人が写っていますか？"}
+{"question_id": 76, "image": "000000515716.jpg", "text": "What do you see happening in this image?", "category": "detail", "_idx": 76, "text_JA": "この画像で何が起こっていると思いますか？"}
+{"question_id": 77, "image": "000000515716.jpg", "text": "What might be the reason behind this gathering?", "category": "complex", "_idx": 77, "text_JA": "この集まりの背景にある理由は何でしょうか？"}
 {"question_id": 78, "image": "000000460149.jpg", "text": "What is the main object featured in the image?", "category": "conv", "_idx": 78, "text_JA": "画像に写っている主なものは何ですか？"}
-{"question_id": 79, "image": "000000460149.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 79, "text_JA": "次のイメージを説明してください。"}
-{"question_id": 80, "image": "000000460149.jpg", "text": "Imagine you are walking down this street; how would you know the time or which direction the sidewalk leads?", "category": "complex", "_idx": 80, "text_JA": "この通りを歩いていると想像してみてほしい。時間や歩道がどの方向に続いているのか、どうやって知ることができるだろう？"}
-{"question_id": 81, "image": "000000293505.jpg", "text": "Is the person riding a motorbike or scooter?", "category": "conv", "_idx": 81, "text_JA": "バイクやスクーターに乗っていますか？"}
-{"question_id": 82, "image": "000000293505.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 82, "text_JA": "画像のビジュアルコンテンツを詳細に説明する。"}
-{"question_id": 83, "image": "000000293505.jpg", "text": "What challenges might the woman on the motorcycle face in this situation?", "category": "complex", "_idx": 83, "text_JA": "この状況で、オートバイに乗っている女性はどんな困難に直面するだろうか？"}
-{"question_id": 84, "image": "000000525439.jpg", "text": "What is the position of the skateboard in the image?", "category": "conv", "_idx": 84, "text_JA": "画像の中でスケートボードの位置は？"}
-{"question_id": 85, "image": "000000525439.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 85, "text_JA": "提供された写真の要素について詳しく教えてください。"}
-{"question_id": 86, "image": "000000525439.jpg", "text": "What might have happened prior to this moment?", "category": "complex", "_idx": 86, "text_JA": "この瞬間の前に何があっただろうか？"}
-{"question_id": 87, "image": "000000534270.jpg", "text": "What type of hats are the man and woman wearing?", "category": "conv", "_idx": 87, "text_JA": "男女がかぶっている帽子の種類は？"}
+{"question_id": 79, "image": "000000460149.jpg", "text": "Describe the following image.", "category": "detail", "_idx": 79, "text_JA": "次の画像を説明してください。"}
+{"question_id": 80, "image": "000000460149.jpg", "text": "Imagine you are walking down this street; how would you know the time or which direction the sidewalk leads?", "category": "complex", "_idx": 80, "text_JA": "あなたがこの通りを歩いていると想像してみてください。あなたはどうやって時間や歩道の方向を知ることができますか？"}
+{"question_id": 81, "image": "000000293505.jpg", "text": "Is the person riding a motorbike or scooter?", "category": "conv", "_idx": 81, "text_JA": "その人はバイクやスクーターに乗っていますか？"}
+{"question_id": 82, "image": "000000293505.jpg", "text": "Explain the visual content of the image in great detail.", "category": "detail", "_idx": 82, "text_JA": "画像の視覚的な内容を詳しく説明してください。"}
+{"question_id": 83, "image": "000000293505.jpg", "text": "What challenges might the woman on the motorcycle face in this situation?", "category": "complex", "_idx": 83, "text_JA": "このような状況で、オートバイに乗っている女性はどのような問題に直面するでしょうか？"}
+{"question_id": 84, "image": "000000525439.jpg", "text": "What is the position of the skateboard in the image?", "category": "conv", "_idx": 84, "text_JA": "画像の中でスケートボードはどのような位置にありますか？"}
+{"question_id": 85, "image": "000000525439.jpg", "text": "Can you elaborate on the elements of the picture provided?", "category": "detail", "_idx": 85, "text_JA": "提供された写真の要素について詳しく説明してもらえますか？"}
+{"question_id": 86, "image": "000000525439.jpg", "text": "What might have happened prior to this moment?", "category": "complex", "_idx": 86, "text_JA": "この瞬間の前に何があったのでしょうか？"}
+{"question_id": 87, "image": "000000534270.jpg", "text": "What type of hats are the man and woman wearing?", "category": "conv", "_idx": 87, "text_JA": "男性と女性はどのような種類の帽子をかぶっていますか？"}
 {"question_id": 88, "image": "000000534270.jpg", "text": "Can you describe the main features of this image for me?", "category": "detail", "_idx": 88, "text_JA": "この画像の主な特徴を説明していただけますか？"}
-{"question_id": 89, "image": "000000534270.jpg", "text": "What benefits do umbrella hats provide to the couple on this rainy day?", "category": "complex", "_idx": 89, "text_JA": "雨の日、傘の帽子はカップルにどんな恩恵をもたらすのだろうか？"}
+{"question_id": 89, "image": "000000534270.jpg", "text": "What benefits do umbrella hats provide to the couple on this rainy day?", "category": "complex", "_idx": 89, "text_JA": "この雨の日に、傘の帽子はカップルにどのような恩恵をもたらすのでしょうか？"}
