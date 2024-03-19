@@ -11,7 +11,7 @@ generation_config = {
     "top_p": 0.0,
 }
 
-# Gemini model API
+# Gemini model
 model_name = "models/gemini-1.0-pro-vision-latest"
 model = genai.GenerativeModel(model_name, generation_config=generation_config)
 
