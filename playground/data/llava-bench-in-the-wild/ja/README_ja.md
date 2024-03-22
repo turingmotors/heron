@@ -13,6 +13,30 @@ LLaVA-Bench-In-the-Wild (Japanese)は、LLaVA-Bench-In-the-Wildの日本語版�
 # Download Dataset
 Hugging Faceの[liuhaotian/llava-bench-in-the-wild](https://huggingface.co/datasets/liuhaotian/llava-bench-in-the-wild)から`images/`をダウンロードして、`playground/data/llava-bench-in-the-wild/`以下に配置してください。
 
+## Claude 3
+
+1. Python SDKのインストール
+
+```
+pip install anthropic
+```
+
+2. ANTHROPIC APIキーの設定
+
+ANTHROPIC APIを使用するには、まずAPIキーを取得する必要があります。APIキーを作成するには、[ANTHROPIC API Reference](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)にアクセスしてください。
+
+```
+export ANTHROPIC_API_KEY="<YOUR_API_KEY>"
+```
+
+3. 推論
+
+[Model Overview](https://docs.anthropic.com/claude/docs/models-overview)からモデルファミリーを確認できます。
+
+```
+python ./playground/scripts/inference_claude3.py
+```
+
 # License
 
 Released under the [Apache License 2.0](./LICENSE).
