@@ -9,5 +9,8 @@
 # Download Dataset
 Download `images/` from HuggingFace Dataset, [turing-motors/Japanese-Heron-Bench](https://huggingface.co/datasets/turing-motors/Japanese-Heron-Bench) and place them under `playground/data/japanese-heron-bench/`.
 
+# Guide to VLM APIs
+When evaluating VLMs, if you use GPT-4V, Claude 3, and Gemini Vision Pro, please refer to the [Guide to VLM APIs](../llava-bench-in-the-wild/README.md#GuidetoVLMAPIs).
+
 # Uses
 We have collected images that are either in the public domain or licensed under Creative Commons Attribution 1.0 (CC BY 1.0) or Creative Commons Attribution 2.0 (CC BY 2.0). Please refer to the [LICENSE.md](LICENCE.md) file for details on the licenses.
