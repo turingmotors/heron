@@ -27,6 +27,7 @@ def process_row(row, writer):
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
         temperature=0,
+        max_tokens=256,
         messages=[
             {
                 "role": "user",
@@ -41,13 +42,11 @@ def process_row(row, writer):
                 ],
             }
         ],
-        max_tokens=512,
     )
 
     result = {
         "question_id": row["question_id"],
         "images": row["image"],
-        "categories": row["category"],
         "image_categories": row["image_category"],
         "prompt": row["text"],
         "answer_id": "",
@@ -61,7 +60,7 @@ def main():
     with open('questions_ja.jsonl', 'r') as f:
         data = [json.loads(l) for l in f.readlines()]
 
-    with jsonlines.open('gpt4v_0314_ja.jsonl', mode='w') as writer:
+    with jsonlines.open('gpt4v_0404_ja.jsonl', mode='w') as writer:
         for row in tqdm(data):
             process_row(row, writer)
             time.sleep(1)
