@@ -9,6 +9,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 generation_config = {
     "temperature": 0.0,
+    "max_output_tokens": 256,
 }
 
 # Gemini model
@@ -20,7 +21,7 @@ questions_file = "questions_ja.jsonl"
 image_dir = Path("images")
 
 # output file
-output_file = "gemini_0314_ja.jsonl"
+output_file = "gemini_0404_ja.jsonl"
 
 def load_data(file_path):
     data_list = []
@@ -44,12 +45,13 @@ def generate_response(model, question, image):
 
 def main():
     data_list = load_data(questions_file)
-    
+
     with open(output_file, "w", encoding='utf-8') as out:
         for data in data_list:
             question_id = data["question_id"]
-            question = data["text_ja"]
+            question = data["text"]
             image_path = data["image"]
+            image_category = data["image_category"]
             image = Image.open(image_dir / image_path)
 
             answer = generate_response(model, question, image)
@@ -60,7 +62,8 @@ def main():
             output = {
                 "question_id": question_id,
                 "images": image_path,
-                "question": question,
+                "image_category": image_category,
+                "prompt": question,
                 "answer_id": "",
                 "model_id": model_name,
                 "metadata": {},
