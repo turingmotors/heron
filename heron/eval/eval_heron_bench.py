@@ -106,12 +106,12 @@ def plot_result(model_results, save_plot_name, min_value=0, max_value=100):
     plt.savefig(save_plot_name, bbox_inches="tight")
 
 
-async def process_question(session, ques, ans1, ans2, category, rule_dict, args):
+async def process_question(session, ques, ans1, ans2, category, context, rule_dict, args):
     rule = rule_dict[category]
     prompt = rule["prompt"]
     role = rule["role"]
     content = (
-        f'[Context]\n{ques["context"]}\n\n'
+        f'[Context]\n{context}\n\n'
         f'[Question]\n{ques["text"]}\n\n'
         f"[{role} 1]\n{ans1[args.gpt4_answer_col]}\n\n[End of {role} 1]\n\n"
         f"[{role} 2]\n{ans2[args.answer_col]}\n\n[End of {role} 2]\n\n"
@@ -140,7 +140,7 @@ async def main(args):
 
             rule_dict = json.load(f_rule)
             context_list = [json.loads(line) for line in f_context]
-            image_to_context = {context["image"]: context for context in context_list}
+            context_dict = {c["image"]: c["caption"] for c in context_list}
 
             cur_reviews = []
             if os.path.isfile(os.path.expanduser(args.output)):
@@ -149,7 +149,6 @@ async def main(args):
 
             with open(args.output, "a") as review_file:
                 tasks = []
-                cur_js_list = []
                 for idx, (ques_js, ans1_js, ans2_js) in enumerate(
                     tqdm.tqdm(zip(f_q, f_ans1, f_ans2), total=TOTAL_QUESTIONS)
                 ):
@@ -157,9 +156,10 @@ async def main(args):
                     ans1 = json.loads(ans1_js)
                     ans2 = json.loads(ans2_js)
                     category = ques["category"]
+                    context = context_dict[ques["image"]]
 
                     if idx >= len(cur_reviews):
-                        task = asyncio.create_task(process_question(session, ques, ans1, ans2, category, rule_dict, args))
+                        task = asyncio.create_task(process_question(session, ques, ans1, ans2, category, context, rule_dict, args))
                         tasks.append(task)
                     else:
                         print(f"Skipping question {idx} as we already have its review.")
