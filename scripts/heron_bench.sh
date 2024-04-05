@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export WANDB_PROJECT_NAME="<YOUR-PROJECT-NAME>"
+
 PLAYGROUND_PATH="./playground/data/japanese-heron-bench"
 MODEL_CONFIG_PATH="./projects/video_blip/exp001.yml"
 OUTPUT_PATH="${PLAYGROUND_PATH}/output"
