@@ -14,7 +14,7 @@ The `llava-bench-in-the-wild/en/*.jsonl` files have been copied from Hugging Fac
 Download `images/` from Hugging Face's [liuhaotian/llava-bench-in-the-wild](https://huggingface.co/datasets/liuhaotian/llava-bench-in-the-wild) and place them under `playground/data/llava-bench-in-the-wild/`.
 
 # Guide to VLM APIs
-When evaluating VLMs, if you use GPT-4V, Claude 3, and Gemini Vision Pro, please refer to the following:
+When evaluating Closed Models such as GPT-4V, Claude 3, and Gemini Vision Pro, please refer to the following:
 
 ## Gemini
 For the full guide, please visit the [Gemini API: Quickstart with Python](https://ai.google.dev/tutorials/python_quickstart).
