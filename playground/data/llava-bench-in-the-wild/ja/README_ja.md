@@ -38,6 +38,29 @@ export GEMINI_API_KEY=<YOUR_API_KEY>
 python ./playground/scripts/inference_gemini.py
 ```
 
+## Claude 3
+
+1. Python SDKのインストール
+
+```
+pip install anthropic
+```
+
+2. ANTHROPIC APIキーの設定
+
+ANTHROPIC APIを使用するには、まずAPIキーを取得する必要があります。APIキーを作成するには、[ANTHROPIC API Reference](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)にアクセスしてください。
+
+```
+export ANTHROPIC_API_KEY="<YOUR_API_KEY>"
+```
+
+3. 推論
+
+[Model Overview](https://docs.anthropic.com/claude/docs/models-overview)からモデルファミリーを確認できます。
+
+```
+python ./playground/scripts/inference_claude3.py
+```
 
 # License
 
