@@ -1,10 +1,11 @@
-import os
 import base64
-from pathlib import Path
+import io
 import json
+import os
+from pathlib import Path
+
 from anthropic import Anthropic
 from PIL import Image
-import io
 
 # Claude3 API 
 api_key = os.getenv("ANTHROPIC_API_KEY")
