@@ -27,3 +27,17 @@ When evaluating Closed Models such as GPT-4V, Claude 3, and Gemini Vision Pro, p
 
 # Uses
 We have collected images that are either in the public domain or licensed under Creative Commons Attribution 1.0 (CC BY 1.0) or Creative Commons Attribution 2.0 (CC BY 2.0). Please refer to the [LICENSE.md](LICENCE.md) file for details on the licenses.
+
+# Citation
+
+If you find Heron-Bench useful for your research and applications, please cite using this BibTex:
+
+```bibtex
+@misc{inoue2024heronbench,
+      title={Heron-Bench: A Benchmark for Evaluating Vision Language Models in Japanese}, 
+      author={Yuichi Inoue and Kento Sasaki and Yuma Ochi and Kazuki Fujii and Kotaro Tanahashi and Yu Yamaguchi},
+      year={2024},
+      eprint={2404.07824},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
