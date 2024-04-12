@@ -12,6 +12,7 @@ LLaVA-Bench-In-the-Wild (Japanese)は、LLaVA-Bench-In-the-Wildの日本語版�
 
 # Download Dataset
 Hugging Faceの[liuhaotian/llava-bench-in-the-wild](https://huggingface.co/datasets/liuhaotian/llava-bench-in-the-wild)から`images/`をダウンロードして、`playground/data/llava-bench-in-the-wild/`以下に配置してください。
+
 # Guide to VLM APIs
 GPT-４V, Claude 3, Gemini Vision ProなどのClosed Modelの評価を行う場合は、以下を参照してください。
 

@@ -34,6 +34,7 @@ export GEMINI_API_KEY=<YOUR_API_KEY>
 ```
 
 3. Inference
+
 ```
 python ./playground/scripts/inference_gemini.py
 ```
