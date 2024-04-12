@@ -54,7 +54,7 @@ class GitMptConfig(MptConfig):
     ):
         super().__init__(**kwargs)
         if hasattr(self, "vision_model_name"):
-            self.set_vision_configs(self.num_image_with_embedding, self.vision_model_name)
+            self.set_vision_configs(**kwargs)
         else:
             self.vision_config = CLIPVisionConfig()
             self.num_image_with_embedding = None
@@ -63,6 +63,7 @@ class GitMptConfig(MptConfig):
         self,
         num_image_with_embedding: int = 1,
         vision_model_name: Union[str, None] = None,
+        **kwargs
     ):
         self.num_image_with_embedding = (
             None if num_image_with_embedding == 1 else num_image_with_embedding
