@@ -9,6 +9,8 @@
 
 Heron是一个可无缝集成多种图像/视频和语言模型的库. 此外, 它还提供在各种数据集上训练的预训练权重.
 
+Demo 可以从这里访问: [[Demo](https://heron-demo.turing-motors.com/)]
+
 <div align="center">
 <img src="../images/heron_image.png" width="50%">
 </div>
@@ -158,7 +160,7 @@ training_config "为训练设置, "model_config "为模型设置，"dataset_conf
 
 # 如何使用
 
-您可以从 Hugging Face Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
+您可以从 Hugging Face Hub 下载训练好的模型：[turing-motors/heron-chat-git-ja-stablelm-base-7b-v1](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v1)<br>
 有关推理和训练方法的更多信息, 请参阅 [notebooks](./notebooks).
 
 ```python
@@ -167,23 +169,25 @@ from PIL import Image
 
 import torch
 from transformers import AutoProcessor
-from heron.models.git_llm.git_llama import GitLlamaForCausalLM
+from heron.models.git_llm.git_japanese_stablelm_alpha import GitJapaneseStableLMAlphaForCausalLM
 
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
+model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
+    'turing-motors/heron-chat-git-ja-stablelm-base-7b-v1', torch_dtype=torch.float16
+)
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v0')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v1')
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
 image = Image.open(requests.get(url, stream=True).raw)
 
-text = f"##Instruction: Please answer the following question concretely. ##Question: What is unusual about this image? Explain precisely and concretely what he is doing? ##Answer: "
+text = f"##human: What is this picture?\n##gpt: "
 
 # do preprocessing
 inputs = processor(
@@ -205,22 +209,44 @@ with torch.no_grad():
     out = model.generate(**inputs, max_length=256, do_sample=False, temperature=0., eos_token_id=eos_token_id_list)
 
 # print result
-print(processor.tokenizer.batch_decode(out))
+print(processor.tokenizer.batch_decode(out)[0])
 ```
 
 ### 训练有素的模型列表
 
 |model|LLM module|adapter|size|
 |:----:|:----|:----|:----|
+|[heron-chat-git-ja-stablelm-base-7b-v1](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v1)|Japanese StableLM Base Alpha|GIT|7B|
+|[heron-chat-blip-ja-stablelm-base-7b-v1-llava-620k](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v1-llava-620k)|Japanese StableLM Base Alpha|BLIP|7B|
+|[heron-chat-blip-ja-stablelm-base-7b-v1](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v1)|Japanese StableLM Base Alpha|BLIP|7B|
 |[heron-chat-blip-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|BLIP|7B|
 |[heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|GIT|7B|
 |[heron-chat-git-ELYZA-fast-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ELYZA-fast-7b-v0)|ELYZA|GIT|7B|
+|[heron-chat-git-Llama-2-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-Llama-2-7b-v0)|Llama-2|GIT|7B|
 |[heron-preliminary-git-Llama-2-70b-v0](https://huggingface.co/turing-motors/heron-preliminary-git-Llama-2-70b-v0) *1|Llama-2|GIT|70B|
 *1 仅限适配器预研
 
 ### 数据集
-翻译成日语的 LLava-Instruct 数据集.<br>
-[LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
+翻译成日语的 LLava 数据集.<br>
+- [LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
+- [LLaVA-v1.5-Instruct-620K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-v1.5-Instruct-620K-JA)
+- [LLaVA-Pretrain-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Pretrain-JA)
+
+用于Heron-Bench评估的数据集。<br>
+- [Japanese-Heron-Bench](https://huggingface.co/datasets/turing-motors/Japanese-Heron-Bench)
+
+# 引用
+
+```bibtex
+@misc{inoue2024heronbench,
+      title={Heron-Bench: A Benchmark for Evaluating Vision Language Models in Japanese}, 
+      author={Yuichi Inoue and Kento Sasaki and Yuma Ochi and Kazuki Fujii and Kotaro Tanahashi and Yu Yamaguchi},
+      year={2024},
+      eprint={2404.07824},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
 
 # 组织信息
 
