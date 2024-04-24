@@ -162,11 +162,12 @@ class LlavaInstructDataset(BaseDataset):
         for i, c in enumerate(row["conversations"]):
             if i > 0:
                 drop_eos_token = 1
+                # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
+                is_first_turn = False
             else:
                 drop_eos_token = 0
+                is_first_turn = True
             agent = c["from"]
-            # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
-            is_first_turn = True if i==0 else False
             # create prompt by instruction_template_type
             agent_prompt, next_agent_prompt = add_instruction_template(
                 agent,
@@ -174,7 +175,7 @@ class LlavaInstructDataset(BaseDataset):
                 self.instruction_template_type,
                 self.is_system_message,
                 is_first_turn,
-                )
+            )
             message = c[language]
             input_text = f"{agent_prompt}{message}{next_agent_prompt}"
             input_text_all += input_text
@@ -236,17 +237,18 @@ class LlavaInstructDataset(BaseDataset):
         language = self.get_language()
         # create prompt by instruction_template_type
 
-        agent = row['conversations']["from"]
+        agent = row["conversations"]["from"]
         # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
         is_first_turn = True
         # create prompt by instruction_template_type
         agent_prompt, next_agent_prompt = add_instruction_template(
-            agent, self.processor.tokenizer,
+            agent,
+            self.processor.tokenizer,
             self.instruction_template_type,
             self.is_system_message,
             is_first_turn,
-            )
-        prompt = agent_prompt + row['conversations'][language] + next_agent_prompt
+        )
+        prompt = agent_prompt + row["conversations"][language] + next_agent_prompt
         tokenized = self.tokenize(prompt)
         tokenized_prompt = tokenized["input_ids"][0]
         prompt_attn_mask = tokenized["attention_mask"][0]

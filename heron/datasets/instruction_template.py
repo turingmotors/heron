@@ -15,8 +15,12 @@
 
 from typing import Tuple
 
+HFTokenizer = "HFTokenizer"
 
-def base_instruction(agent: str, tokenizer) -> Tuple[str, str]:
+
+def base_instruction(
+    agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
+) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -25,7 +29,10 @@ def base_instruction(agent: str, tokenizer) -> Tuple[str, str]:
         next_agent_prompt = "\n##gpt: "
     return agent_prompt, next_agent_prompt
 
-def none_instruction(agent: str, tokenizer) -> Tuple[str, str]:
+
+def none_instruction(
+    agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
+) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -34,13 +41,16 @@ def none_instruction(agent: str, tokenizer) -> Tuple[str, str]:
         next_agent_prompt = ""
     return agent_prompt, next_agent_prompt
 
-def llama2_instruction(agent: str, tokenizer, is_system_message: bool, is_first_turn: bool) -> Tuple[str, str]:
+
+def llama2_instruction(
+    agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
+) -> Tuple[str, str]:
     if is_system_message and is_first_turn:
         if agent == "gpt":
             agent_prompt = ""
             next_agent_prompt = f"{tokenizer.eos_token}"
         elif agent == "human":
-            system_prompt = "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don\'t know the answer to a question, please don\'t share false information.\n"
+            system_prompt = "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.\n"
             agent_prompt = f"[INST] <<SYS>>\n{system_prompt}<</SYS>>\n\n"
             next_agent_prompt = " [/INST] "
     else:
@@ -52,13 +62,16 @@ def llama2_instruction(agent: str, tokenizer, is_system_message: bool, is_first_
             next_agent_prompt = " [/INST] "
     return agent_prompt, next_agent_prompt
 
-def tinyllama_instruction(agent: str, tokenizer, is_system_message: bool, is_first_turn: bool) -> Tuple[str, str]:
+
+def tinyllama_instruction(
+    agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
+) -> Tuple[str, str]:
     if is_system_message and is_first_turn:
         if agent == "gpt":
             agent_prompt = ""
             next_agent_prompt = f"{tokenizer.eos_token}"
         elif agent == "human":
-            system_prompt = "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don\'t know the answer to a question, please don\'t share false information."
+            system_prompt = "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."
             agent_prompt = f"<|system|>\n{system_prompt}{tokenizer.eos_token}\n<|user|>\n"
             next_agent_prompt = f"{tokenizer.eos_token}\n<|assistant|>\n"
     else:
@@ -70,7 +83,10 @@ def tinyllama_instruction(agent: str, tokenizer, is_system_message: bool, is_fir
             next_agent_prompt = f"{tokenizer.eos_token}\n<|assistant|>\n"
     return agent_prompt, next_agent_prompt
 
-def mistral_instruction(agent: str, tokenizer) -> Tuple[str, str]:
+
+def mistral_instruction(
+    agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
+) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -79,7 +95,10 @@ def mistral_instruction(agent: str, tokenizer) -> Tuple[str, str]:
         next_agent_prompt = " [/INST] "
     return agent_prompt, next_agent_prompt
 
-def commandr_instruction(agent: str, tokenizer) -> Tuple[str, str]:
+
+def commandr_instruction(
+    agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
+) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -89,22 +108,28 @@ def commandr_instruction(agent: str, tokenizer) -> Tuple[str, str]:
     return agent_prompt, next_agent_prompt
 
 
-def add_instruction_template(agent: str, tokenizer, instruction_template_type: str, is_system_message: bool, is_first_turn: bool) -> Tuple[str, str]:
-    if instruction_template_type == "llama2":
-        agent_prompt, next_agent_prompt = llama2_instruction(agent, tokenizer, is_system_message, is_first_turn)
-        return agent_prompt, next_agent_prompt
-    elif instruction_template_type in ("mistral", "mixtral"):
-        agent_prompt, next_agent_prompt = mistral_instruction(agent, tokenizer)
-        return agent_prompt, next_agent_prompt
-    elif instruction_template_type == "command-r":
-        agent_prompt, next_agent_prompt = commandr_instruction(agent, tokenizer)
-        return agent_prompt, next_agent_prompt
-    elif instruction_template_type == "tinyllama":
-        agent_prompt, next_agent_prompt = tinyllama_instruction(agent, tokenizer, is_system_message, is_first_turn)
-        return agent_prompt, next_agent_prompt
-    elif instruction_template_type == "none":
-        agent_prompt, next_agent_prompt = none_instruction(agent, tokenizer)
+def add_instruction_template(
+    agent: str,
+    tokenizer: HFTokenizer,
+    instruction_template_type: str,
+    is_system_message: bool,
+    is_first_turn: bool,
+) -> Tuple[str, str]:
+    template_type_dict = {
+        "llama2": llama2_instruction,
+        "mistral": mistral_instruction,
+        "mixtral": mistral_instruction,
+        "command-r": commandr_instruction,
+        "tinyllama": tinyllama_instruction,
+        "none": none_instruction,
+    }
+    if instruction_template_type not in template_type_dict:
+        agent_prompt, next_agent_prompt = base_instruction(
+            agent, tokenizer, is_system_message, is_first_turn
+        )
         return agent_prompt, next_agent_prompt
     else:
-        agent_prompt, next_agent_prompt = base_instruction(agent, tokenizer)
+        agent_prompt, next_agent_prompt = template_type_dict[instruction_template_type](
+            agent, tokenizer, is_system_message, is_first_turn
+        )
         return agent_prompt, next_agent_prompt
