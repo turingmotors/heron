@@ -23,8 +23,7 @@ from datasets.arrow_dataset import Dataset as HFDataset
 from PIL import Image
 
 from .base_datasets import IGNORE_INDEX, BaseDataset
-from .train_instruction_template import add_train_instruction_template
-from .inference_instruction_template import add_inference_instruction_template
+from .instruction_template import add_instruction_template
 
 HFProcessor = "HFProcessor"
 
@@ -166,9 +165,15 @@ class LlavaInstructDataset(BaseDataset):
             else:
                 drop_eos_token = 0
             agent = c["from"]
+            # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
+            is_first_turn = True if i==0 else False
             # create prompt by instruction_template_type
-            agent_prompt, next_agent_prompt = add_train_instruction_template(
-                agent, self.processor.tokenizer, self.instruction_template_type, self.is_system_message,
+            agent_prompt, next_agent_prompt = add_instruction_template(
+                agent,
+                self.processor.tokenizer,
+                self.instruction_template_type,
+                self.is_system_message,
+                is_first_turn,
                 )
             message = c[language]
             input_text = f"{agent_prompt}{message}{next_agent_prompt}"
@@ -230,15 +235,18 @@ class LlavaInstructDataset(BaseDataset):
 
         language = self.get_language()
         # create prompt by instruction_template_type
-        prompt = add_inference_instruction_template(
-            row['conversations'][language],
-            self.processor.tokenizer,
+
+        agent = row['conversations']["from"]
+        # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
+        is_first_turn = True
+        # create prompt by instruction_template_type
+        agent_prompt, next_agent_prompt = add_instruction_template(
+            agent, self.processor.tokenizer,
             self.instruction_template_type,
-            self.is_system_message,            
+            self.is_system_message,
+            is_first_turn,
             )
-        ##############################
-        print("\n", prompt, "\n")
-        ##############################
+        prompt = agent_prompt + row['conversations'][""] + next_agent_prompt
         tokenized = self.tokenize(prompt)
         tokenized_prompt = tokenized["input_ids"][0]
         prompt_attn_mask = tokenized["attention_mask"][0]

@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def base_instruction(agent, tokenizer):
+
+from typing import Tuple
+
+
+def base_instruction(agent: str, tokenizer) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -21,7 +25,7 @@ def base_instruction(agent, tokenizer):
         next_agent_prompt = "\n##gpt: "
     return agent_prompt, next_agent_prompt
 
-def none_instruction(agent, tokenizer):
+def none_instruction(agent: str, tokenizer) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -30,8 +34,8 @@ def none_instruction(agent, tokenizer):
         next_agent_prompt = ""
     return agent_prompt, next_agent_prompt
 
-def llama2_instruction(agent, tokenizer, is_system_message):
-    if is_system_message:
+def llama2_instruction(agent: str, tokenizer, is_system_message: bool, is_first_turn: bool) -> Tuple[str, str]:
+    if is_system_message and is_first_turn:
         if agent == "gpt":
             agent_prompt = ""
             next_agent_prompt = f"{tokenizer.eos_token}"
@@ -48,8 +52,8 @@ def llama2_instruction(agent, tokenizer, is_system_message):
             next_agent_prompt = " [/INST] "
     return agent_prompt, next_agent_prompt
 
-def tinyllama_instruction(agent, tokenizer, is_system_message):
-    if is_system_message:
+def tinyllama_instruction(agent: str, tokenizer, is_system_message: bool, is_first_turn: bool) -> Tuple[str, str]:
+    if is_system_message and is_first_turn:
         if agent == "gpt":
             agent_prompt = ""
             next_agent_prompt = f"{tokenizer.eos_token}"
@@ -66,7 +70,7 @@ def tinyllama_instruction(agent, tokenizer, is_system_message):
             next_agent_prompt = f"{tokenizer.eos_token}\n<|assistant|>\n"
     return agent_prompt, next_agent_prompt
 
-def mistral_instruction(agent, tokenizer):
+def mistral_instruction(agent: str, tokenizer) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -75,7 +79,7 @@ def mistral_instruction(agent, tokenizer):
         next_agent_prompt = " [/INST] "
     return agent_prompt, next_agent_prompt
 
-def commandr_instruction(agent, tokenizer):
+def commandr_instruction(agent: str, tokenizer) -> Tuple[str, str]:
     if agent == "gpt":
         agent_prompt = ""
         next_agent_prompt = f"{tokenizer.eos_token}"
@@ -85,9 +89,9 @@ def commandr_instruction(agent, tokenizer):
     return agent_prompt, next_agent_prompt
 
 
-def add_train_instruction_template(agent, tokenizer, instruction_template_type, is_system_message):
+def add_instruction_template(agent: str, tokenizer, instruction_template_type: str, is_system_message: bool, is_first_turn: bool) -> Tuple[str, str]:
     if instruction_template_type == "llama2":
-        agent_prompt, next_agent_prompt = llama2_instruction(agent, tokenizer, is_system_message)
+        agent_prompt, next_agent_prompt = llama2_instruction(agent, tokenizer, is_system_message, is_first_turn)
         return agent_prompt, next_agent_prompt
     elif instruction_template_type in ("mistral", "mixtral"):
         agent_prompt, next_agent_prompt = mistral_instruction(agent, tokenizer)
@@ -96,7 +100,7 @@ def add_train_instruction_template(agent, tokenizer, instruction_template_type, 
         agent_prompt, next_agent_prompt = commandr_instruction(agent, tokenizer)
         return agent_prompt, next_agent_prompt
     elif instruction_template_type == "tinyllama":
-        agent_prompt, next_agent_prompt = tinyllama_instruction(agent, tokenizer, is_system_message)
+        agent_prompt, next_agent_prompt = tinyllama_instruction(agent, tokenizer, is_system_message, is_first_turn)
         return agent_prompt, next_agent_prompt
     elif instruction_template_type == "none":
         agent_prompt, next_agent_prompt = none_instruction(agent, tokenizer)
