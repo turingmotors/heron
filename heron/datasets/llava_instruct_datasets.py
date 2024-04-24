@@ -246,7 +246,7 @@ class LlavaInstructDataset(BaseDataset):
             self.is_system_message,
             is_first_turn,
             )
-        prompt = agent_prompt + row['conversations'][""] + next_agent_prompt
+        prompt = agent_prompt + row['conversations'][language] + next_agent_prompt
         tokenized = self.tokenize(prompt)
         tokenized_prompt = tokenized["input_ids"][0]
         prompt_attn_mask = tokenized["attention_mask"][0]
