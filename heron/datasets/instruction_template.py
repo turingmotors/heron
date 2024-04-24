@@ -17,6 +17,15 @@ from typing import Tuple
 
 HFTokenizer = "HFTokenizer"
 
+template_type_dict = {
+    "llama2": llama2_instruction,
+    "mistral": mistral_instruction,
+    "mixtral": mistral_instruction,
+    "command-r": commandr_instruction,
+    "tinyllama": tinyllama_instruction,
+    "none": none_instruction,
+}
+
 
 def base_instruction(
     agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
@@ -115,21 +124,7 @@ def add_instruction_template(
     is_system_message: bool,
     is_first_turn: bool,
 ) -> Tuple[str, str]:
-    template_type_dict = {
-        "llama2": llama2_instruction,
-        "mistral": mistral_instruction,
-        "mixtral": mistral_instruction,
-        "command-r": commandr_instruction,
-        "tinyllama": tinyllama_instruction,
-        "none": none_instruction,
-    }
-    if instruction_template_type not in template_type_dict:
-        agent_prompt, next_agent_prompt = base_instruction(
-            agent, tokenizer, is_system_message, is_first_turn
-        )
-        return agent_prompt, next_agent_prompt
-    else:
-        agent_prompt, next_agent_prompt = template_type_dict[instruction_template_type](
-            agent, tokenizer, is_system_message, is_first_turn
-        )
-        return agent_prompt, next_agent_prompt
+    agent_prompt, next_agent_prompt = template_type_dict.get(
+        instruction_template_type, base_instruction
+    )(agent, tokenizer, is_system_message, is_first_turn)
+    return agent_prompt, next_agent_prompt
