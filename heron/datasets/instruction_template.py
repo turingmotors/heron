@@ -17,15 +17,6 @@ from typing import Tuple
 
 HFTokenizer = "HFTokenizer"
 
-template_type_dict = {
-    "llama2": llama2_instruction,
-    "mistral": mistral_instruction,
-    "mixtral": mistral_instruction,
-    "command-r": commandr_instruction,
-    "tinyllama": tinyllama_instruction,
-    "none": none_instruction,
-}
-
 
 def base_instruction(
     agent: str, tokenizer: HFTokenizer, is_system_message: bool, is_first_turn: bool
@@ -115,6 +106,16 @@ def commandr_instruction(
         agent_prompt = "<|START_OF_TURN_TOKEN|><|USER_TOKEN|>"
         next_agent_prompt = "<|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|CHATBOT_TOKEN|>"
     return agent_prompt, next_agent_prompt
+
+
+template_type_dict = {
+    "llama2": llama2_instruction,
+    "mistral": mistral_instruction,
+    "mixtral": mistral_instruction,
+    "command-r": commandr_instruction,
+    "tinyllama": tinyllama_instruction,
+    "none": none_instruction,
+}
 
 
 def add_instruction_template(
