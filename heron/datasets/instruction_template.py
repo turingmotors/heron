@@ -58,7 +58,7 @@ def llama2_instruction(
             agent_prompt = ""
             next_agent_prompt = f"{tokenizer.eos_token}"
         elif agent == "human":
-            agent_prompt = "[INST] "
+            agent_prompt = "<s>[INST] "
             next_agent_prompt = " [/INST] "
     return agent_prompt, next_agent_prompt
 
