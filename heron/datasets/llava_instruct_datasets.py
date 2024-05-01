@@ -23,6 +23,7 @@ from datasets.arrow_dataset import Dataset as HFDataset
 from PIL import Image
 
 from .base_datasets import IGNORE_INDEX, BaseDataset
+from .instruction_template import add_instruction_template
 
 HFProcessor = "HFProcessor"
 
@@ -40,6 +41,8 @@ class LlavaInstructDataset(BaseDataset):
         is_inference: bool,
         language: str,
         dataset_root: str,
+        instruction_template_type: str,
+        is_system_message: bool,
     ):
         super(LlavaInstructDataset, self).__init__(is_inference)
         assert language in ["ja", "en"], "given language is not supported"
@@ -49,6 +52,8 @@ class LlavaInstructDataset(BaseDataset):
         self.is_inference = is_inference
         self.language = language
         self.dataset_root = dataset_root
+        self.instruction_template_type = instruction_template_type
+        self.is_system_message = is_system_message
 
     @classmethod
     def create(
@@ -93,6 +98,8 @@ class LlavaInstructDataset(BaseDataset):
                 is_inference,
                 dataset_config["language"],
                 dataset_config["dataset_root"],
+                dataset_config["instruction_template_type"],
+                dataset_config["is_system_message"],
             )
 
         elif split == "validation":
@@ -103,6 +110,8 @@ class LlavaInstructDataset(BaseDataset):
                 is_inference,
                 dataset_config["language"],
                 dataset_config["dataset_root"],
+                dataset_config["instruction_template_type"],
+                dataset_config["is_system_message"],
             )
         else:
             raise ValueError("given split is invalid")
@@ -153,15 +162,20 @@ class LlavaInstructDataset(BaseDataset):
         for i, c in enumerate(row["conversations"]):
             if i > 0:
                 drop_eos_token = 1
+                # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
+                is_first_turn = False
             else:
                 drop_eos_token = 0
+                is_first_turn = True
             agent = c["from"]
-            if agent == "gpt":
-                agent_prompt = ""
-                next_agent_prompt = f"{self.processor.tokenizer.eos_token}\n"
-            elif agent == "human":
-                agent_prompt = "##human: "
-                next_agent_prompt = "\n##gpt: "
+            # create prompt by instruction_template_type
+            agent_prompt, next_agent_prompt = add_instruction_template(
+                agent,
+                self.processor.tokenizer,
+                self.instruction_template_type,
+                self.is_system_message,
+                is_first_turn,
+            )
             message = c[language]
             input_text = f"{agent_prompt}{message}{next_agent_prompt}"
             input_text_all += input_text
@@ -221,8 +235,20 @@ class LlavaInstructDataset(BaseDataset):
         images = [image]
 
         language = self.get_language()
-        prompt = f"##human: {row['conversations'][language]}\n##gpt: "
+        # create prompt by instruction_template_type
 
+        agent = row["conversations"]["from"]
+        # Variable to know if it is the first turn or not, because we want the system prompt to apply only to the first turn.
+        is_first_turn = True
+        # create prompt by instruction_template_type
+        agent_prompt, next_agent_prompt = add_instruction_template(
+            agent,
+            self.processor.tokenizer,
+            self.instruction_template_type,
+            self.is_system_message,
+            is_first_turn,
+        )
+        prompt = agent_prompt + row["conversations"][language] + next_agent_prompt
         tokenized = self.tokenize(prompt)
         tokenized_prompt = tokenized["input_ids"][0]
         prompt_attn_mask = tokenized["attention_mask"][0]
