@@ -181,6 +181,12 @@ model.to(f"cuda:{device_id}")
 
 # prepare a processor
 processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v1')
+tokenizer = LlamaTokenizer.from_pretrained(
+    "novelai/nerdstash-tokenizer-v1",
+    padding_side="right",
+    additional_special_tokens=["▁▁"],
+)
+processor.tokenizer = tokenizer
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
