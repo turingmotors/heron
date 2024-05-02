@@ -168,7 +168,7 @@ import requests
 from PIL import Image
 
 import torch
-from transformers import AutoProcessor
+from transformers import AutoProcessor, LlamaTokenizer
 from heron.models.git_llm.git_japanese_stablelm_alpha import GitJapaneseStableLMAlphaForCausalLM
 
 device_id = 0
