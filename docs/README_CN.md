@@ -168,7 +168,7 @@ import requests
 from PIL import Image
 
 import torch
-from transformers import AutoProcessor
+from transformers import AutoProcessor, LlamaTokenizer
 from heron.models.git_llm.git_japanese_stablelm_alpha import GitJapaneseStableLMAlphaForCausalLM
 
 device_id = 0
@@ -182,6 +182,12 @@ model.to(f"cuda:{device_id}")
 
 # prepare a processor
 processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v1')
+tokenizer = LlamaTokenizer.from_pretrained(
+    "novelai/nerdstash-tokenizer-v1",
+    padding_side="right",
+    additional_special_tokens=["▁▁"],
+)
+processor.tokenizer = tokenizer
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
