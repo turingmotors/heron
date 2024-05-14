@@ -150,6 +150,8 @@ The following LLM modules are currently supported for `model_type`. We plan to a
 - [GPT-NeoX](https://github.com/EleutherAI/gpt-neox)
 - [Japanese StableLM](https://huggingface.co/stabilityai/japanese-stablelm-base-alpha-7b)
 - [ELYZA-japanese-Llama-2](https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-fast)
+- [GPT-2](https://huggingface.co/docs/transformers/model_doc/gpt2)
+- [llm-jp-v1.0](https://huggingface.co/llm-jp)
 
 To start learning, execute the following command.
 

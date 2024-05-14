@@ -77,6 +77,14 @@ def get_tokenizer(language_model_name: str) -> "Tokenizer":
         )
         return tokenizer
 
+    elif "gpt2-" in language_model_name or "llm-jp/llm-jp-" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=False
+        )
+        if "gpt2-" in language_model_name:
+            tokenizer.pad_token = tokenizer.eos_token
+        return tokenizer
+
     else:
         raise NotImplementedError(
             f"Tokenizer for language_model_name: {language_model_name} is not implemented."
