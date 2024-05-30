@@ -25,6 +25,7 @@ from PIL import Image
 from .base_datasets import IGNORE_INDEX, BaseDataset
 from .instruction_template import add_instruction_template
 
+IMAGE_TOKEN = "<image>"
 HFProcessor = "HFProcessor"
 
 
@@ -197,6 +198,30 @@ class LlavaInstructDataset(BaseDataset):
         tokenized_prompt = torch.cat(tokenized_list, dim=-1)
         labels = torch.cat(labels_list, dim=-1)
         prompt_attn_mask = torch.cat(attn_mask_list, dim=-1)
+
+        # Add IMAGE_TOKEN(`"<image>"`) token
+        image_token_id = self.processor.tokenizer.convert_tokens_to_ids(IMAGE_TOKEN)
+        image_token_num = (tokenized_prompt == image_token_id).sum().item()
+
+        if image_token_num == len(images):
+            pass
+        elif image_token_num < len(images):
+            add_image_token_num = len(images) - image_token_num
+            add_image_token_tensor = torch.full((add_image_token_num,), image_token_id)
+            add_ignore_token_tensor = torch.full((add_image_token_num,), IGNORE_INDEX)
+            add_attn_mask_tensor = torch.full((add_image_token_num,), 1)
+            # update tokenized_prompt, labels, prompt_attn_mask
+            tokenized_prompt_left = tokenized_prompt[:1]
+            tokenized_prompt_right = tokenized_prompt[1:]
+            tokenized_prompt = torch.cat(
+                (tokenized_prompt_left, add_image_token_tensor, tokenized_prompt_right), dim=-1
+            )
+            labels = torch.cat((add_ignore_token_tensor, labels), dim=-1)
+            prompt_attn_mask = torch.cat((add_attn_mask_tensor, prompt_attn_mask), dim=-1)
+        else:
+            raise ValueError(
+                f"The input provided to the model are wrong.\nThe number of image tokens is {image_token_num} while the number of image given to the model is {len(images)}."
+            )
 
         if len(tokenized_prompt) < self.max_length:
             pad_length = self.max_length - len(tokenized_prompt)
