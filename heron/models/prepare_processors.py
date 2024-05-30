@@ -69,6 +69,19 @@ def get_tokenizer(language_model_name: str) -> "Tokenizer":
             language_model_name, padding_side="right", use_fast=False
         )
         tokenizer.pad_token = tokenizer.eos_token
+        # add special tokens
+        special_tokens_dict = {"additional_special_tokens": ["<image>", "<pad>"]}
+        tokenizer.add_special_tokens(special_tokens_dict)
+        return tokenizer
+
+    elif "Swallow-7b-NVE" in language_model_name:
+        tokenizer = AutoTokenizer.from_pretrained(
+            language_model_name, padding_side="right", use_fast=False
+        )
+        tokenizer.pad_token = tokenizer.eos_token
+        # add special tokens
+        special_tokens_dict = {"additional_special_tokens": ["<image>", "<pad>"]}
+        tokenizer.add_special_tokens(special_tokens_dict)
         return tokenizer
 
     elif "opt" in language_model_name:
@@ -87,7 +100,13 @@ def get_processor(model_config: Dict) -> "Processor":
     language_model_name = model_config["language_model_name"]
     model_type = model_config["model_type"]
 
-    if "git" in model_type:
+    if "llava_llm" in model_type:
+        processor = AutoProcessor.from_pretrained("llava-hf/llava-1.5-7b-hf")
+        processor.image_processor = CLIPImageProcessor.from_pretrained(
+            model_config["vision_model_name"]
+        )
+
+    elif "git" in model_type or "llava" in model_type:
         processor = AutoProcessor.from_pretrained("microsoft/git-base")
         processor.image_processor = CLIPImageProcessor.from_pretrained(
             model_config["vision_model_name"]
