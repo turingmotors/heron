@@ -41,7 +41,7 @@ model_config:
   pad_token_id: 32001
   keys_to_finetune: []
   keys_to_freeze:
-      - all
+      - vision_tower
 
   use_lora: false
   lora:
