@@ -9,6 +9,8 @@ English | [日本語](./docs/README_JP.md) | [中文](./docs/README_CN.md)
 
 Welcome to "heron" repository. Heron is a library that seamlessly integrates multiple Vision and Language models, as well as Video and Language models. One of its standout features is its support for Japanese V&L models. Additionally, we provide pretrained weights trained on various datasets.
 
+Demo is available from here: [[Demo](https://heron-demo.turing-motors.com/)]
+
 <div align="center">
 <img src="./images/heron_image.png" width="50%">
 </div>
@@ -159,7 +161,7 @@ GPU is required for learning; we have tested on Ubuntu 20.04, CUDA 11.7.
 
 # Evaluation
 
-You can get the pretrained weight form Hugging Face Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)<br>
+You can get the pretrained weight form Hugging Face Hub: [turing-motors/heron-chat-git-ja-stablelm-base-7b-v1](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v1)<br>
 See also [notebooks](./notebooks).
 
 ```python
@@ -167,20 +169,26 @@ import requests
 from PIL import Image
 
 import torch
-from transformers import AutoProcessor
-from heron.models.git_llm.git_llama import GitLlamaForCausalLM
+from transformers import AutoProcessor, LlamaTokenizer
+from heron.models.git_llm.git_japanese_stablelm_alpha import GitJapaneseStableLMAlphaForCausalLM
 
 device_id = 0
 
 # prepare a pretrained model
-model = GitLlamaForCausalLM.from_pretrained(
-    'turing-motors/heron-chat-git-Llama-2-7b-v0', torch_dtype=torch.float16
+model = GitJapaneseStableLMAlphaForCausalLM.from_pretrained(
+    'turing-motors/heron-chat-git-ja-stablelm-base-7b-v1', torch_dtype=torch.float16
 )
 model.eval()
 model.to(f"cuda:{device_id}")
 
 # prepare a processor
-processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-Llama-2-7b-v0')
+processor = AutoProcessor.from_pretrained('turing-motors/heron-chat-git-ja-stablelm-base-7b-v1')
+tokenizer = LlamaTokenizer.from_pretrained(
+    "novelai/nerdstash-tokenizer-v1",
+    padding_side="right",
+    additional_special_tokens=["▁▁"],
+)
+processor.tokenizer = tokenizer
 
 # prepare inputs
 url = "https://www.barnorama.com/wp-content/uploads/2016/12/03-Confusing-Pictures.jpg"
@@ -215,6 +223,9 @@ print(processor.tokenizer.batch_decode(out)[0])
 
 |model|LLM module|adapter|size|
 |:----:|:----|:----|:----|
+|[heron-chat-git-ja-stablelm-base-7b-v1](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v1)|Japanese StableLM Base Alpha|GIT|7B|
+|[heron-chat-blip-ja-stablelm-base-7b-v1-llava-620k](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v1-llava-620k)|Japanese StableLM Base Alpha|BLIP|7B|
+|[heron-chat-blip-ja-stablelm-base-7b-v1](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v1)|Japanese StableLM Base Alpha|BLIP|7B|
 |[heron-chat-blip-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-blip-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|BLIP|7B|
 |[heron-chat-git-ja-stablelm-base-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ja-stablelm-base-7b-v0)|Japanese StableLM Base Alpha|GIT|7B|
 |[heron-chat-git-ELYZA-fast-7b-v0](https://huggingface.co/turing-motors/heron-chat-git-ELYZA-fast-7b-v0)|ELYZA|GIT|7B|
@@ -223,8 +234,27 @@ print(processor.tokenizer.batch_decode(out)[0])
 *1 This model only applies to pre-training of adapters.
 
 ### Datasets
-LLava-Instruct dataset translated into Japanese.<br>
-[LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
+LLava datasets translated into Japanese.<br>
+- [LLaVA-Instruct-150K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Instruct-150K-JA)
+- [LLaVA-v1.5-Instruct-620K-JA](https://huggingface.co/datasets/turing-motors/LLaVA-v1.5-Instruct-620K-JA)
+- [LLaVA-Pretrain-JA](https://huggingface.co/datasets/turing-motors/LLaVA-Pretrain-JA)
+
+Evaluation dataset for Heron-Bench.<br>
+- [Japanese-Heron-Bench](https://huggingface.co/datasets/turing-motors/Japanese-Heron-Bench)
+
+# Citation
+
+If you find Heron useful for your research and applications, please cite using this BibTex:
+```bibtex
+@misc{inoue2024heronbench,
+      title={Heron-Bench: A Benchmark for Evaluating Vision Language Models in Japanese}, 
+      author={Yuichi Inoue and Kento Sasaki and Yuma Ochi and Kazuki Fujii and Kotaro Tanahashi and Yu Yamaguchi},
+      year={2024},
+      eprint={2404.07824},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
 
 # Organization
 

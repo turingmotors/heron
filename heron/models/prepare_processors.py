@@ -66,7 +66,7 @@ def get_tokenizer(language_model_name: str) -> "Tokenizer":
 
     elif "Llama" in language_model_name:
         tokenizer = AutoTokenizer.from_pretrained(
-            language_model_name, padding_side="right", use_fast=False
+            language_model_name, padding_side="right", use_fast=False, add_bos_token=False
         )
         tokenizer.pad_token = tokenizer.eos_token
         # add special tokens
