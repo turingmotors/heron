@@ -20,6 +20,8 @@ import torch
 from transformers import AutoConfig, CLIPVisionConfig, LlamaConfig
 from transformers.configuration_utils import PretrainedConfig
 
+IGNORE_INDEX = -100
+
 
 class LlavaLlamaConfig(PretrainedConfig):
     model_type = "llava_llama"
@@ -28,7 +30,6 @@ class LlavaLlamaConfig(PretrainedConfig):
     def __init__(
         self,
         language_model_name: Union[str, None] = None,
-        ignore_index=-100,
         image_token_index=32000,
         projector_hidden_act="gelu",
         vision_feature_select_strategy="default",
@@ -37,7 +38,7 @@ class LlavaLlamaConfig(PretrainedConfig):
         **kwargs,
     ):
         self.language_model_name = language_model_name
-        self.ignore_index = ignore_index
+        self.ignore_index = IGNORE_INDEX
         self.image_token_index = image_token_index
         self.projector_hidden_act = projector_hidden_act
 
@@ -69,25 +70,26 @@ class LlavaLlamaConfig(PretrainedConfig):
 
         super().__init__(**kwargs)
 
+    def get_vision_config(self, vision_model_name: str):
+        if "google/siglip" in vision_model_name:
+            return AutoConfig.from_pretrained(vision_model_name).vision_config
+        elif "recruit-jp/japanese-clip-vit-b-32-roberta-base" in vision_model_name:
+            return AutoConfig.from_pretrained("openai/clip-vit-base-patch32").vision_config
+        else:
+            return CLIPVisionConfig.from_pretrained(vision_model_name)
+
     def set_extra_configs(
         self,
         num_image_with_embedding: int = 1,
         vision_model_name: Union[str, None] = None,
         torch_dtype: torch.dtype = torch.float16,
     ):
+        # The config's self.num_image_with_embedding is set to None if it is image only, and a number if it is movie
         self.num_image_with_embedding = (
             None if num_image_with_embedding == 1 else num_image_with_embedding
         )
         self.vision_model_name = vision_model_name
-        if "google/siglip" in vision_model_name:
-            self.vision_config = AutoConfig.from_pretrained(vision_model_name).vision_config
-        elif "recruit-jp/japanese-clip-vit-b-32-roberta-base" in vision_model_name:
-            # required config info is same as openai clip
-            self.vision_config = AutoConfig.from_pretrained(
-                "openai/clip-vit-base-patch32"
-            ).vision_config
-        else:
-            self.vision_config = CLIPVisionConfig.from_pretrained(vision_model_name)
+        self.vision_config = self.get_vision_config(vision_model_name)
         self.torch_dtype = torch_dtype
 
     def to_dict(self):

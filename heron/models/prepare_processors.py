@@ -106,7 +106,7 @@ def get_processor(model_config: Dict) -> "Processor":
             model_config["vision_model_name"]
         )
 
-    elif "git" in model_type or "llava" in model_type:
+    elif "git_llm" in model_type:
         processor = AutoProcessor.from_pretrained("microsoft/git-base")
         processor.image_processor = CLIPImageProcessor.from_pretrained(
             model_config["vision_model_name"]

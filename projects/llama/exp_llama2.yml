@@ -33,7 +33,6 @@ model_config:
   vision_model_name: openai/clip-vit-base-patch16
   num_image_with_embedding: 1 # if 1, no img_temporal_embedding
   max_length: 768
-  ignore_index: -100
   image_token_index: 32000
   projector_hidden_act: "gelu"
   vision_feature_select_strategy: "default"
