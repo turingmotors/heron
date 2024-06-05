@@ -39,6 +39,7 @@ class LlavaInstructDataset(BaseDataset):
         loaded_dataset: HFDataset,
         processor: HFProcessor,
         max_length: int,
+        model_type: str,
         is_inference: bool,
         language: str,
         dataset_root: str,
@@ -49,6 +50,7 @@ class LlavaInstructDataset(BaseDataset):
         assert language in ["ja", "en"], "given language is not supported"
         self.loaded_dataset = loaded_dataset
         self.max_length = max_length
+        self.model_type = model_type
         self.processor = processor
         self.is_inference = is_inference
         self.language = language
@@ -121,7 +123,7 @@ class LlavaInstructDataset(BaseDataset):
             raise ValueError("given split is invalid")
 
     def preprocess_image(self, images):
-        return self.processor(images=images, return_tensors="pt")["pixel_values"][0]
+        return self.processor.image_processor(images=images, return_tensors="pt")["pixel_values"][0]
 
     def tokenize(self, text):
         kwargs = {}
@@ -202,7 +204,7 @@ class LlavaInstructDataset(BaseDataset):
         labels = torch.cat(labels_list, dim=-1)
         prompt_attn_mask = torch.cat(attn_mask_list, dim=-1)
 
-        if model_type == "llava_llm":
+        if self.model_type == "llava_llm":
             # Add IMAGE_TOKEN(`"<image>"`) token
             image_token_id = self.processor.tokenizer.convert_tokens_to_ids(IMAGE_TOKEN)
             image_token_num = (tokenized_prompt == image_token_id).sum().item()
