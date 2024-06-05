@@ -112,8 +112,13 @@ def load_model(
                 LlavaLlamaConfig,
                 LlavaLlamaForConditionalGeneration,
             )
+            # Get default arguments for LlavaLlamaConfig
+            default_args = LlavaLlamaConfig().__dict__.keys()
 
-            llava_llama_config = LlavaLlamaConfig(language_model)
+            # Create instances by extracting only default arguments
+            filtered_config_dict = {key: value for key, value in model_config.items() if key in default_args}
+            llava_llama_config = LlavaLlamaConfig(**filtered_config_dict)
+
             llava_llama_config.set_extra_configs(
                 num_image_with_embedding=num_image_with_embedding,
                 vision_model_name=model_config["vision_model_name"],
