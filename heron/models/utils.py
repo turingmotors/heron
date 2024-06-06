@@ -106,6 +106,29 @@ def load_model(
                 language_model, config=git_config, torch_dtype=torch_dtype
             )
 
+    elif model_type == "llava_llm":
+        if "Llama" in language_model or "Swallow-7b-NVE" in language_model:
+            from .llava_llm.llava_llama import (
+                LlavaLlamaConfig,
+                LlavaLlamaForConditionalGeneration,
+            )
+            # Get default arguments for LlavaLlamaConfig
+            default_args = LlavaLlamaConfig().__dict__.keys()
+
+            # Create instances by extracting only default arguments
+            filtered_config_dict = {key: value for key, value in model_config.items() if key in default_args}
+            llava_llama_config = LlavaLlamaConfig(**filtered_config_dict)
+
+            llava_llama_config.set_extra_configs(
+                num_image_with_embedding=num_image_with_embedding,
+                vision_model_name=model_config["vision_model_name"],
+            )
+            model = LlavaLlamaForConditionalGeneration.from_pretrained(
+                language_model, config=llava_llama_config, torch_dtype=torch_dtype
+            )
+        else:
+            raise ValueError(f"{language_model} is not supported.")
+
     elif model_type == "video_blip":
         from .video_blip import VideoBlipForConditionalGeneration
 

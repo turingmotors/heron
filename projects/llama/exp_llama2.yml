@@ -1,0 +1,58 @@
+training_config:
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  num_train_epochs: 1
+  dataloader_num_workers: 16
+  fp16: true
+  bf16: false
+  optim: "adamw_torch"
+  learning_rate: 5.0e-5
+  lr_scheduler_type: "cosine_with_min_lr"
+  lr_scheduler_kwargs:
+    min_lr_rate: 0.1
+  warmup_ratio: 0.05
+  logging_strategy: "steps"
+  evaluation_strategy: "steps"
+  save_strategy: "steps"
+  logging_steps: 1
+  eval_steps: 200
+  save_steps: 200
+  save_total_limit: 1
+  load_best_model_at_end: True
+  gradient_checkpointing: True
+  deepspeed: ./configs/deepspeed/ds_config_zero2_custom.json
+  output_dir: ./output/
+  report_to: "wandb"
+
+model_config:
+  fp16: true
+  bf16: false
+  pretrained_path: # None or path to model weight
+  model_type: llava_llm
+  language_model_name: meta-llama/Llama-2-7b-chat-hf
+  vision_model_name: openai/clip-vit-base-patch16
+  num_image_with_embedding: 1 # if 1, no img_temporal_embedding
+  max_length: 768
+  image_token_index: 32000
+  projector_hidden_act: "gelu"
+  vision_feature_select_strategy: "default"
+  vision_feature_layer: -2
+  pad_token_id: 32001
+  keys_to_finetune: []
+  keys_to_freeze:
+      - vision_tower
+
+  use_lora: false
+  lora:
+    r: 8
+    lora_alpha: 32
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+    lora_dropout: 0.01
+    bias: none
+    task_type: CAUSAL_LM
+
+dataset_config_path:
+  - ./configs/datasets/llava_ja_instruct.yaml

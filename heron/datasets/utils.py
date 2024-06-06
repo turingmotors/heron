@@ -38,14 +38,18 @@ dataset_classes = {
 }
 
 
-def get_each_dataset(dataset_config: Dict, processor, max_length: int) -> Tuple[Dataset, Dataset]:
+def get_each_dataset(
+    dataset_config: Dict, processor, max_length: int, model_type: str
+) -> Tuple[Dataset, Dataset]:
     dataset_type = dataset_config["dataset_type"]
     if dataset_type not in dataset_classes:
         raise ValueError(f"dataset_type: {dataset_type} is not supported.")
 
     DatasetClass = dataset_classes[dataset_type]
-    train_dataset = DatasetClass.create(dataset_config, processor, max_length, "train")
-    val_dataset = DatasetClass.create(dataset_config, processor, max_length, "validation")
+    train_dataset = DatasetClass.create(dataset_config, processor, max_length, model_type, "train")
+    val_dataset = DatasetClass.create(
+        dataset_config, processor, max_length, model_type, "validation"
+    )
     return train_dataset, val_dataset
 
 
@@ -54,11 +58,14 @@ def get_dataset(config: Dict) -> Tuple[Dataset, Dataset]:
     train_dataset_list = []
     val_dataset_list = []
     max_length = config["model_config"]["max_length"]
+    model_type = config["model_config"]["model_type"]
 
     for dataset_config_path in config["dataset_config_path"]:
         with open(dataset_config_path, "r") as f:
             dataset_config = yaml.safe_load(f)
-        train_dataset, val_dataset = get_each_dataset(dataset_config, processor, max_length)
+        train_dataset, val_dataset = get_each_dataset(
+            dataset_config, processor, max_length, model_type
+        )
         train_dataset_list.append(train_dataset)
         val_dataset_list.append(val_dataset)
 
