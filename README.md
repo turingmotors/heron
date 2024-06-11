@@ -61,7 +61,7 @@ pip install -e .
 pre-commit install
 ```
 
-## 3. Resister for Llama-2 models
+## 3. Register for Llama-2 models
 To use Llama-2 models, you need to register for the models.
 First, you request access to the llama-2 models, in [Hugging Face page](https://huggingface.co/meta-llama/Llama-2-7b) and [Meta website](https://ai.meta.com/resources/models-and-libraries/llama-downloads/).
 
