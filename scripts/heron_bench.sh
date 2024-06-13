@@ -11,7 +11,7 @@ EXP_NAME=$(basename "${MODEL_CONFIG_PATH}" .yml)
 QUESTION_PATH="${PLAYGROUND_PATH}/questions_ja.jsonl"
 CONTEXT_PATH="${PLAYGROUND_PATH}/context_ja.jsonl"
 ANSWER_LIST_PATHS="${PLAYGROUND_PATH}/answers_gpt4.jsonl ${PLAYGROUND_PATH}/gpt4v_0404_ja.jsonl"
-RULE_PATH="./playground/data/llava-bench-ja/rule.json"
+RULE_PATH="./playground/data/japanese-heron-bench/rule.json"
 
 OUTPUT_FILE="${OUTPUT_PATH}/${EXP_NAME}_reviews.json"
 
