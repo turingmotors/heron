@@ -2,6 +2,8 @@
 
 # Japanese-Heron-Bench
 
+English | [日本語](README_ja.md)
+
 </div>
 
 **Japanese-Heron-Bench** is a benchmark for evaluating Japanese VLMs (Vision-Language Models). We collected 21 images related to Japan. We then set up three categories for each image: Conversation, Detail, and Complex, and prepared one or two questions for each category. The final evaluation dataset consists of 102 questions. Furthermore, each image is assigned one of seven subcategories: anime, art, culture, food, landscape, landmark, and transportation.
