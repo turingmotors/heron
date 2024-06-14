@@ -42,7 +42,7 @@ from transformers.modeling_outputs import (
     BaseModelOutputWithPooling,
     CausalLMOutputWithPast,
 )
-from transformers.models.git.modeling_git import GitProjection
+from heron.models.mlp_adapter import MLPProjection
 
 
 class GitMptConfig(MptConfig):
@@ -106,7 +106,7 @@ class GitMptModel(MptModel):
 
         # Git modules
         self.image_encoder = CLIPVisionModel.from_pretrained(config.vision_model_name)
-        self.visual_projection = GitProjection(config)
+        self.visual_projection = MLPProjection(config)
 
         if config.num_image_with_embedding is not None:
             self.img_temporal_embedding = nn.ParameterList(
